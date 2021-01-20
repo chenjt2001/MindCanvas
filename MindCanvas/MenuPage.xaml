@@ -1,0 +1,62 @@
+﻿<Page
+    x:Class="MindCanvas.MenuPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MindCanvas"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+
+
+    <Page.Resources>
+        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" />
+        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#1D2227" />
+    </Page.Resources>
+    <Grid>
+        <NavigationView 
+            x:Name="NavView" 
+            IsSettingsVisible="True" 
+            PaneTitle="菜单"
+            BackRequested="NavView_BackRequested"
+            IsBackEnabled="True"
+            PaneDisplayMode="Left"
+            Loaded="NavView_Loaded"
+            SelectionChanged="NavView_SelectionChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Add" Tag="New" Content="新建"/>
+                <NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" Content="打开" />
+                <NavigationViewItem Icon="Save" Tag="Save" Content="保存" />
+
+                <NavigationViewItem Tag="SaveAs" Content="另存为" >
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE792;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItemSeparator/>
+
+                <NavigationViewItem Tag="Output" Content="导出" >
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDE1;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <!--<NavigationViewItem Tag="Print" Content="打印">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE749;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>-->
+
+                <NavigationViewItem Icon="Share" Tag="Share" Content="共享" />
+                <NavigationViewItemSeparator/>
+
+                <NavigationViewItem Icon="Help" Tag="Help" Content="帮助" />
+
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="ContentFrame"/>
+
+        </NavigationView>
+    </Grid>
+</Page>

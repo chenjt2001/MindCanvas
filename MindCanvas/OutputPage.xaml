@@ -1,0 +1,42 @@
+﻿<Page
+    x:Class="MindCanvas.OutputPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MindCanvas"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+
+    <Grid>
+        <ScrollViewer
+            Padding="20,0,0,0"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <StackPanel HorizontalAlignment="Left">
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,4,0,0"
+                    FontWeight="Normal"
+                    Text="格式" />
+
+                <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" PlaceholderText="请选择一个格式" Width="200">
+                    <x:String>JPEG (*.jpg)</x:String>
+                    <x:String>PNG (*.png)</x:String>
+                </ComboBox>
+
+                <Button Margin="0,10,0,0" Content="导出" Click="OutputBtn_Click"/>
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    FontWeight="Normal"
+                    Text="预览" />
+
+                <Image x:Name="PreviewImage" Margin="0,10,0,0" MaxWidth="840"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
