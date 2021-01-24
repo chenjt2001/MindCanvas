@@ -22,8 +22,8 @@
                     Text="格式" />
 
                 <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" PlaceholderText="请选择一个格式" Width="200">
-                    <x:String>JPEG (*.jpg)</x:String>
                     <x:String>PNG (*.png)</x:String>
+                    <x:String>TIFF (*.tiff)</x:String>
                 </ComboBox>
 
                 <Button Margin="0,10,0,0" Content="导出" Click="OutputBtn_Click"/>
@@ -36,6 +36,10 @@
 
                 <Image x:Name="PreviewImage" Margin="0,10,0,0" MaxWidth="840"/>
 
+                <Border 
+                x:Name="MindMapBorder" 
+                Loaded="MindMapBorder_Loaded" />
+                
             </StackPanel>
         </ScrollViewer>
     </Grid>

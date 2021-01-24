@@ -19,6 +19,7 @@ using Windows.UI.Composition;
 using System.Numerics;
 using Windows.Storage.AccessCache;
 using Windows.UI.Core.Preview;
+using Microsoft.Graphics.Canvas;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -40,6 +41,8 @@ namespace MindCanvas
         private bool isMovingNode = false;// 是否有点正在被移动
         private static MindMapCanvas mindMapCanvas;
         private StorageItemMostRecentlyUsedList mru = StorageApplicationPermissions.MostRecentlyUsedList;
+        private ScaleTransform scaleTransform = new ScaleTransform();// 缩放
+
 
         public MainPage()
         {
@@ -55,14 +58,12 @@ namespace MindCanvas
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
                 AppNameBorder.Background = new SolidColorBrush(Colors.White);
-                MindMapBorder.Background = new SolidColorBrush(Colors.White);
             }
             else if (ThemeHelper.ActualTheme == ElementTheme.Light)
             {
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
                 AppNameBorder.Background = new SolidColorBrush(Colors.Black);
-                MindMapBorder.Background = new SolidColorBrush(Colors.Black);
             }
 
             UndoBtn.IsEnabled = EventsManager.CanUndo();
@@ -221,10 +222,10 @@ namespace MindCanvas
                     string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
                         left + pos.X + border.ActualWidth / 2,
                         top + pos.Y + border.ActualHeight / 2,
-                        anotherNode.x + anotherBorder.ActualWidth / 2,
-                        anotherNode.y + anotherBorder.ActualHeight / 2,
-                        (left + pos.X + border.ActualWidth / 2 + anotherNode.x + anotherBorder.ActualWidth / 2) / 2);
-                    mindMapCanvas.ModifyTiePathAsync(tie, commands);
+                        mindMapCanvas.Width / 2 + anotherNode.x + anotherBorder.ActualWidth / 2,
+                        mindMapCanvas.Height / 2 + anotherNode.y + anotherBorder.ActualHeight / 2,
+                        (left + pos.X + border.ActualWidth / 2 + mindMapCanvas.Width / 2 + anotherNode.x + anotherBorder.ActualWidth / 2) / 2);
+                    mindMapCanvas.ModifyTiePath(tie, commands);
                 }
 
                 isMovingNode = true;
@@ -309,9 +310,10 @@ namespace MindCanvas
             }
         }
 
-        private async void MenuBtn_Click(object sender, RoutedEventArgs e)
+        private void MenuBtn_Click(object sender, RoutedEventArgs e)
         {
-            await Snapshot.NewSnapshot(MindMapBorder);
+            //await Snapshot.NewSnapshot(mindMapCanvas);
+
             this.Frame.Navigate(typeof(MenuPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
         }
 
@@ -361,13 +363,29 @@ namespace MindCanvas
         // MindMapBorder加载完成
         private void MindMapBorder_Loaded(object sender, RoutedEventArgs e)
         {
-
             mindMapCanvas = new MindMapCanvas();
             MindMapBorder.Child = mindMapCanvas;
 
             EventsManager.SetMindMapCanvas(mindMapCanvas);
-            mindMapCanvas.Background = new SolidColorBrush((Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "Black"));
             ConfigNodesBorder();
+
+            MindMapScrollViewer.ChangeView(horizontalOffset: MindMapScrollViewer.ScrollableWidth / 2, verticalOffset: MindMapScrollViewer.ScrollableHeight / 2, zoomFactor: 1);
+        }
+
+        private void MindMapScrollViewer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            // 移动画布
+            // 排除有点正在按下的情况
+            if (nowPressedNode == null)
+            { 
+                // 排除在使用鼠标并且处于惯性的情况
+                if (!(e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse && e.IsInertial))
+                    MindMapScrollViewer.ChangeView(
+                        horizontalOffset: MindMapScrollViewer.HorizontalOffset - e.Delta.Translation.X,
+                        verticalOffset: MindMapScrollViewer.VerticalOffset - e.Delta.Translation.Y,
+                        zoomFactor: null);
+            }
+            
         }
     }
 }

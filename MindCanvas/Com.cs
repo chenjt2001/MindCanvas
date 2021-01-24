@@ -24,6 +24,8 @@ using Windows.UI.ViewManagement;
 using System.Reflection;
 using System.Threading;
 using System.Diagnostics;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Input;
 
 namespace MindCanvas
 {
@@ -140,24 +142,34 @@ namespace MindCanvas
     }
 
     // 思维导图Canvas
-    public class MindMapCanvas : Canvas
+    public class MindMapCanvas : Canvas// InfiniteCanvas
     {
         private MindMap mindMap;
         private Dictionary<int, Border> nodeIdBorder = new Dictionary<int, Border>();// 标记点id与border
         private Dictionary<int, Windows.UI.Xaml.Shapes.Path> tieIdPath = new Dictionary<int, Windows.UI.Xaml.Shapes.Path>();// 标记线id与path
+        private bool showAnimation;// 是否显示动画
 
-        public MindMapCanvas()
+        public MindMapCanvas(bool showAnimation = true)
         {
             mindMap = new MindMap();
             VerticalAlignment = VerticalAlignment.Center;
             HorizontalAlignment = HorizontalAlignment.Center;
-            Background = new SolidColorBrush((Color)XamlBindingHelper.ConvertValue(typeof(Color), "White"));
+            //Background = new SolidColorBrush(Colors.White);
 
             // 设置动画
-            TransitionCollection tc = new TransitionCollection() { };
-            tc.Add(new EntranceThemeTransition() { IsStaggeringEnabled = true });
-            ChildrenTransitions = tc;
+            this.showAnimation = showAnimation;
+            if (showAnimation)
+            {
+                TransitionCollection tc = new TransitionCollection() { };
+                tc.Add(new EntranceThemeTransition() { IsStaggeringEnabled = true });
+                ChildrenTransitions = tc;
+            }
+
+            // 画布大小
+            Width = 100000;
+            Height = 100000;
         }
+
 
         // 设置此Canvas对应的思维导图
         public void SetMindMap(MindMap mindMap)
@@ -197,8 +209,8 @@ namespace MindCanvas
                 Foreground = foreground// 文字颜色
             };
 
-            SetTop(border, node.y);
-            SetLeft(border, node.x);
+            SetTop(border, Height / 2 + node.y);
+            SetLeft(border, Width / 2 + node.x);
 
             border.Child = textBlock;
             Children.Add(border);
@@ -232,11 +244,11 @@ namespace MindCanvas
             // controlPoint2: 曲线的第二个控制点，它决定曲线的结束切线。
             // endPoint: 终结点，绘制曲线将通过的点
             string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
-                node1.x + node1Border.ActualWidth / 2,
-                node1.y + node1Border.ActualHeight / 2,
-                node2.x + node2Border.ActualWidth / 2,
-                node2.y + node2Border.ActualHeight / 2,
-                (node1.x + node1Border.ActualWidth / 2 + node2.x + node2Border.ActualWidth / 2) / 2);
+                Width / 2 + node1.x + node1Border.ActualWidth / 2,
+                Height / 2 + node1.y + node1Border.ActualHeight / 2,
+                Width / 2 + node2.x + node2Border.ActualWidth / 2,
+               Height / 2 + node2.y + node2Border.ActualHeight / 2,
+                (Width / 2 + node1.x + node1Border.ActualWidth / 2 + Width / 2 + node2.x + node2Border.ActualWidth / 2) / 2);
             var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
             path.Data = pathData;
 
@@ -348,7 +360,7 @@ namespace MindCanvas
 
 
         // 修改线的path
-        public void ModifyTiePathAsync(Tie tie, string commands)
+        public void ModifyTiePath(Tie tie, string commands)
         {
             Windows.UI.Xaml.Shapes.Path path = ConvertTieToPath(tie);
             var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
@@ -565,17 +577,18 @@ namespace MindCanvas
     // 快照
     public static class Snapshot
     {
-        public static IBuffer canvasSnapshot;
+        public static IBuffer pixels;
         public static RenderTargetBitmap renderTargetBitmap;
 
 
         public static async Task<IBuffer> NewSnapshot(UIElement element)
         {
+            //element.UpdateLayout();
             renderTargetBitmap = new RenderTargetBitmap();
-            await renderTargetBitmap.RenderAsync(element);
-            var pixels = await renderTargetBitmap.GetPixelsAsync();
 
-            canvasSnapshot = pixels;
+            await renderTargetBitmap.RenderAsync(element);
+            pixels = await renderTargetBitmap.GetPixelsAsync();
+
             return pixels;
         }
     }
@@ -770,7 +783,7 @@ namespace MindCanvas
             Border border = mindMapCanvas.ConvertNodeToBorder(node);
             Canvas.SetTop(border, y);
             Canvas.SetLeft(border, x);
-            mindMap.ModifyNode(node.id, x, y);
+            mindMap.ModifyNode(node.id, x - mindMapCanvas.Width / 2, y - mindMapCanvas.Height / 2);
             Record();
         }
 

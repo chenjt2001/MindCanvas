@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using Windows.Storage;
 using Windows.Graphics.Imaging;
+using Windows.UI;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -31,8 +32,6 @@ namespace MindCanvas
         public OutputPage()
         {
             this.InitializeComponent();
-
-            PreviewImage.Source = Snapshot.renderTargetBitmap;
         }
 
         private async void OutputBtn_Click(object sender, RoutedEventArgs e)
@@ -56,8 +55,8 @@ namespace MindCanvas
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
 
                 // 文件类型
-                if (choice == "JPEG (*.jpg)")
-                    savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
+                if (choice == "TIFF (*.tiff)")
+                    savePicker.FileTypeChoices.Add("TIFF 文件", new List<string>() { ".tiff" });
                 else if (choice == "PNG (*.png)")
                     savePicker.FileTypeChoices.Add("PNG 文件", new List<string>() { ".png" });
 
@@ -71,18 +70,18 @@ namespace MindCanvas
 
                 if (file != null)
                 {
-                    var pixels = Snapshot.canvasSnapshot;
+                    var pixels = Snapshot.pixels;
                     var renderTargetBitmap = Snapshot.renderTargetBitmap;
 
-                    // JPEG格式
-                    if (choice == "JPEG (*.jpg)")
+                    // TIFF格式
+                    if (choice == "TIFF (*.tiff)")
                     {
                         using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
                         {
-                            BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+                            BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.TiffEncoderId, stream);
                             encoder.SetPixelData(
                                 BitmapPixelFormat.Bgra8,
-                                BitmapAlphaMode.Ignore,
+                                BitmapAlphaMode.Straight,
                                 (uint)renderTargetBitmap.PixelWidth,
                                 (uint)renderTargetBitmap.PixelHeight,
                                 Windows.Graphics.Display.DisplayInformation.GetForCurrentView().LogicalDpi,
@@ -112,6 +111,18 @@ namespace MindCanvas
                 }
 
             }
+        }
+
+        public async void MindMapBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+            MindMapCanvas mindMapCanvas = new MindMapCanvas(showAnimation: false);
+            MindMapBorder.Child = mindMapCanvas;
+            mindMapCanvas.SetMindMap(App.mindMap);
+            mindMapCanvas.DrawAll();
+
+            await Snapshot.NewSnapshot(mindMapCanvas);
+            PreviewImage.Source = Snapshot.renderTargetBitmap;
+            MindMapBorder.Visibility = Visibility.Collapsed;
         }
     }
 }

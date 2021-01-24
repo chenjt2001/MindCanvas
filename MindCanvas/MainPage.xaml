@@ -33,7 +33,6 @@
             </AppBarButton>
         </Border>
 
-
         <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
             <StackPanel
                 Orientation="Horizontal" 
@@ -83,8 +82,20 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Canvas.ZIndex="-1">
-            <Border x:Name="MindMapBorder" Loaded="MindMapBorder_Loaded">
-            </Border>
+            <ScrollViewer 
+                x:Name="MindMapScrollViewer" 
+                ZoomMode="Enabled"                 
+                MinZoomFactor="0.4"
+                MaxZoomFactor="2"
+                VerticalScrollBarVisibility="Hidden" 
+                HorizontalScrollBarVisibility="Hidden"
+                ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
+                ManipulationMode="All">
+                <!--https://social.msdn.microsoft.com/Forums/sqlserver/en-US/fa291e73-81d0-4977-b7be-c21b32f5c035/uwp-zoom-from-center-of-image-using-scroller-viewer-->
+                <Border 
+                    x:Name="MindMapBorder" 
+                    Loaded="MindMapBorder_Loaded" />
+            </ScrollViewer>
         </Border>
 
         <Border Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
