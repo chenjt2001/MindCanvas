@@ -1,0 +1,94 @@
+﻿<Page
+    x:Class="MindCanvas.EditPage.EditNodePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MindCanvas.EditPage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+
+    <Grid>
+        <ScrollViewer
+                Padding="0,0,0,0"
+                VerticalScrollBarVisibility="Auto"
+                VerticalScrollMode="Auto">
+
+            <StackPanel Orientation="Vertical" Margin="20,40,20,0">
+                <StackPanel x:Name="NodeStackPanel" Orientation="Vertical" Visibility="Visible">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <ContentThemeTransition />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+
+                    <TextBlock Text="基本信息" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="名称" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" LostFocus="NameTextBox_LostFocus" TextChanged="NameTextBox_TextChanged"/>
+                    </Grid>
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="描述" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" LostFocus="DescriptionTextBox_LostFocus"/>
+                    </Grid>
+
+                    <MenuFlyoutSeparator Margin="0,20,0,0"/>
+
+                    <TextBlock Text="边框颜色" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+                    
+                    <muxc:RadioButtons>
+                        <RadioButton Margin="0,20,0,0" Content="默认" x:Name="DefaultBorderBrushRadioButton" Checked="DefaultBorderBrushRadioButton_Checked"/>
+                        <RadioButton Content="自定义" x:Name="CustomBorderBrushRadioButton" Checked="CustomBorderBrushRadioButton_Checked"/>
+                    </muxc:RadioButtons>
+
+                    <Viewbox MaxWidth="200" Visibility="{x:Bind CustomBorderBrushRadioButton.IsChecked,Mode=OneWay}">
+                        <ColorPicker
+                            x:Name="BorderBrushColorPicker"
+                            ColorSpectrumShape="Box"
+                            IsMoreButtonVisible="False"
+                            IsColorSliderVisible="True"
+                            IsColorChannelTextInputVisible="False"
+                            IsHexInputVisible="False"
+                            IsAlphaEnabled="False"
+                            IsColorPreviewVisible="False"
+                            IsAlphaSliderVisible="True"
+                            IsAlphaTextInputVisible="True"
+                            ColorChanged="BorderBrushColorPicker_ColorChanged"
+                            PointerCaptureLost="BorderBrushColorPicker_PointerCaptureLost"/>
+                    </Viewbox>
+                    
+                    <MenuFlyoutSeparator Margin="0,20,0,0"/>
+
+                    <TextBlock Text="文字大小" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+
+                    <muxc:RadioButtons>
+                        <RadioButton Margin="0,20,0,0" Content="默认" x:Name="DefaultFontSizeRadioButton" Checked="DefaultFontSizeRadioButton_Checked"/>
+                        <RadioButton Content="自定义" x:Name="CustomFontSizeRadioButton" Checked="CustomFontSizeRadioButton_Checked"/>
+                    </muxc:RadioButtons>
+
+                    <muxc:NumberBox 
+                        x:Name="FontSizeNumberBox" 
+                        Header="设置字号：" 
+                        PlaceholderText="字号" 
+                        Minimum="10" 
+                        Maximum="100" 
+                        SpinButtonPlacementMode="Compact" 
+                        ValueChanged="FontSizeNumberBox_ValueChanged"
+                        Visibility="{x:Bind CustomFontSizeRadioButton.IsChecked, Mode=OneWay}"/>
+
+                    <MenuFlyoutSeparator Margin="0,20,0,0"/>
+                    <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="删除" FontSize="15" Width="100" Click="RemoveNodeBtn_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

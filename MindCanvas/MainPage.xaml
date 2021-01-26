@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:data="using:MindCanvas"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -99,14 +100,15 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-            <ScrollViewer
+            <Frame x:Name="EditFrame"/>
+            <!--<ScrollViewer
                 Padding="0,0,0,0"
                 VerticalScrollBarVisibility="Auto"
                 VerticalScrollMode="Auto">
 
                 <StackPanel Orientation="Vertical" Margin="20,40,20,0">
                     <TextBlock  x:Name="InfoTextBlock" Text="从左侧选择一个元素以查看或编辑它。" HorizontalAlignment="Center" FontSize="16" TextWrapping="Wrap"/>
-                    <StackPanel x:Name="NodeStackPanel" Orientation="Vertical" Visibility="Collapsed">
+                    <StackPanel x:Name="NodeStackPanel" Orientation="Vertical" Visibility="Visible">
                         <StackPanel.ChildrenTransitions>
                             <TransitionCollection>
                                 <ContentThemeTransition />
@@ -130,11 +132,14 @@
                             <TextBlock Text="描述" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <TextBox x:Name="NodeDescription" Grid.Row="0" Grid.Column="1"/>
                         </Grid>
-                        <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="修改" FontSize="15" Width="100" Click="ModifiedNodeBtn_Click"/>
+                        
+                        <MenuFlyoutSeparator Margin="0,20,0,0"/>
+
+                            <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="修改" FontSize="15" Width="100" Click="ModifiedNodeBtn_Click"/>
                         <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="删除" FontSize="15" Width="100" Click="RemoveNodeBtn_Click"/>
                     </StackPanel>
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
         </Border>
 
     </Grid>

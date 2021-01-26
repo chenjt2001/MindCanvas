@@ -39,10 +39,9 @@ namespace MindCanvas
         private List<Border> selectedBorderList = new List<Border>();// 选中的点
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
-        private static MindMapCanvas mindMapCanvas;
+        public static MindMapCanvas mindMapCanvas;
         private StorageItemMostRecentlyUsedList mru = StorageApplicationPermissions.MostRecentlyUsedList;
         private ScaleTransform scaleTransform = new ScaleTransform();// 缩放
-
 
         public MainPage()
         {
@@ -66,8 +65,9 @@ namespace MindCanvas
                 AppNameBorder.Background = new SolidColorBrush(Colors.Black);
             }
 
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
+            RefreshUnRedoBtn();
+
+            EditFrame.Navigate(typeof(EditPage.InfoPage)); 
         }
 
         // 配置点Border
@@ -126,6 +126,8 @@ namespace MindCanvas
                     else
                         EventsManager.AddTie(node1, node2);
 
+                    RefreshUnRedoBtn();
+
                     // 不论如何，让这2个被选中的点恢复
                     CreateOrUpdateSpringAnimation(1.0f);
                     foreach (Border border in selectedBorderList)
@@ -134,7 +136,7 @@ namespace MindCanvas
 
                     // 恢复正常
                     TieBtn.IsChecked = false;
-                    InfoTextBlock.Text = "从左侧选择一个元素以查看或编辑它。";
+                    EditFrame.Navigate(typeof(EditPage.InfoPage));
                 }
             }
 
@@ -146,11 +148,13 @@ namespace MindCanvas
                 nowNodeBorder.StartAnimation(_springAnimation);
 
                 // 显示信息
-                InfoTextBlock.Visibility = Visibility.Collapsed;
-                NodeStackPanel.Visibility = Visibility.Visible;
-
-                NodeName.Text = nowNode.name;
-                NodeDescription.Text = nowNode.description;
+                Dictionary<string, object> data = new Dictionary<string, object>
+                {
+                    { "node", nowNode },
+                    { "border", nowNodeBorder },
+                    { "mainPage", this }
+                };
+                EditFrame.Navigate(typeof(EditPage.EditNodePage), data);
             }
         }
 
@@ -166,14 +170,12 @@ namespace MindCanvas
                 var top = (double)border.GetValue(Canvas.TopProperty);
 
                 EventsManager.ModifyNode(nowPressedNode, left, top);
+                RefreshUnRedoBtn();
                 isMovingNode = false;
             }
             nowPressedNode = null;// 没有点被按下，之所以这句话不写在Node_Released里面
                                   // 是因为当鼠标释放时Node_Released会比MainPage_PointerReleased先运行
                                   // 那MainPage_PointerReleased就不能获取nowPressedNode了
-
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
         }
 
         // 鼠标按下border
@@ -269,32 +271,12 @@ namespace MindCanvas
             }
         }
 
-        // 修改点
-        private void ModifiedNodeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            EventsManager.ModifyNode(nowNode, NodeName.Text, NodeDescription.Text);
-            foreach (Tie tie in App.mindMap.GetTies(nowNode))
-                mindMapCanvas.ReDraw(tie);
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
-        }
-
-        // 删除点
-        private void RemoveNodeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            EventsManager.RemoveNode(nowNode);
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
-        }
-
         // 连接点按钮
         private void TieBtn_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)TieBtn.IsChecked)
             {
-                InfoTextBlock.Text = "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。";
-                InfoTextBlock.Visibility = Visibility.Visible;
-                NodeStackPanel.Visibility = Visibility.Collapsed;
+                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。");
             }
             else
             {
@@ -304,9 +286,7 @@ namespace MindCanvas
                     border.StartAnimation(_springAnimation);
                 selectedBorderList.Clear();
 
-                InfoTextBlock.Text = "从左侧选择一个元素以查看或编辑它。";
-                InfoTextBlock.Visibility = Visibility.Visible;
-                NodeStackPanel.Visibility = Visibility.Collapsed;                
+                EditFrame.Navigate(typeof(EditPage.InfoPage));
             }
         }
 
@@ -320,7 +300,7 @@ namespace MindCanvas
         private void AddNodeBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
             // 退出“连接点”的状态，让所有被选中的点恢复
-            InfoTextBlock.Text = "从左侧选择一个元素以查看或编辑它。";
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
             TieBtn.IsChecked = false;
             CreateOrUpdateSpringAnimation(1.0f);
             foreach (Border border in selectedBorderList)
@@ -337,8 +317,7 @@ namespace MindCanvas
             {
                 Node newNode = EventsManager.AddNode(AddNodeTextBox.Text);
                 ConfigNodesBorder(new List<Node> { newNode });
-                UndoBtn.IsEnabled = EventsManager.CanUndo();
-                RedoBtn.IsEnabled = EventsManager.CanRedo();
+                RefreshUnRedoBtn();
             }
         }
 
@@ -346,18 +325,25 @@ namespace MindCanvas
         public void UndoBtn_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.Undo();
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
+            RefreshUnRedoBtn();
             ConfigNodesBorder();
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
         }
 
         // 重做
         public void RedoBtn_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.Redo();
-            UndoBtn.IsEnabled = EventsManager.CanUndo();
-            RedoBtn.IsEnabled = EventsManager.CanRedo();
+            RefreshUnRedoBtn();
             ConfigNodesBorder();
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
+        }
+
+        // 刷新撤销重做按钮
+        public void RefreshUnRedoBtn()
+        {
+            UndoBtn.IsEnabled = EventsManager.CanUndo;
+            RedoBtn.IsEnabled = EventsManager.CanRedo;
         }
 
         // MindMapBorder加载完成
@@ -385,7 +371,6 @@ namespace MindCanvas
                         verticalOffset: MindMapScrollViewer.VerticalOffset - e.Delta.Translation.Y,
                         zoomFactor: null);
             }
-            
         }
     }
 }

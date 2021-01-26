@@ -26,6 +26,7 @@ using System.Threading;
 using System.Diagnostics;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Input;
+using System.ComponentModel;
 
 namespace MindCanvas
 {
@@ -41,6 +42,11 @@ namespace MindCanvas
         public string name;
         [OptionalField]
         public string title;
+        [OptionalField]
+        public byte[] borderBrushArgb;// 边框颜色
+        [OptionalField]
+        public double nameFontSize;// 名称字体大小
+
 
         // 相对于画布中心的位置
         public double x;
@@ -61,6 +67,10 @@ namespace MindCanvas
     {
         public List<Node> nodes;
         public List<Tie> ties;
+        [OptionalField]
+        public byte[] defaultNodeBorderBrushArgb;// 默认边框颜色
+        [OptionalField]
+        public double defaultNodeNameFontSize;// 默认点名称字体大小
     }
 
     // 思维导图文件
@@ -131,13 +141,16 @@ namespace MindCanvas
         // 兼容版本
         private void VersionHelper(ref MindCanvasFileData data)
         {
-            // 兼容第一版（发布版本号为1.0.2.0）
+            // V1.0 -> V1.1
             foreach (Node node in data.nodes)
                 if (node.title != null && node.name == null)
-                {
                     node.name = node.title;
-                }
-                    
+
+            // V1.1 -> V1.2
+            if (data.defaultNodeBorderBrushArgb == null)
+                data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A , Colors.Blue.R , Colors.Blue.G , Colors.Blue.B };
+            if (data.defaultNodeNameFontSize == 0.0d)
+                data.defaultNodeNameFontSize = 20;
         }
     }
 
@@ -187,11 +200,25 @@ namespace MindCanvas
         public void Draw(Node node)
         {
             var background = new SolidColorBrush((Color)XamlBindingHelper.ConvertValue(typeof(Color), "White"));
-            var borderBrush = new SolidColorBrush((Color)XamlBindingHelper.ConvertValue(typeof(Color), "#FF0000FF"));//蓝色
+            //var borderBrush = new SolidColorBrush((Color)XamlBindingHelper.ConvertValue(typeof(Color), "#FF0000FF"));//蓝色
             var foreground = new SolidColorBrush(Colors.Black);
             var borderThickness = new Thickness(2);
             var padding = new Thickness(10);
             var cornerRadius = new CornerRadius(5);
+
+            // 边框颜色
+            SolidColorBrush borderBrush;
+            if (node.borderBrushArgb == null)// 默认
+                borderBrush = mindMap.defaultNodeBorderBrush;
+            else// 已设置
+                borderBrush = new SolidColorBrush(Color.FromArgb(node.borderBrushArgb[0], node.borderBrushArgb[1], node.borderBrushArgb[2], node.borderBrushArgb[3]));
+
+            // 点名称字体大小
+            Double fontSize;
+            if (node.nameFontSize == 0.0d)// 默认
+                fontSize = mindMap.defaultNodeNameFontSize;
+            else// 已设置
+                fontSize = node.nameFontSize;
 
             Border border = new Border()// 也可以使用Rectangle
             {
@@ -205,7 +232,7 @@ namespace MindCanvas
             TextBlock textBlock = new TextBlock()
             {
                 Text = node.name,// 文字内容
-                FontSize = 20,// 文字大小
+                FontSize = fontSize,// 文字大小
                 Foreground = foreground// 文字颜色
             };
 
@@ -358,6 +385,12 @@ namespace MindCanvas
             Draw(tie);
         }
 
+        // 重绘线
+        public void ReDrawTies(Node node)
+        {
+            foreach (Tie tie in mindMap.GetTies(node))
+                ReDraw(tie);
+        }
 
         // 修改线的path
         public void ModifyTiePath(Tie tie, string commands)
@@ -374,6 +407,8 @@ namespace MindCanvas
     {
         public List<Node> nodes;
         public List<Tie> ties;
+        public SolidColorBrush defaultNodeBorderBrush;// 默认边框颜色
+        public double defaultNodeNameFontSize;// 默认点名称文字大小
 
         public MindMap()
         {
@@ -396,19 +431,38 @@ namespace MindCanvas
             };
 
             nodes.Add(firstNode);
+
+            defaultNodeBorderBrush = new SolidColorBrush(Colors.Blue);
+            defaultNodeNameFontSize = 20;
         }
 
         // 添加点
         public Node AddNode(string name, string description = "暂无描述")
         {
-            Node newNode = new Node
+            Node newNode;
+
+            if (nodes.Count() == 0)
             {
-                id = nodes.Last().id + 1,
-                name = name,
-                description = description,
-                x = nodes.Last().x + 20,
-                y = nodes.Last().y + 20,
-            };
+                newNode = new Node
+                {
+                    id = 0,
+                    name = name,
+                    description = description,
+                    x = 0,
+                    y = 0,
+                };
+            }
+            else
+            {
+                newNode = new Node
+                {
+                    id = nodes.Last().id + 1,
+                    name = name,
+                    description = description,
+                    x = nodes.Last().x + 20,
+                    y = nodes.Last().y + 20,
+                };
+            }
 
             nodes.Add(newNode);
             return newNode;
@@ -524,16 +578,36 @@ namespace MindCanvas
             this.ties = ties;
         }
 
+        public void Load(MindCanvasFileData mindCanvasFileData)
+        {
+            this.nodes = mindCanvasFileData.nodes;
+            this.ties = mindCanvasFileData.ties;
+
+            this.defaultNodeBorderBrush = new SolidColorBrush(Color.FromArgb(
+                mindCanvasFileData.defaultNodeBorderBrushArgb[0], 
+                mindCanvasFileData.defaultNodeBorderBrushArgb[1],
+                mindCanvasFileData.defaultNodeBorderBrushArgb[2],
+                mindCanvasFileData.defaultNodeBorderBrushArgb[3]));
+
+            this.defaultNodeNameFontSize = mindCanvasFileData.defaultNodeNameFontSize;
+        }
+
         // 获取可序列化的数据
         public MindCanvasFileData GetData()
         {
-            MindCanvasFileData inMindFileData = new MindCanvasFileData
+            MindCanvasFileData mindCanvasFileData = new MindCanvasFileData
             {
                 nodes = nodes,
-                ties = ties
+                ties = ties,
+                defaultNodeBorderBrushArgb = new byte[4] {
+                    defaultNodeBorderBrush.Color.A,
+                    defaultNodeBorderBrush.Color.R,
+                    defaultNodeBorderBrush.Color.G,
+                    defaultNodeBorderBrush.Color.B },
+                defaultNodeNameFontSize = defaultNodeNameFontSize,
             };
 
-            return inMindFileData;
+            return mindCanvasFileData;
         }
 
         // 清空
@@ -602,8 +676,9 @@ namespace MindCanvas
         private static MindMap mindMap;
         private static MindCanvasFile mindCanvasFile;
         private static MindMapCanvas mindMapCanvas;
-        public static int nowIndex;
         public static bool modified = false;
+        public static int nowIndex;
+
 
         public static void SetMindMapCanvas(MindMapCanvas newMindMapCanvas)
         {
@@ -773,7 +848,10 @@ namespace MindCanvas
         public static void ModifyNode(Node node, string newName, string newDescription)
         {
             Border border = mindMapCanvas.ConvertNodeToBorder(node);
+
             (border.Child as TextBlock).Text = newName;
+            mindMapCanvas.ReDrawTies(node);
+
             mindMap.ModifyNode(node.id, newName, newDescription);
             Record();
         }
@@ -781,9 +859,49 @@ namespace MindCanvas
         public static void ModifyNode(Node node, double x, double y)
         {
             Border border = mindMapCanvas.ConvertNodeToBorder(node);
+
             Canvas.SetTop(border, y);
             Canvas.SetLeft(border, x);
+            mindMapCanvas.ReDrawTies(node);
+
             mindMap.ModifyNode(node.id, x - mindMapCanvas.Width / 2, y - mindMapCanvas.Height / 2);
+            Record();
+        }
+
+        public static void ModifyNodeBorderBrushColor(Node node, Color? borderBrushColor)
+        {
+            Border border = mindMapCanvas.ConvertNodeToBorder(node);
+            if (borderBrushColor != null)
+            {
+                Color color = (Color)borderBrushColor;
+                border.BorderBrush = new SolidColorBrush((Color)borderBrushColor);
+                node.borderBrushArgb = new byte[4] { color.A, color.R, color.G, color.B };
+            }
+            else
+            {
+                node.borderBrushArgb = null;
+                border.BorderBrush = mindMap.defaultNodeBorderBrush;
+            }
+
+            Record();
+        }
+
+        public static void ModifyNodeNameFontSize(Node node, double? nameFontSize)
+        {
+            TextBlock textBlock = mindMapCanvas.ConvertNodeToBorder(node).Child as TextBlock;
+            if (nameFontSize != null)
+            {
+                node.nameFontSize = (double)nameFontSize;
+                textBlock.FontSize = (double)nameFontSize;
+            }
+            else
+            {
+                node.nameFontSize = 0.0d;
+                textBlock.FontSize = mindMap.defaultNodeNameFontSize;
+            }
+
+            mindMapCanvas.ReDrawTies(node);
+
             Record();
         }
 
@@ -830,9 +948,13 @@ namespace MindCanvas
         }
 
         // 判断能否撤销
-        public static bool CanUndo()
+        public static bool CanUndo
         {
-            return nowIndex > 0;
+            get
+            {
+                return nowIndex > 0;
+
+            }
         }
 
         // 重做
@@ -845,9 +967,12 @@ namespace MindCanvas
         }
 
         // 判断能否重做
-        public static bool CanRedo()
+        public static bool CanRedo
         {
-            return records.Count() > nowIndex + 1;
+            get
+            {
+                return records.Count() > nowIndex + 1;
+            }
         }
 
         // 记录一下
@@ -856,7 +981,7 @@ namespace MindCanvas
             // 判断现在是不是在records列表的最后一项操作，是的话直接添加记录就好
             // 如果不是的话，要删除之后的，再添加（类似于新分支）
             // 如果能撤消，说明没在最后一项操作
-            if (CanRedo())
+            if (CanRedo)
                 records.RemoveRange(nowIndex + 1, records.Count() - (nowIndex + 1));
             records.Add(DeepCopy(mindMap.GetData()));
             nowIndex++;

@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="MindCanvas.EditPage.InfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MindCanvas.EditPage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+
+    <Grid>
+        <ScrollViewer
+                Padding="0,0,0,0"
+                VerticalScrollBarVisibility="Auto"
+                VerticalScrollMode="Auto">
+
+            <StackPanel Orientation="Vertical" Margin="20,40,20,0">
+                <TextBlock  x:Name="InfoTextBlock" Text="从左侧选择一个元素以查看或编辑它。" HorizontalAlignment="Center" FontSize="16" TextWrapping="Wrap"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -31,6 +31,19 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
+                    Text="评价" />
+                <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
+                    <Paragraph>
+                        您的评价对 MindCanvas 的发展至关重要，请
+                        <Hyperlink NavigateUri="ms-windows-store://review/?ProductId=9MZ0K1FKVZP1">为 MindCanvas 评分</Hyperlink>
+                        。
+                    </Paragraph>
+                </RichTextBlock>
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    FontWeight="Normal"
                     Text="关于" />
 
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
@@ -43,10 +56,14 @@
                         <Run Text="{x:Bind Version}"/>
                     </Paragraph>
                     <Paragraph Margin="0,10,0,0">
+                        Copyright © 2021 珒陶. All rights reserved.
+                    </Paragraph>
+                    <Paragraph Margin="0,10,0,0">
                         更多信息可访问
                         <Hyperlink NavigateUri="http://www.chenjt.com/mindcanvas">官方网站</Hyperlink>
                         及
                         <Hyperlink NavigateUri="http://www.chenjt.com/mindcanvas-privacy">隐私策略</Hyperlink>
+                        。
                     </Paragraph>
                 </RichTextBlock>
 
