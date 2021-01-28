@@ -40,7 +40,6 @@ namespace MindCanvas
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
         public static MindMapCanvas mindMapCanvas;
-        public static MainPage mainPage;
         private StorageItemMostRecentlyUsedList mru = StorageApplicationPermissions.MostRecentlyUsedList;
         private ScaleTransform scaleTransform = new ScaleTransform();// 缩放
 
@@ -48,32 +47,10 @@ namespace MindCanvas
         {
             this.InitializeComponent();
 
-            mainPage = this;
-
             // 这两个事件用来实现移动点
             PointerMoved += MainPage_PointerMoved;// 鼠标移动事件
             PointerReleased += MainPage_PointerReleased;// 鼠标释放事件
 
-            // 设置缓存
-            NavigationCacheMode = NavigationCacheMode.Required;
-
-            RefreshTheme();
-
-            RefreshUnRedoBtn();
-
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
-            
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            //将传过来的数据 类型转换一下
-        }
-
-        // 刷新主题设置
-        public void RefreshTheme()
-        {
             // 应用主题颜色
             if (ThemeHelper.ActualTheme == ElementTheme.Light)
             {
@@ -81,12 +58,16 @@ namespace MindCanvas
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
                 AppNameBorder.Background = new SolidColorBrush(Colors.White);
             }
-            else if (ThemeHelper.ActualTheme == ElementTheme.Dark)
+            else if (ThemeHelper.ActualTheme == ElementTheme.Light)
             {
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
                 AppNameBorder.Background = new SolidColorBrush(Colors.Black);
             }
+
+            RefreshUnRedoBtn();
+
+            EditFrame.Navigate(typeof(EditPage.InfoPage)); 
         }
 
         // 配置点Border
@@ -102,20 +83,7 @@ namespace MindCanvas
                 border.PointerReleased += this.Node_Released;// 鼠标释放
                 border.PointerEntered += this.Node_PointerEntered;// 鼠标进入
                 border.PointerExited += this.Node_PointerExited;// 鼠标退出
-                border.RightTapped += this.Node_RightTapped;// 右键或触摸设备长按
 
-            }
-        }
-
-        // 配置线Path
-        private void ConfigTiesPath(List<Tie> needConfig = null)
-        {
-            if (needConfig == null)
-                needConfig = App.mindMap.ties;
-
-            foreach (Tie tie in needConfig)
-            {
-                Windows.UI.Xaml.Shapes.Path path = mindMapCanvas.ConvertTieToPath(tie);
             }
         }
 
@@ -168,7 +136,7 @@ namespace MindCanvas
 
                     // 恢复正常
                     TieBtn.IsChecked = false;
-                    EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+                    EditFrame.Navigate(typeof(EditPage.InfoPage));
                 }
             }
 
@@ -186,7 +154,7 @@ namespace MindCanvas
                     { "border", nowNodeBorder },
                     { "mainPage", this }
                 };
-                EditFrame.Navigate(typeof(EditPage.EditNodePage), data, new DrillInNavigationTransitionInfo());
+                EditFrame.Navigate(typeof(EditPage.EditNodePage), data);
             }
         }
 
@@ -285,7 +253,6 @@ namespace MindCanvas
             CreateOrUpdateSpringAnimation(1.1f);
             (sender as UIElement).StartAnimation(_springAnimation);
         }
-
         // 鼠标退出border
         private void Node_PointerExited(object sender, PointerRoutedEventArgs e)
         {
@@ -304,18 +271,12 @@ namespace MindCanvas
             }
         }
 
-        // 右键或鼠标长按
-        private void Node_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            
-        }
-
         // 连接点按钮
         private void TieBtn_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)TieBtn.IsChecked)
             {
-                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。", new DrillInNavigationTransitionInfo());
+                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。");
             }
             else
             {
@@ -325,7 +286,7 @@ namespace MindCanvas
                     border.StartAnimation(_springAnimation);
                 selectedBorderList.Clear();
 
-                EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+                EditFrame.Navigate(typeof(EditPage.InfoPage));
             }
         }
 
@@ -339,7 +300,7 @@ namespace MindCanvas
         private void AddNodeBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
             // 退出“连接点”的状态，让所有被选中的点恢复
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
             TieBtn.IsChecked = false;
             CreateOrUpdateSpringAnimation(1.0f);
             foreach (Border border in selectedBorderList)
@@ -366,7 +327,7 @@ namespace MindCanvas
             EventsManager.Undo();
             RefreshUnRedoBtn();
             ConfigNodesBorder();
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
         }
 
         // 重做
@@ -375,7 +336,7 @@ namespace MindCanvas
             EventsManager.Redo();
             RefreshUnRedoBtn();
             ConfigNodesBorder();
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            EditFrame.Navigate(typeof(EditPage.InfoPage));
         }
 
         // 刷新撤销重做按钮
@@ -410,16 +371,6 @@ namespace MindCanvas
                         verticalOffset: MindMapScrollViewer.VerticalOffset - e.Delta.Translation.Y,
                         zoomFactor: null);
             }
-        }
-
-        // MindMapScrollViewer大小改变
-        private void MindMapScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            // 保持显示的相对位置不变
-            MindMapScrollViewer.ChangeView(
-                horizontalOffset: MindMapScrollViewer.HorizontalOffset - (e.NewSize.Width - e.PreviousSize.Width) / 2,
-                verticalOffset: MindMapScrollViewer.VerticalOffset - (e.NewSize.Height - e.PreviousSize.Height) / 2,
-                zoomFactor: null);
         }
     }
 }

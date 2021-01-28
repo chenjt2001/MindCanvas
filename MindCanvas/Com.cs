@@ -115,42 +115,26 @@ namespace MindCanvas
         }
 
         // 加载文件
-        public async Task<bool> LoadFile(StorageFile storageFile, bool addToMru = true)
+        public async Task LoadFile(StorageFile storageFile, bool addToMru = true)
         {
-            try
+            file = storageFile;
+            IBuffer buffer = await FileIO.ReadBufferAsync(file);
+
+            using (var dataReader = DataReader.FromBuffer(buffer))
             {
-                IBuffer buffer = await FileIO.ReadBufferAsync(storageFile);
+                var bytes = new byte[buffer.Length];
+                dataReader.ReadBytes(bytes);
 
-                using (var dataReader = DataReader.FromBuffer(buffer))
+                using (MemoryStream ms = new MemoryStream(bytes))
                 {
-                    var bytes = new byte[buffer.Length];
-                    dataReader.ReadBytes(bytes);
+                    IFormatter formatter = new BinaryFormatter();
+                    MindCanvasFileData inMindFileData = (MindCanvasFileData)formatter.Deserialize(ms);
+                    VersionHelper(ref inMindFileData);
 
-                    using (MemoryStream ms = new MemoryStream(bytes))
-                    {
-                        IFormatter formatter = new BinaryFormatter();
-                        MindCanvasFileData inMindFileData = (MindCanvasFileData)formatter.Deserialize(ms);
-                        VersionHelper(ref inMindFileData);
-
-                        mindMap.Load(inMindFileData.nodes, inMindFileData.ties);
-                        if (addToMru)
-                            mru.Add(storageFile);
-                    }
+                    mindMap.Load(inMindFileData.nodes, inMindFileData.ties);
+                    if (addToMru)
+                        mru.Add(file);
                 }
-
-                file = storageFile;
-                return true;
-            }
-            catch (Exception)
-            {
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "错误",
-                    Content = "文件打开失败！",
-                    CloseButtonText = "好的"
-                };
-                await dialog.ShowAsync();
-                return false;
             }
         }
 
@@ -733,7 +717,6 @@ namespace MindCanvas
                     if (await Save())
                     {
                         Initialize();
-                        ResetMainPageCache();
                         return true;
                     }
                     else
@@ -743,7 +726,6 @@ namespace MindCanvas
                 else
                 {
                     Initialize();
-                    ResetMainPageCache();
                     return true;
                 }
             }
@@ -752,7 +734,6 @@ namespace MindCanvas
             else
             {
                 Initialize();
-                ResetMainPageCache();
                 return true;
             }
         }
@@ -784,7 +765,6 @@ namespace MindCanvas
                         ClearRecords();
                         await mindCanvasFile.LoadFile(file);
                         Record();
-                        ResetMainPageCache();
                         modified = false;
                         return true;
                     }
@@ -798,7 +778,6 @@ namespace MindCanvas
                     ClearRecords();
                     await mindCanvasFile.LoadFile(file);
                     Record();
-                    ResetMainPageCache();
                     modified = false;
                     return true;
                 }
@@ -814,17 +793,9 @@ namespace MindCanvas
                 ClearRecords();
                 await mindCanvasFile.LoadFile(file);
                 Record();
-                ResetMainPageCache();
                 modified = false;
                 return true;
             }                
-        }
-
-        // 清除主页面缓存
-        public static void ResetMainPageCache()
-        {
-            if (MainPage.mainPage != null)
-                MainPage.mainPage.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
         }
 
         // 保存文件
@@ -1111,10 +1082,10 @@ namespace MindCanvas
             if (CurrentApplicationWindow != null)
             {
                 // Dispatch on UI thread so that we have a current appbar to access and change
-                //CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                //{
-                //UpdateSystemCaptionButtonColors();
-                //});
+                CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    UpdateSystemCaptionButtonColors();
+                });
             }
         }
 

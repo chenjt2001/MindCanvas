@@ -78,7 +78,7 @@
                     <muxc:NumberBox 
                         x:Name="FontSizeNumberBox" 
                         Header="设置字号：" 
-                        PlaceholderText="1-100的数" 
+                        PlaceholderText="字号" 
                         Minimum="10" 
                         Maximum="100" 
                         SpinButtonPlacementMode="Compact" 
