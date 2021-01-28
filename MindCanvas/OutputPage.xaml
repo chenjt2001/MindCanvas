@@ -5,6 +5,7 @@
     xmlns:local="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
@@ -24,6 +25,16 @@
                 <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" PlaceholderText="请选择一个格式" Width="200">
                     <x:String>PNG (*.png)</x:String>
                     <x:String>TIFF (*.tiff)</x:String>
+                    <ComboBox.Resources>
+                        <muxc:TeachingTip 
+                            x:Name="FormatTip"
+	                        Target="{x:Bind FormatComboBox}"
+                            Title="导出"
+	                        Subtitle="请选择导出格式！"
+                            IsLightDismissEnabled="True"
+                            PreferredPlacement="Right">
+                        </muxc:TeachingTip>
+                    </ComboBox.Resources>
                 </ComboBox>
 
                 <Button Margin="0,10,0,0" Content="导出" Click="OutputBtn_Click"/>

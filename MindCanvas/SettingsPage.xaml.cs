@@ -37,7 +37,7 @@ namespace MindCanvas
             if (selectedTheme != null)
             {
                 ThemeHelper.RootTheme = App.GetEnum<ElementTheme>(selectedTheme);
-                MainPage.mainPage.RefreshTheme();
+                //MainPage.mainPage.RefreshTheme();
             }
         }
     }

@@ -62,6 +62,13 @@ namespace MindCanvas
             RefreshUnRedoBtn();
 
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
+            
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            //将传过来的数据 类型转换一下
         }
 
         // 刷新主题设置

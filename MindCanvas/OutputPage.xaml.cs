@@ -41,6 +41,7 @@ namespace MindCanvas
 
             if (choice == null)
             {
+                //FormatTip.IsOpen = true;
                 ContentDialog dialog = new ContentDialog
                 {
                     Title = "导出错误",
@@ -122,6 +123,12 @@ namespace MindCanvas
 
             await Snapshot.NewSnapshot(mindMapCanvas);
             PreviewImage.Source = Snapshot.renderTargetBitmap;
+
+            // 防止PreviewImage自动缩放预览大小
+            if (Snapshot.renderTargetBitmap.PixelWidth < PreviewImage.MaxWidth)
+                PreviewImage.MaxWidth = Snapshot.renderTargetBitmap.PixelWidth;
+
+
             MindMapBorder.Visibility = Visibility.Collapsed;
         }
     }

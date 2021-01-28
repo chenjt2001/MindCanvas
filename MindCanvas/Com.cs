@@ -733,6 +733,7 @@ namespace MindCanvas
                     if (await Save())
                     {
                         Initialize();
+                        ResetMainPageCache();
                         return true;
                     }
                     else
@@ -742,6 +743,7 @@ namespace MindCanvas
                 else
                 {
                     Initialize();
+                    ResetMainPageCache();
                     return true;
                 }
             }
@@ -750,6 +752,7 @@ namespace MindCanvas
             else
             {
                 Initialize();
+                ResetMainPageCache();
                 return true;
             }
         }
@@ -1110,7 +1113,7 @@ namespace MindCanvas
                 // Dispatch on UI thread so that we have a current appbar to access and change
                 //CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 //{
-                UpdateSystemCaptionButtonColors();
+                //UpdateSystemCaptionButtonColors();
                 //});
             }
         }
