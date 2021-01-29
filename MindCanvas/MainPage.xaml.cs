@@ -20,6 +20,9 @@ using System.Numerics;
 using Windows.Storage.AccessCache;
 using Windows.UI.Core.Preview;
 using Microsoft.Graphics.Canvas;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Windows.Storage;
+using Microsoft.UI.Xaml.Controls;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -62,13 +65,6 @@ namespace MindCanvas
             RefreshUnRedoBtn();
 
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
-            
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            //将传过来的数据 类型转换一下
         }
 
         // 刷新主题设置
@@ -122,6 +118,10 @@ namespace MindCanvas
         // 鼠标在点内释放，算按了一下点
         private void Node_Released(object sender, PointerRoutedEventArgs e)
         {
+            // 使EditFrame中的内容失去焦点
+            EditFrame.IsEnabled = false;
+            EditFrame.IsEnabled = true;
+
             Border nowNodeBorder = sender as Border;
             nowNode = mindMapCanvas.ConvertBorderToNode(nowNodeBorder);// 记为nowNode
 
@@ -193,6 +193,7 @@ namespace MindCanvas
         // 鼠标释放
         private void MainPage_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
+
             // 如果有个点在鼠标释放时处于移动状态，就算进行了一次“移动点”
             // 之所以不写在Node_Released里面，是因为可能用户在移动点时鼠标移动太快，导致鼠标未在点内释放
             if (isMovingNode)

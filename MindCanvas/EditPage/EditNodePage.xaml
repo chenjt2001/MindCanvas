@@ -30,7 +30,7 @@
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="名称" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" LostFocus="NameTextBox_LostFocus" TextChanged="NameTextBox_TextChanged"/>
+                        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" LosingFocus="NameTextBox_LosingFocus" TextChanged="NameTextBox_TextChanged"/>
                     </Grid>
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="描述" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" LostFocus="DescriptionTextBox_LostFocus"/>
+                        <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" LosingFocus="DescriptionTextBox_LosingFocus"/>
                     </Grid>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>

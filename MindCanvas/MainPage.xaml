@@ -110,11 +110,12 @@
             </Frame>
         </Border>
 
-        <muxc:TeachingTip
+        <!--<muxc:TeachingTip
+            x:Name="NewFunctionTip"
             Title="无限画布"
             Subtitle="使用 鼠标 或 手指 在画布上拖动，可使用画布的其他区域。手指捏合 或 按住Ctrl键并转动鼠标滚轮 可缩放画布。"
-            IsOpen="True">
-        </muxc:TeachingTip>
-        
+            IsOpen="False">
+        </muxc:TeachingTip>-->
+
     </Grid>
 </Page>

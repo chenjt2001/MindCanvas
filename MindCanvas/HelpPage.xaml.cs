@@ -36,5 +36,9 @@ namespace MindCanvas
             }
         }
 
+        private async void NewFunctionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await App.ShowNewFunction();
+        }
     }
 }

@@ -100,7 +100,7 @@ namespace MindCanvas.EditPage
         }
 
         // 名称文本框失去焦点
-        private void NameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void NameTextBox_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
             // 如果已修改，则修改点名称
             if (NameTextBox.Text != node.name)
@@ -111,7 +111,7 @@ namespace MindCanvas.EditPage
         }
 
         // 描述文本框失去焦点
-        private void DescriptionTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void DescriptionTextBox_LosingFocus(object sender, RoutedEventArgs e)
         {
             // 如果已修改，则修改点描述
             if (DescriptionTextBox.Text != node.description)

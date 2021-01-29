@@ -146,7 +146,7 @@ namespace MindCanvas
                 ContentDialog dialog = new ContentDialog
                 {
                     Title = "错误",
-                    Content = "文件打开失败！",
+                    Content = "文件打开失败！请确认此文件为 MindCanvas 格式的文件并尝试将 MindCanvas 更新至最新版本！",
                     CloseButtonText = "好的"
                 };
                 await dialog.ShowAsync();
@@ -887,13 +887,13 @@ namespace MindCanvas
 
         public static void ModifyNode(Node node, double x, double y)
         {
-            Border border = mindMapCanvas.ConvertNodeToBorder(node);
+            mindMap.ModifyNode(node.id, x - mindMapCanvas.Width / 2, y - mindMapCanvas.Height / 2);
 
+            Border border = mindMapCanvas.ConvertNodeToBorder(node);
             Canvas.SetTop(border, y);
             Canvas.SetLeft(border, x);
             mindMapCanvas.ReDrawTies(node);
 
-            mindMap.ModifyNode(node.id, x - mindMapCanvas.Width / 2, y - mindMapCanvas.Height / 2);
             Record();
         }
 
@@ -1113,7 +1113,7 @@ namespace MindCanvas
                 // Dispatch on UI thread so that we have a current appbar to access and change
                 //CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 //{
-                //UpdateSystemCaptionButtonColors();
+                UpdateSystemCaptionButtonColors();
                 //});
             }
         }

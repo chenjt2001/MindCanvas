@@ -26,6 +26,13 @@
                         MindCanvas 是一款用来制作思维导图的软件。
                     </Paragraph>
                 </RichTextBlock>
+                
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    FontWeight="Normal"
+                    Text="新增内容" />
+                <Button x:Name="NewFunctionBtn" Content="版本新功能" Margin="0,10,0,0" Click="NewFunctionBtn_Click"/>
 
                 <TextBlock
                     Style="{StaticResource TitleTextBlockStyle}"
