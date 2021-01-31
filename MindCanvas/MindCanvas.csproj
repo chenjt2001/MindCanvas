@@ -129,7 +129,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Com.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="Dialog.cs" />
     <Compile Include="EditPage\EditNodePage.xaml.cs">
       <DependentUpon>EditNodePage.xaml</DependentUpon>
     </Compile>
@@ -139,6 +140,7 @@
     <Compile Include="EditPage\InfoPage.xaml.cs">
       <DependentUpon>InfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EventsManager.cs" />
     <Compile Include="HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
@@ -147,6 +149,12 @@
     </Compile>
     <Compile Include="MenuPage.xaml.cs">
       <DependentUpon>MenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MindCanvasFile.cs" />
+    <Compile Include="MindMap.cs" />
+    <Compile Include="MindMapCanvas.cs" />
+    <Compile Include="NodeControl.xaml.cs">
+      <DependentUpon>NodeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="OpenPage.xaml.cs">
       <DependentUpon>OpenPage.xaml</DependentUpon>
@@ -158,6 +166,8 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Snapshot.cs" />
+    <Compile Include="ThemeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -245,6 +255,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MenuPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NodeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

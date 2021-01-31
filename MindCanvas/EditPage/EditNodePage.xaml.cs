@@ -25,8 +25,7 @@ namespace MindCanvas.EditPage
     public sealed partial class EditNodePage : Page
     {
         private Node node;
-        private Border border;
-        private TextBlock textBlock;
+        private NodeControl border;
         private MainPage mainPage;
         private Dictionary<string, object> data;
 
@@ -49,22 +48,21 @@ namespace MindCanvas.EditPage
         private void LoadData()
         {
             node = (Node)data["node"];
-            border = (Border)data["border"];
+            border = (NodeControl)data["border"];
             mainPage = (MainPage)data["mainPage"];
-            textBlock = border.Child as TextBlock;
 
             // 名称和描述
-            NameTextBox.Text = node.name;
-            DescriptionTextBox.Text = node.description;
+            NameTextBox.Text = node.Name;
+            DescriptionTextBox.Text = node.Description;
 
             // 边框颜色
-            if (node.borderBrushArgb == null)
+            if (node.BorderBrushArgb == null)
                 DefaultBorderBrushRadioButton.IsChecked = true;
             else
                 CustomBorderBrushRadioButton.IsChecked = true;
 
             // 字体大小
-            if (node.nameFontSize == 0.0d)
+            if (node.NameFontSize == 0.0d)
                 DefaultFontSizeRadioButton.IsChecked = true;
             else
                 CustomFontSizeRadioButton.IsChecked = true;
@@ -80,7 +78,7 @@ namespace MindCanvas.EditPage
         // 选择默认边框颜色
         private void DefaultBorderBrushRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (node.borderBrushArgb != null)
+            if (node.BorderBrushArgb != null)
             {
                 EventsManager.ModifyNodeBorderBrushColor(node, null);
                 mainPage.RefreshUnRedoBtn();
@@ -92,7 +90,7 @@ namespace MindCanvas.EditPage
         {
             BorderBrushColorPicker.Color = (border.BorderBrush as SolidColorBrush).Color;
 
-            if (node.borderBrushArgb == null)
+            if (node.BorderBrushArgb == null)
             {
                 EventsManager.ModifyNodeBorderBrushColor(node, BorderBrushColorPicker.Color);
                 mainPage.RefreshUnRedoBtn();
@@ -103,7 +101,7 @@ namespace MindCanvas.EditPage
         private void NameTextBox_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
             // 如果已修改，则修改点名称
-            if (NameTextBox.Text != node.name)
+            if (NameTextBox.Text != node.Name)
             {
                 EventsManager.ModifyNode(node, NameTextBox.Text, DescriptionTextBox.Text);
                 mainPage.RefreshUnRedoBtn();
@@ -114,7 +112,7 @@ namespace MindCanvas.EditPage
         private void DescriptionTextBox_LosingFocus(object sender, RoutedEventArgs e)
         {
             // 如果已修改，则修改点描述
-            if (DescriptionTextBox.Text != node.description)
+            if (DescriptionTextBox.Text != node.Description)
             {
                 EventsManager.ModifyNode(node, NameTextBox.Text, DescriptionTextBox.Text);
                 mainPage.RefreshUnRedoBtn();
@@ -124,7 +122,7 @@ namespace MindCanvas.EditPage
         // 使显示的名称和连接跟随输入框改变
         private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            textBlock.Text = NameTextBox.Text;
+            border.Text = NameTextBox.Text;
             MainPage.mindMapCanvas.ReDrawTies(node);
         }
 
@@ -137,12 +135,12 @@ namespace MindCanvas.EditPage
         // 鼠标释放，完成颜色修改
         private void BorderBrushColorPicker_PointerCaptureLost(object sender, PointerRoutedEventArgs e)
         {
-            if (node.borderBrushArgb != null)
+            if (node.BorderBrushArgb != null)
             {
-                if (BorderBrushColorPicker.Color.A != node.borderBrushArgb[0] ||
-                    BorderBrushColorPicker.Color.R != node.borderBrushArgb[1] ||
-                    BorderBrushColorPicker.Color.G != node.borderBrushArgb[2] ||
-                    BorderBrushColorPicker.Color.B != node.borderBrushArgb[3])
+                if (BorderBrushColorPicker.Color.A != node.BorderBrushArgb[0] ||
+                    BorderBrushColorPicker.Color.R != node.BorderBrushArgb[1] ||
+                    BorderBrushColorPicker.Color.G != node.BorderBrushArgb[2] ||
+                    BorderBrushColorPicker.Color.B != node.BorderBrushArgb[3])
                 {
                     EventsManager.ModifyNodeBorderBrushColor(node, BorderBrushColorPicker.Color);
                     mainPage.RefreshUnRedoBtn();
@@ -158,7 +156,7 @@ namespace MindCanvas.EditPage
         // 选择默认字体大小
         private void DefaultFontSizeRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (node.nameFontSize != 0.0d)
+            if (node.NameFontSize != 0.0d)
             {
                 EventsManager.ModifyNodeNameFontSize(node, null);
                 mainPage.RefreshUnRedoBtn();
@@ -168,9 +166,9 @@ namespace MindCanvas.EditPage
         // 选择自定义字体大小
         private void CustomFontSizeRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            FontSizeNumberBox.Value = textBlock.FontSize;
+            FontSizeNumberBox.Value = border.FontSize;
 
-            if (node.nameFontSize == 0.0d)
+            if (node.NameFontSize == 0.0d)
             {
                 EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
                 mainPage.RefreshUnRedoBtn();
@@ -188,7 +186,7 @@ namespace MindCanvas.EditPage
                 return;
             } 
 
-            if (FontSizeNumberBox.Value != node.nameFontSize)
+            if (FontSizeNumberBox.Value != node.NameFontSize)
             {
                 EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
                 mainPage.RefreshUnRedoBtn();

@@ -39,7 +39,7 @@ namespace MindCanvas
 
 
         private Node nowNode;// 正在操作的点
-        private List<Border> selectedBorderList = new List<Border>();// 选中的点
+        private List<NodeControl> selectedBorderList = new List<NodeControl>();// 选中的点
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
         public static MindMapCanvas mindMapCanvas;
@@ -61,7 +61,6 @@ namespace MindCanvas
             NavigationCacheMode = NavigationCacheMode.Required;
 
             RefreshTheme();
-
             RefreshUnRedoBtn();
 
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
@@ -93,7 +92,7 @@ namespace MindCanvas
 
             foreach (Node node in needConfig)
             {
-                Border border = mindMapCanvas.ConvertNodeToBorder(node);
+                NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
                 border.PointerPressed += this.Node_Pressed;// 鼠标按下
                 border.PointerReleased += this.Node_Released;// 鼠标释放
                 border.PointerEntered += this.Node_PointerEntered;// 鼠标进入
@@ -122,7 +121,7 @@ namespace MindCanvas
             EditFrame.IsEnabled = false;
             EditFrame.IsEnabled = true;
 
-            Border nowNodeBorder = sender as Border;
+            NodeControl nowNodeBorder = sender as NodeControl;
             nowNode = mindMapCanvas.ConvertBorderToNode(nowNodeBorder);// 记为nowNode
 
             // 正在选择点
@@ -162,7 +161,7 @@ namespace MindCanvas
 
                     // 不论如何，让这2个被选中的点恢复
                     CreateOrUpdateSpringAnimation(1.0f);
-                    foreach (Border border in selectedBorderList)
+                    foreach (NodeControl border in selectedBorderList)
                         border.StartAnimation(_springAnimation);
                     selectedBorderList.Clear();
 
@@ -198,7 +197,7 @@ namespace MindCanvas
             // 之所以不写在Node_Released里面，是因为可能用户在移动点时鼠标移动太快，导致鼠标未在点内释放
             if (isMovingNode)
             {
-                Border border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
+                NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
                 var left = (double)border.GetValue(Canvas.LeftProperty);
                 var top = (double)border.GetValue(Canvas.TopProperty);
 
@@ -214,7 +213,7 @@ namespace MindCanvas
         // 鼠标按下border
         private void Node_Pressed(object sender, PointerRoutedEventArgs e)
         {
-            Border border = sender as Border;
+            NodeControl border = sender as NodeControl;
 
             // 缩放到1.05倍
             CreateOrUpdateSpringAnimation(1.05f);
@@ -231,7 +230,7 @@ namespace MindCanvas
             // 是因为在拖动点时可能鼠标移动太快导致丢失点border
             if (nowPressedNode != null)
             {
-                Border border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
+                NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
                 var point = e.GetCurrentPoint(border);// 获取相对于border的指针
                 var pos = point.Position;
                 pos.X = pos.X - border.ActualWidth / 2.0;
@@ -246,7 +245,7 @@ namespace MindCanvas
                 foreach (Tie tie in App.mindMap.GetTies(nowPressedNode))
                 {
                     List<Node> nodes = App.mindMap.GetNodes(tie);
-                    Border anotherBorder;
+                    NodeControl anotherBorder;
                     Node anotherNode;
                     if (nodes[0] != nowPressedNode)
                         anotherNode = nodes[0];
@@ -257,9 +256,9 @@ namespace MindCanvas
                     string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
                         left + pos.X + border.ActualWidth / 2,
                         top + pos.Y + border.ActualHeight / 2,
-                        mindMapCanvas.Width / 2 + anotherNode.x + anotherBorder.ActualWidth / 2,
-                        mindMapCanvas.Height / 2 + anotherNode.y + anotherBorder.ActualHeight / 2,
-                        (left + pos.X + border.ActualWidth / 2 + mindMapCanvas.Width / 2 + anotherNode.x + anotherBorder.ActualWidth / 2) / 2);
+                        mindMapCanvas.Width / 2 + anotherNode.X + anotherBorder.ActualWidth / 2,
+                        mindMapCanvas.Height / 2 + anotherNode.Y + anotherBorder.ActualHeight / 2,
+                        (left + pos.X + border.ActualWidth / 2 + mindMapCanvas.Width / 2 + anotherNode.X + anotherBorder.ActualWidth / 2) / 2);
                     mindMapCanvas.ModifyTiePath(tie, commands);
                 }
 
@@ -291,7 +290,7 @@ namespace MindCanvas
         private void Node_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             // 如果这个点正在被选择，就不显示退出的动画，而是只缩小一点点
-            if (selectedBorderList.Contains(sender as Border))
+            if (selectedBorderList.Contains(sender as NodeControl))
             {
                 CreateOrUpdateSpringAnimation(1.05f);
                 (sender as UIElement).StartAnimation(_springAnimation);
@@ -322,7 +321,7 @@ namespace MindCanvas
             {
                 // 让所有被选中的点恢复
                 CreateOrUpdateSpringAnimation(1.0f);
-                foreach (Border border in selectedBorderList)
+                foreach (NodeControl border in selectedBorderList)
                     border.StartAnimation(_springAnimation);
                 selectedBorderList.Clear();
 
@@ -343,7 +342,7 @@ namespace MindCanvas
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
             TieBtn.IsChecked = false;
             CreateOrUpdateSpringAnimation(1.0f);
-            foreach (Border border in selectedBorderList)
+            foreach (NodeControl border in selectedBorderList)
                 border.StartAnimation(_springAnimation);
             selectedBorderList.Clear();
 
