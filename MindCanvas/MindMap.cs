@@ -10,7 +10,7 @@ using MindCanvas;
 
 namespace MindCanvas
 {
-    }// 思维导图
+    // 思维导图
     public class MindMap
     {
         public List<Node> nodes;
@@ -188,16 +188,12 @@ namespace MindCanvas
 
         public void Load(MindCanvasFileData mindCanvasFileData)
         {
-            this.nodes = mindCanvasFileData.nodes;
-            this.ties = mindCanvasFileData.ties;
+            this.nodes = mindCanvasFileData.Nodes;
+            this.ties = mindCanvasFileData.Ties;
 
-            this.defaultNodeBorderBrush = new SolidColorBrush(Color.FromArgb(
-                mindCanvasFileData.defaultNodeBorderBrushArgb[0],
-                mindCanvasFileData.defaultNodeBorderBrushArgb[1],
-                mindCanvasFileData.defaultNodeBorderBrushArgb[2],
-                mindCanvasFileData.defaultNodeBorderBrushArgb[3]));
+            this.defaultNodeBorderBrush = mindCanvasFileData.DefaultNodeBorderBrush as SolidColorBrush;
 
-            this.defaultNodeNameFontSize = mindCanvasFileData.defaultNodeNameFontSize;
+            this.defaultNodeNameFontSize = mindCanvasFileData.DefaultNodeNameFontSize;
         }
 
         // 获取可序列化的数据
@@ -205,14 +201,10 @@ namespace MindCanvas
         {
             MindCanvasFileData mindCanvasFileData = new MindCanvasFileData
             {
-                nodes = nodes,
-                ties = ties,
-                defaultNodeBorderBrushArgb = new byte[4] {
-                    defaultNodeBorderBrush.Color.A,
-                    defaultNodeBorderBrush.Color.R,
-                    defaultNodeBorderBrush.Color.G,
-                    defaultNodeBorderBrush.Color.B },
-                defaultNodeNameFontSize = defaultNodeNameFontSize,
+                Nodes = nodes,
+                Ties = ties,
+                DefaultNodeBorderBrush = defaultNodeBorderBrush,
+                DefaultNodeNameFontSize = defaultNodeNameFontSize,
             };
 
             return mindCanvasFileData;
@@ -255,3 +247,4 @@ namespace MindCanvas
             return tie;
         }
     }
+}

@@ -58,7 +58,7 @@ namespace MindCanvas
         // 画一个点
         public void Draw(Node node)
         {
-            NodeControl border = new NodeControl(node, mindMap);
+            NodeControl border = new NodeControl(node, mindMap, showAnimation: showAnimation);
             SetTop(border, Height / 2 + node.Y);
             SetLeft(border, Width / 2 + node.X);
 

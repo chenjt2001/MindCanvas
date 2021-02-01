@@ -34,8 +34,6 @@ namespace MindCanvas
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private Compositor _compositor = Window.Current.Compositor;
-        private SpringVector3NaturalMotionAnimation _springAnimation;
 
 
         private Node nowNode;// 正在操作的点
@@ -44,8 +42,6 @@ namespace MindCanvas
         private bool isMovingNode = false;// 是否有点正在被移动
         public static MindMapCanvas mindMapCanvas;
         public static MainPage mainPage;
-        private StorageItemMostRecentlyUsedList mru = StorageApplicationPermissions.MostRecentlyUsedList;
-        private ScaleTransform scaleTransform = new ScaleTransform();// 缩放
 
         public MainPage()
         {
@@ -95,10 +91,6 @@ namespace MindCanvas
                 NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
                 border.PointerPressed += this.Node_Pressed;// 鼠标按下
                 border.PointerReleased += this.Node_Released;// 鼠标释放
-                border.PointerEntered += this.Node_PointerEntered;// 鼠标进入
-                border.PointerExited += this.Node_PointerExited;// 鼠标退出
-                border.RightTapped += this.Node_RightTapped;// 右键或触摸设备长按
-
             }
         }
 
@@ -131,15 +123,11 @@ namespace MindCanvas
                 if (selectedBorderList.Contains(nowNodeBorder))
                 {
                     // 已被选择，现在又点了一次，所以取消选择
-                    CreateOrUpdateSpringAnimation(1.0f);
-                    nowNodeBorder.StartAnimation(_springAnimation);
                     selectedBorderList.Remove(nowNodeBorder);
                     return;
                 }
 
                 // 此点未被选择，现在进行选择
-                CreateOrUpdateSpringAnimation(1.05f);
-                nowNodeBorder.StartAnimation(_springAnimation);
                 selectedBorderList.Add(nowNodeBorder);// 把当前选择的点计入selectedBorderList
 
                 // 如果已经选好了两个点，就连接
@@ -160,9 +148,8 @@ namespace MindCanvas
                     RefreshUnRedoBtn();
 
                     // 不论如何，让这2个被选中的点恢复
-                    CreateOrUpdateSpringAnimation(1.0f);
                     foreach (NodeControl border in selectedBorderList)
-                        border.StartAnimation(_springAnimation);
+                        border.IsSelected = false;
                     selectedBorderList.Clear();
 
                     // 恢复正常
@@ -174,9 +161,21 @@ namespace MindCanvas
             // 没在选择点，查看点信息
             else
             {
-                // 缩放到1.1倍
-                CreateOrUpdateSpringAnimation(1.1f);
-                nowNodeBorder.StartAnimation(_springAnimation);
+                // 只能同时选择一个点
+                foreach (NodeControl border in selectedBorderList)
+                    border.IsSelected = false;
+                selectedBorderList.Clear();
+
+                // 如果这个点不是在被选择选择状态就直接退出
+                // 这在用户点了一个正在查看信息的点时会遇到
+                // 因为连选点击两次相同的点IsSelected会反转
+                if (!nowNodeBorder.IsSelected)
+                {
+                    EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+                    return;
+                }
+                    
+                selectedBorderList.Add(nowNodeBorder);
 
                 // 显示信息
                 Dictionary<string, object> data = new Dictionary<string, object>
@@ -214,11 +213,6 @@ namespace MindCanvas
         private void Node_Pressed(object sender, PointerRoutedEventArgs e)
         {
             NodeControl border = sender as NodeControl;
-
-            // 缩放到1.05倍
-            CreateOrUpdateSpringAnimation(1.05f);
-            (border).StartAnimation(_springAnimation);
-
             nowPressedNode = mindMapCanvas.ConvertBorderToNode(border);
         }
 
@@ -233,8 +227,8 @@ namespace MindCanvas
                 NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
                 var point = e.GetCurrentPoint(border);// 获取相对于border的指针
                 var pos = point.Position;
-                pos.X = pos.X - border.ActualWidth / 2.0;
-                pos.Y = pos.Y - border.ActualHeight / 2.0;
+                pos.X -= border.ActualWidth / 2.0;
+                pos.Y -= border.ActualHeight / 2.0;
 
                 var left = (double)border.GetValue(Canvas.LeftProperty);
                 var top = (double)border.GetValue(Canvas.TopProperty);
@@ -268,82 +262,33 @@ namespace MindCanvas
             }
         }
 
-        // 动画配置
-        private void CreateOrUpdateSpringAnimation(float finalValue)
-        {
-            if (_springAnimation == null)
-            {
-                _springAnimation = _compositor.CreateSpringVector3Animation();
-                _springAnimation.Target = "Scale";
-            }
-            _springAnimation.FinalValue = new Vector3(finalValue);
-        }
-
-        // 鼠标进入border
-        private void Node_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            CreateOrUpdateSpringAnimation(1.1f);
-            (sender as UIElement).StartAnimation(_springAnimation);
-        }
-
-        // 鼠标退出border
-        private void Node_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            // 如果这个点正在被选择，就不显示退出的动画，而是只缩小一点点
-            if (selectedBorderList.Contains(sender as NodeControl))
-            {
-                CreateOrUpdateSpringAnimation(1.05f);
-                (sender as UIElement).StartAnimation(_springAnimation);
-            }
-
-            else
-            {
-                // Scale back down to 1.0
-                CreateOrUpdateSpringAnimation(1.0f);
-                (sender as UIElement).StartAnimation(_springAnimation);
-            }
-        }
-
-        // 右键或鼠标长按
-        private void Node_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            
-        }
-
         // 连接点按钮
         private void TieBtn_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)TieBtn.IsChecked)
-            {
-                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。", new DrillInNavigationTransitionInfo());
-            }
-            else
-            {
-                // 让所有被选中的点恢复
-                CreateOrUpdateSpringAnimation(1.0f);
-                foreach (NodeControl border in selectedBorderList)
-                    border.StartAnimation(_springAnimation);
-                selectedBorderList.Clear();
+            // 让所有被选中的点恢复
+            foreach (NodeControl border in selectedBorderList)
+                border.IsSelected = false;
+            selectedBorderList.Clear();
 
+            if ((bool)TieBtn.IsChecked)
+                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。", new DrillInNavigationTransitionInfo());
+            else
                 EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
-            }
         }
 
         private void MenuBtn_Click(object sender, RoutedEventArgs e)
         {
-            //await Snapshot.NewSnapshot(mindMapCanvas);
-
             this.Frame.Navigate(typeof(MenuPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
         }
 
         private void AddNodeBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            // 退出“连接点”的状态，让所有被选中的点恢复
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+
+            // 退出“连接点”的状态，让所有被选中的点恢复
             TieBtn.IsChecked = false;
-            CreateOrUpdateSpringAnimation(1.0f);
             foreach (NodeControl border in selectedBorderList)
-                border.StartAnimation(_springAnimation);
+                border.IsSelected = false;
             selectedBorderList.Clear();
 
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);

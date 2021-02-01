@@ -41,12 +41,12 @@ namespace MindCanvas
         // 保存文件
         public async void SaveFile(bool addToMru = true)
         {
-            MindCanvasFileData inMindFileData = mindMap.GetData();
+            MindCanvasFileData data = mindMap.GetData();
 
             using (MemoryStream ms = new MemoryStream())
             {
                 IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(ms, inMindFileData);
+                formatter.Serialize(ms, data);
                 await FileIO.WriteBytesAsync(file, ms.GetBuffer());
             }
 
@@ -70,10 +70,10 @@ namespace MindCanvas
                     using (MemoryStream ms = new MemoryStream(bytes))
                     {
                         IFormatter formatter = new BinaryFormatter();
-                        MindCanvasFileData inMindFileData = (MindCanvasFileData)formatter.Deserialize(ms);
-                        VersionHelper(ref inMindFileData);
+                        MindCanvasFileData mindCanvasFileData = (MindCanvasFileData)formatter.Deserialize(ms);
+                        VersionHelper(ref mindCanvasFileData);
 
-                        mindMap.Load(inMindFileData.nodes, inMindFileData.ties);
+                        mindMap.Load(mindCanvasFileData.Nodes, mindCanvasFileData.Ties);
                         if (addToMru)
                             mru.Add(storageFile);
                     }
@@ -98,16 +98,13 @@ namespace MindCanvas
         // 兼容版本
         private void VersionHelper(ref MindCanvasFileData data)
         {
-            // V1.0 -> V1.1
-            foreach (Node node in data.nodes)
-                if (node.title != null && node.Name == null)
-                    node.Name = node.title;
+            foreach (Node node in data.Nodes)
+                Node.VersionHelper(node);
 
-            // V1.1 -> V1.2
-            if (data.defaultNodeBorderBrushArgb == null)
-                data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A, Colors.Blue.R, Colors.Blue.G, Colors.Blue.B };
-            if (data.defaultNodeNameFontSize == 0.0d)
-                data.defaultNodeNameFontSize = 20;
+            foreach (Tie tie in data.Ties)
+                Tie.VersionHelper(tie);
+
+            MindCanvasFileData.VersionHelper(data);
         }
     }
 }

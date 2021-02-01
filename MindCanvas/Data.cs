@@ -21,7 +21,7 @@ namespace MindCanvas
         [OptionalField]
         private string name;
         [OptionalField]
-        public string title;
+        private string title;
         [OptionalField]
         private byte[] borderBrushArgb;// 边框颜色
         [OptionalField]
@@ -54,6 +54,14 @@ namespace MindCanvas
             }
         }
 
+        // 版本兼容
+        public static void VersionHelper(Node node)
+        {
+            // V1.0 -> V1.1
+            if (node.title != null && node.name == null)
+                node.name = node.title;
+        }
+
         public int Id { get => id; set => id = value; }
         public string Description { get => description; set => description = value; }
         public string Name { get => name; set => name = value; }
@@ -71,6 +79,11 @@ namespace MindCanvas
         private int node1id;
         private int node2id;
 
+        // 版本兼容
+        public static void VersionHelper(Tie tie)
+        {
+        }
+
         public int Id { get => id; set => id = value; }
         public string Description { get => description; set => description = value; }
         public int Node1Id { get => node1id; set => node1id = value; }
@@ -80,11 +93,42 @@ namespace MindCanvas
     [Serializable]
     public struct MindCanvasFileData
     {
-        public List<Node> nodes;
-        public List<Tie> ties;
+        private List<Node> nodes;
+        private List<Tie> ties;
         [OptionalField]
-        public byte[] defaultNodeBorderBrushArgb;// 默认边框颜色
+        private byte[] defaultNodeBorderBrushArgb;// 默认边框颜色
         [OptionalField]
-        public double defaultNodeNameFontSize;// 默认点名称字体大小
+        private double defaultNodeNameFontSize;// 默认点名称字体大小
+
+        public Brush DefaultNodeBorderBrush
+        {
+            get
+            {
+                return new SolidColorBrush(Color.FromArgb(
+                    defaultNodeBorderBrushArgb[0], 
+                    defaultNodeBorderBrushArgb[1], 
+                    defaultNodeBorderBrushArgb[2], 
+                    defaultNodeBorderBrushArgb[3]));
+            }
+            set
+            {
+                Color color = (value as SolidColorBrush).Color;
+                defaultNodeBorderBrushArgb = new byte[4] { color.A, color.R, color.G, color.B };
+            }
+        }
+
+        // 版本兼容
+        public static void VersionHelper(MindCanvasFileData data)
+        {
+            // V1.1 -> V1.2
+            if (data.defaultNodeBorderBrushArgb == null)
+                data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A, Colors.Blue.R, Colors.Blue.G, Colors.Blue.B };
+            if (data.defaultNodeNameFontSize == 0.0d)
+                data.defaultNodeNameFontSize = 20;
+        }
+
+        public List<Node> Nodes { get => nodes; set => nodes = value; }
+        public List<Tie> Ties { get => ties; set => ties = value; }
+        public double DefaultNodeNameFontSize { get => defaultNodeNameFontSize; set => defaultNodeNameFontSize = value; }
     }
 }

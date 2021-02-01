@@ -23,8 +23,8 @@ namespace MindCanvas
         private static MindMap mindMap;
         private static MindCanvasFile mindCanvasFile;
         private static MindMapCanvas mindMapCanvas;
-        public static bool modified = false;
-        public static int nowIndex;
+        private static bool modified = false;
+        private static int nowIndex;
 
 
         public static void SetMindMapCanvas(MindMapCanvas newMindMapCanvas)
@@ -286,7 +286,7 @@ namespace MindCanvas
         public static void Undo()
         {
             MindCanvasFileData lastData = records[--nowIndex];
-            mindMap.Load(DeepCopy(lastData.nodes), DeepCopy(lastData.ties));
+            mindMap.Load(DeepCopy(lastData.Nodes), DeepCopy(lastData.Ties));
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             modified = true;
         }
@@ -305,7 +305,7 @@ namespace MindCanvas
         public static void Redo()
         {
             MindCanvasFileData lastData = records[++nowIndex];
-            mindMap.Load(DeepCopy(lastData.nodes), DeepCopy(lastData.ties));
+            mindMap.Load(DeepCopy(lastData.Nodes), DeepCopy(lastData.Ties));
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             modified = true;
         }
