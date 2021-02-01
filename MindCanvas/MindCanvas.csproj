@@ -153,6 +153,7 @@
     <Compile Include="MindCanvasFile.cs" />
     <Compile Include="MindMap.cs" />
     <Compile Include="MindMapCanvas.cs" />
+    <Compile Include="MindMapInkCanvas.cs" />
     <Compile Include="NodeControl.xaml.cs">
       <DependentUpon>NodeControl.xaml</DependentUpon>
     </Compile>

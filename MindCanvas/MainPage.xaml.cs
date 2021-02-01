@@ -23,6 +23,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Storage;
 using Microsoft.UI.Xaml.Controls;
+using Windows.UI.Core;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -41,6 +42,7 @@ namespace MindCanvas
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
         public static MindMapCanvas mindMapCanvas;
+        public static MindMapInkCanvas mindMapInkCanvas;
         public static MainPage mainPage;
 
         public MainPage()
@@ -342,6 +344,15 @@ namespace MindCanvas
             MindMapScrollViewer.ChangeView(horizontalOffset: MindMapScrollViewer.ScrollableWidth / 2, verticalOffset: MindMapScrollViewer.ScrollableHeight / 2, zoomFactor: 1);
         }
 
+        // MindMapInkBorder加载完成
+        private void MindMapInkBorder_Loaded(object sender, RoutedEventArgs e)
+        {
+            mindMapInkCanvas = new MindMapInkCanvas();
+            MindMapInkBorder.Child = mindMapInkCanvas;
+            MindMapInkToolbar.TargetInkCanvas = mindMapInkCanvas;
+            mindMapInkCanvas.SetInkToolbar(MindMapInkToolbar);
+        }
+
         private void MindMapScrollViewer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             // 移动画布
@@ -365,6 +376,15 @@ namespace MindCanvas
                 horizontalOffset: MindMapScrollViewer.HorizontalOffset - (e.NewSize.Width - e.PreviousSize.Width) / 2,
                 verticalOffset: MindMapScrollViewer.VerticalOffset - (e.NewSize.Height - e.PreviousSize.Height) / 2,
                 zoomFactor: null);
+        }
+
+        // 触控书写支持
+        private void TouchWritingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (TouchWritingBtn.IsChecked == true)
+                mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
+            else
+                mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Pen;
         }
     }
 }

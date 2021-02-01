@@ -83,10 +83,26 @@
                 Text="MindCanvas"/>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Canvas.ZIndex="-1">
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Canvas.ZIndex="-1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="9*"/>
+            </Grid.RowDefinitions>
+
+            <InkToolbar x:Name="MindMapInkToolbar" HorizontalAlignment="Center">
+                <!--触控书写支持-->
+                <InkToolbarCustomToggleButton 
+                x:Name="TouchWritingBtn" 
+                Click="TouchWritingBtn_Click" 
+                ToolTipService.ToolTip="触控书写">
+                    <FontIcon Glyph="&#xED5F;"/>
+                </InkToolbarCustomToggleButton>
+            </InkToolbar>
+
             <ScrollViewer 
+                Grid.Row="1"
                 x:Name="MindMapScrollViewer" 
-                ZoomMode="Enabled"                 
+                ZoomMode="Enabled"
                 MinZoomFactor="0.4"
                 MaxZoomFactor="2"
                 VerticalScrollBarVisibility="Hidden" 
@@ -94,11 +110,17 @@
                 ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
                 SizeChanged="MindMapScrollViewer_SizeChanged"
                 ManipulationMode="All">
-                <Border 
-                    x:Name="MindMapBorder" 
-                    Loaded="MindMapBorder_Loaded" />
+                <Grid>
+                    <Border
+                        x:Name="MindMapInkBorder"
+                        Loaded="MindMapInkBorder_Loaded"/>
+                    <Border 
+                        x:Name="MindMapBorder" 
+                        Loaded="MindMapBorder_Loaded" />
+                </Grid>
             </ScrollViewer>
-        </Border>
+
+        </Grid>
 
         <Border Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
             <Frame x:Name="EditFrame">
