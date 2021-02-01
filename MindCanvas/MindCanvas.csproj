@@ -151,6 +151,7 @@
       <DependentUpon>MenuPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MindCanvasFile.cs" />
+    <Compile Include="MindCanvasGrid.cs" />
     <Compile Include="MindMap.cs" />
     <Compile Include="MindMapCanvas.cs" />
     <Compile Include="NodeControl.xaml.cs">
