@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using System.Runtime.Serialization;
+using System.IO;
+using Windows.UI.Input.Inking;
 
 namespace MindCanvas
 {
@@ -99,6 +101,8 @@ namespace MindCanvas
         private byte[] defaultNodeBorderBrushArgb;// 默认边框颜色
         [OptionalField]
         private double defaultNodeNameFontSize;// 默认点名称字体大小
+        [OptionalField]
+        private byte[] inkStrokeContainerData;// 墨迹数据
 
         public Brush DefaultNodeBorderBrush
         {
@@ -117,6 +121,32 @@ namespace MindCanvas
             }
         }
 
+        public InkStrokeContainer InkStrokeContainer
+        {
+            get
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    ms.Write(inkStrokeContainerData, 0, inkStrokeContainerData.Length);
+                    ms.Position = 0;
+
+                    InkStrokeContainer inkStrokeContainer = new InkStrokeContainer();
+                    inkStrokeContainer.LoadAsync(ms.AsInputStream()).GetResults();
+                    return inkStrokeContainer;
+                }
+            }
+            set
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    if (value == null)
+                        value = new InkStrokeContainer();
+                    value.SaveAsync(ms.AsOutputStream(), inkPersistenceFormat: InkPersistenceFormat.Isf).GetResults();
+                    inkStrokeContainerData = ms.ToArray();
+                }
+            }
+        }
+
         // 版本兼容
         public static void VersionHelper(MindCanvasFileData data)
         {
@@ -125,6 +155,16 @@ namespace MindCanvas
                 data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A, Colors.Blue.R, Colors.Blue.G, Colors.Blue.B };
             if (data.defaultNodeNameFontSize == 0.0d)
                 data.defaultNodeNameFontSize = 20;
+
+            // V1.2 -> V1.3
+            if (data.inkStrokeContainerData == null)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    new InkStrokeContainer().SaveAsync(ms.AsOutputStream(), inkPersistenceFormat: InkPersistenceFormat.Isf).GetResults();
+                    data.inkStrokeContainerData = ms.ToArray();
+                }
+            }
         }
 
         public List<Node> Nodes { get => nodes; set => nodes = value; }

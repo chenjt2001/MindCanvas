@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using MindCanvas;
+using Windows.UI.Input.Inking;
+using System.IO;
 
 namespace MindCanvas
 {
@@ -17,6 +19,7 @@ namespace MindCanvas
         public List<Tie> ties;
         public SolidColorBrush defaultNodeBorderBrush;// 默认边框颜色
         public double defaultNodeNameFontSize;// 默认点名称文字大小
+        public InkStrokeContainer inkStrokeContainer;// 墨迹
 
         public MindMap()
         {
@@ -42,6 +45,7 @@ namespace MindCanvas
 
             defaultNodeBorderBrush = new SolidColorBrush(Colors.Blue);
             defaultNodeNameFontSize = 20;
+            inkStrokeContainer = new InkStrokeContainer();
         }
 
         // 添加点
@@ -192,8 +196,8 @@ namespace MindCanvas
             this.ties = mindCanvasFileData.Ties;
 
             this.defaultNodeBorderBrush = mindCanvasFileData.DefaultNodeBorderBrush as SolidColorBrush;
-
             this.defaultNodeNameFontSize = mindCanvasFileData.DefaultNodeNameFontSize;
+            this.inkStrokeContainer = mindCanvasFileData.InkStrokeContainer;
         }
 
         // 获取可序列化的数据
@@ -205,6 +209,7 @@ namespace MindCanvas
                 Ties = ties,
                 DefaultNodeBorderBrush = defaultNodeBorderBrush,
                 DefaultNodeNameFontSize = defaultNodeNameFontSize,
+                InkStrokeContainer = inkStrokeContainer,
             };
 
             return mindCanvasFileData;

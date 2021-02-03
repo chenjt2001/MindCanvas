@@ -24,6 +24,7 @@ using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.Storage;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI.Core;
+using Windows.UI.Input.Inking.Core;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -55,6 +56,9 @@ namespace MindCanvas
             PointerMoved += MainPage_PointerMoved;// 鼠标移动事件
             PointerReleased += MainPage_PointerReleased;// 鼠标释放事件
 
+            // 擦除所有墨迹事件
+            MindMapInkToolbar.EraseAllClicked += MindMapInkToolbar_EraseAllClicked;
+
             // 设置缓存
             NavigationCacheMode = NavigationCacheMode.Required;
 
@@ -62,6 +66,12 @@ namespace MindCanvas
             RefreshUnRedoBtn();
 
             EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
+        }
+
+        // 擦除所有墨迹
+        private void MindMapInkToolbar_EraseAllClicked(InkToolbar sender, object args)
+        {
+            
         }
 
         // 刷新主题设置
@@ -347,10 +357,12 @@ namespace MindCanvas
         // MindMapInkBorder加载完成
         private void MindMapInkBorder_Loaded(object sender, RoutedEventArgs e)
         {
+            TouchWritingBtn.IsChecked = false;
             mindMapInkCanvas = new MindMapInkCanvas();
             MindMapInkBorder.Child = mindMapInkCanvas;
             MindMapInkToolbar.TargetInkCanvas = mindMapInkCanvas;
-            mindMapInkCanvas.SetInkToolbar(MindMapInkToolbar);
+
+            EventsManager.SetMindMapInkCanvas(mindMapInkCanvas);
         }
 
         private void MindMapScrollViewer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
@@ -382,9 +394,19 @@ namespace MindCanvas
         private void TouchWritingBtn_Click(object sender, RoutedEventArgs e)
         {
             if (TouchWritingBtn.IsChecked == true)
+            {
                 mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
+
+                Canvas.SetZIndex(MindMapInkBorder, 1);
+                Canvas.SetZIndex(MindMapBorder, 0);
+            }
             else
+            {
                 mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Pen;
+
+                Canvas.SetZIndex(MindMapInkBorder, 0);
+                Canvas.SetZIndex(MindMapBorder, 1);
+            }
         }
     }
 }

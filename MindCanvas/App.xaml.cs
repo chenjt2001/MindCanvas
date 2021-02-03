@@ -49,7 +49,7 @@ namespace MindCanvas
 
             // DEBUG模式则清除所有应用设置
 #if DEBUG
-            ApplicationData.Current.LocalSettings.Values.Clear();
+            //ApplicationData.Current.LocalSettings.Values.Clear();
 #endif
         }
 

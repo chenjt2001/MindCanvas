@@ -143,7 +143,7 @@ namespace MindCanvas
             MindCanvasFile mindCanvasFile = new MindCanvasFile();
             mindCanvasFile.SetMindMap(App.mindMap);
             mindCanvasFile.file = SharedFile;
-            mindCanvasFile.SaveFile(addToMru: false);
+            await mindCanvasFile.SaveFile(addToMru: false);
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += this.DataRequested;

@@ -39,7 +39,7 @@ namespace MindCanvas
         }
 
         // 保存文件
-        public async void SaveFile(bool addToMru = true)
+        public async Task SaveFile(bool addToMru = true)
         {
             MindCanvasFileData data = mindMap.GetData();
 
@@ -73,7 +73,7 @@ namespace MindCanvas
                         MindCanvasFileData mindCanvasFileData = (MindCanvasFileData)formatter.Deserialize(ms);
                         VersionHelper(ref mindCanvasFileData);
 
-                        mindMap.Load(mindCanvasFileData.Nodes, mindCanvasFileData.Ties);
+                        mindMap.Load(mindCanvasFileData);
                         if (addToMru)
                             mru.Add(storageFile);
                     }

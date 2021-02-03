@@ -113,11 +113,14 @@
                 <Grid>
                     <Border
                         x:Name="MindMapInkBorder"
-                        Loaded="MindMapInkBorder_Loaded"/>
+                        Loaded="MindMapInkBorder_Loaded"
+                        Canvas.ZIndex="1"/>
                     <Border 
                         x:Name="MindMapBorder" 
-                        Loaded="MindMapBorder_Loaded" />
+                        Loaded="MindMapBorder_Loaded"
+                        Canvas.ZIndex="2"/>
                 </Grid>
+
             </ScrollViewer>
 
         </Grid>

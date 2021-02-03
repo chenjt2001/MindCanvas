@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Windows.UI.Input.Inking;
 
 namespace MindCanvas
 {
@@ -23,6 +24,7 @@ namespace MindCanvas
         private static MindMap mindMap;
         private static MindCanvasFile mindCanvasFile;
         private static MindMapCanvas mindMapCanvas;
+        private static MindMapInkCanvas mindMapInkCanvas;
         private static bool modified = false;
         private static int nowIndex;
 
@@ -33,6 +35,12 @@ namespace MindCanvas
 
             mindMapCanvas.SetMindMap(mindMap);
             mindMapCanvas.DrawAll();
+        }
+
+        public static void SetMindMapInkCanvas(MindMapInkCanvas newMindMapInkCanvas)
+        {
+            mindMapInkCanvas = newMindMapInkCanvas;
+            newMindMapInkCanvas.InkPresenter.StrokeContainer = mindMap.inkStrokeContainer;
         }
 
         public static void Initialize()
@@ -163,7 +171,7 @@ namespace MindCanvas
         {
             if (mindCanvasFile.file != null)
             {
-                mindCanvasFile.SaveFile();
+                await mindCanvasFile.SaveFile();
                 modified = false;
                 return true;
             }
@@ -180,7 +188,7 @@ namespace MindCanvas
                 if (file != null)
                 {
                     mindCanvasFile.file = file;
-                    mindCanvasFile.SaveFile();
+                    await mindCanvasFile.SaveFile();
                     return true;
                 }
                 else
@@ -282,12 +290,20 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改墨迹
+        public static void ModifyInkCanvas(InkStrokeContainer newInkStrokeContainer)
+        {
+            mindMap.inkStrokeContainer = newInkStrokeContainer;
+            Record();
+        }
+
         // 撤销
         public static void Undo()
         {
-            MindCanvasFileData lastData = records[--nowIndex];
-            mindMap.Load(DeepCopy(lastData.Nodes), DeepCopy(lastData.Ties));
+            MindCanvasFileData lastData = DeepCopy(records[--nowIndex]);
+            mindMap.Load(lastData);
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
+            mindMapInkCanvas.InkPresenter.StrokeContainer = lastData.InkStrokeContainer;// 墨迹
             modified = true;
         }
 
@@ -297,16 +313,16 @@ namespace MindCanvas
             get
             {
                 return nowIndex > 0;
-
             }
         }
 
         // 重做
         public static void Redo()
         {
-            MindCanvasFileData lastData = records[++nowIndex];
-            mindMap.Load(DeepCopy(lastData.Nodes), DeepCopy(lastData.Ties));
+            MindCanvasFileData nextData = DeepCopy(records[++nowIndex]);
+            mindMap.Load(nextData);
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
+            mindMapInkCanvas.InkPresenter.StrokeContainer = nextData.InkStrokeContainer;// 墨迹
             modified = true;
         }
 

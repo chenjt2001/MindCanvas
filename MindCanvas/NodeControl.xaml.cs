@@ -138,7 +138,8 @@ namespace MindCanvas
         }
 
         // 背景颜色
-        public new Brush Background => new SolidColorBrush(Colors.White);
+        public new Brush Background => new SolidColorBrush(Colors.Transparent);
+        //public new Brush Background => new SolidColorBrush(Colors.White);
 
         // 边框颜色
         public new Brush BorderBrush
