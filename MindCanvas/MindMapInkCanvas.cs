@@ -21,8 +21,8 @@ namespace MindCanvas
             //InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
 
             // 画布大小
-            this.Width = 100000;
-            this.Height = 100000;
+            Width = 100000;
+            Height = 100000;
 
             InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             InkPresenter.StrokesErased += InkPresenter_StrokesErased;

@@ -119,11 +119,12 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 使显示的名称和连接跟随输入框改变
+        // 使显示的点跟随输入框改变
         private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             border.Text = NameTextBox.Text;
-            MainPage.mindMapCanvas.ReDrawTies(node);
+            border.UpdateLayout();
+            Canvas.SetLeft(border, MainPage.mindMapCanvas.Width / 2 + node.X - border.ActualWidth / 2);
         }
 
         // 使边框颜色跟随当前值改变

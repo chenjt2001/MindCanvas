@@ -11,6 +11,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid.Resources>
+            <ThemeShadow x:Name="SharedShadow" />
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="6*"/>
@@ -83,21 +86,23 @@
                 Text="MindCanvas"/>
         </Border>
 
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Canvas.ZIndex="-1">
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="9*"/>
             </Grid.RowDefinitions>
 
-            <InkToolbar x:Name="MindMapInkToolbar" HorizontalAlignment="Center">
-                <!--触控书写支持-->
-                <InkToolbarCustomToggleButton 
+            <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">
+                <InkToolbar x:Name="MindMapInkToolbar" HorizontalAlignment="Center">
+                    <!--触控书写支持-->
+                    <InkToolbarCustomToggleButton 
                 x:Name="TouchWritingBtn" 
                 Click="TouchWritingBtn_Click" 
                 ToolTipService.ToolTip="触控书写">
-                    <FontIcon Glyph="&#xED5F;"/>
-                </InkToolbarCustomToggleButton>
-            </InkToolbar>
+                        <FontIcon Glyph="&#xED5F;"/>
+                    </InkToolbarCustomToggleButton>
+                </InkToolbar>
+            </Border>
 
             <ScrollViewer 
                 Grid.Row="1"
@@ -110,7 +115,7 @@
                 ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
                 SizeChanged="MindMapScrollViewer_SizeChanged"
                 ManipulationMode="All">
-                <Grid>
+                <Grid Canvas.ZIndex="-1">
                     <Border
                         x:Name="MindMapInkBorder"
                         Loaded="MindMapInkBorder_Loaded"
@@ -125,7 +130,7 @@
 
         </Grid>
 
-        <Border Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+        <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">
             <Frame x:Name="EditFrame">
                 <Frame.ContentTransitions>
                     <TransitionCollection>

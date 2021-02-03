@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.Foundation;
 
 namespace MindCanvas
 {
@@ -59,12 +60,23 @@ namespace MindCanvas
         public void Draw(Node node)
         {
             NodeControl border = new NodeControl(node, mindMap, showAnimation: showAnimation);
-            SetTop(border, Height / 2 + node.Y);
-            SetLeft(border, Width / 2 + node.X);
-
-            Children.Add(border);
 
             nodeIdBorder[node.Id] = border;
+            Children.Add(border);
+
+            // 在UpdateLayout前获取大小
+            border.Measure(new Size(Double.MaxValue, Double.MaxValue));
+            Size visualSize = border.DesiredSize;
+            border.Arrange(new Rect(new Point(0, 0), visualSize));
+
+            border.CenterPoint = new System.Numerics.Vector3{
+                X = (float)(visualSize.Width / 2),
+                Y = (float)(visualSize.Height / 2),
+            };
+            SetTop(border, this.Height / 2 + node.Y - visualSize.Height / 2);
+            SetLeft(border, this.Width / 2 + node.X - visualSize.Width / 2);
+
+            border.UpdateLayout();
         }
 
         // 画一条线
@@ -93,11 +105,11 @@ namespace MindCanvas
             // controlPoint2: 曲线的第二个控制点，它决定曲线的结束切线。
             // endPoint: 终结点，绘制曲线将通过的点
             string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
-                Width / 2 + node1.X + node1Border.ActualWidth / 2,
-                Height / 2 + node1.Y + node1Border.ActualHeight / 2,
-                Width / 2 + node2.X + node2Border.ActualWidth / 2,
-               Height / 2 + node2.Y + node2Border.ActualHeight / 2,
-                (Width / 2 + node1.X + node1Border.ActualWidth / 2 + Width / 2 + node2.X + node2Border.ActualWidth / 2) / 2);
+                Width / 2 + node1.X,
+                Height / 2 + node1.Y,
+                Width / 2 + node2.X,
+               Height / 2 + node2.Y,
+                (Width / 2 + node1.X + Width / 2 + node2.X) / 2);
             var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
             path.Data = pathData;
 

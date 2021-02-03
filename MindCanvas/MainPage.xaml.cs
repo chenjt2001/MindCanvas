@@ -53,7 +53,7 @@ namespace MindCanvas
             mainPage = this;
 
             // 这两个事件用来实现移动点
-            PointerMoved += MainPage_PointerMoved;// 鼠标移动事件
+            ManipulationDelta += MainPage_ManipulationDelta;// 鼠标移动事件
             PointerReleased += MainPage_PointerReleased;// 鼠标释放事件
 
             // 擦除所有墨迹事件
@@ -61,6 +61,11 @@ namespace MindCanvas
 
             // 设置缓存
             NavigationCacheMode = NavigationCacheMode.Required;
+
+            // 设置阴影
+            SharedShadow.Receivers.Add(MindMapScrollViewer);
+            EditBorder.Translation += new Vector3(0, 0, 32);
+            InkToolbarBorder.Translation += new Vector3(0, 0, 32);
 
             RefreshTheme();
             RefreshUnRedoBtn();
@@ -71,7 +76,8 @@ namespace MindCanvas
         // 擦除所有墨迹
         private void MindMapInkToolbar_EraseAllClicked(InkToolbar sender, object args)
         {
-            
+            EventsManager.ModifyInkCanvas(sender.TargetInkCanvas.InkPresenter.StrokeContainer);
+            RefreshUnRedoBtn();
         }
 
         // 刷新主题设置
@@ -209,10 +215,12 @@ namespace MindCanvas
             if (isMovingNode)
             {
                 NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
-                var left = (double)border.GetValue(Canvas.LeftProperty);
-                var top = (double)border.GetValue(Canvas.TopProperty);
+                var left = Canvas.GetLeft(border);
+                var top = Canvas.GetTop(border);
 
-                EventsManager.ModifyNode(nowPressedNode, left, top);
+                EventsManager.ModifyNode(nowPressedNode,
+                    left - mindMapCanvas.Width / 2 + border.ActualWidth / 2,
+                    top - mindMapCanvas.Height / 2 + border.ActualHeight / 2);
                 RefreshUnRedoBtn();
                 isMovingNode = false;
             }
@@ -229,42 +237,41 @@ namespace MindCanvas
         }
 
         // 鼠标移动事件
-        private void MainPage_PointerMoved(object sender, PointerRoutedEventArgs e)
+        private void MainPage_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             // 如果这时有个点正在被按下，就移动它
             // 之所以不使用检测“在点border内鼠标移动”的方式来处理这个
             // 是因为在拖动点时可能鼠标移动太快导致丢失点border
-            if (nowPressedNode != null)
+            if (nowPressedNode != null && !e.IsInertial)
             {
                 NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
-                var point = e.GetCurrentPoint(border);// 获取相对于border的指针
-                var pos = point.Position;
-                pos.X -= border.ActualWidth / 2.0;
-                pos.Y -= border.ActualHeight / 2.0;
+                var translationPoint = e.Delta.Translation;// 获取相对指针变化
 
-                var left = (double)border.GetValue(Canvas.LeftProperty);
-                var top = (double)border.GetValue(Canvas.TopProperty);
-                border.SetValue(Canvas.LeftProperty, left + pos.X);
-                border.SetValue(Canvas.TopProperty, top + pos.Y);
+                var newLeft = Canvas.GetLeft(border) + translationPoint.X;
+                var newTop = Canvas.GetTop(border) + translationPoint.Y;
+
+                Canvas.SetLeft(border, newLeft);
+                Canvas.SetTop(border, newTop);
+
+                var newX = newLeft + border.ActualWidth / 2;
+                var newY = newTop + border.ActualHeight / 2;
 
                 // 保持线连着点
                 foreach (Tie tie in App.mindMap.GetTies(nowPressedNode))
                 {
                     List<Node> nodes = App.mindMap.GetNodes(tie);
-                    NodeControl anotherBorder;
                     Node anotherNode;
                     if (nodes[0] != nowPressedNode)
                         anotherNode = nodes[0];
                     else
                         anotherNode = nodes[1];
-                    anotherBorder = mindMapCanvas.ConvertNodeToBorder(anotherNode);
 
                     string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
-                        left + pos.X + border.ActualWidth / 2,
-                        top + pos.Y + border.ActualHeight / 2,
-                        mindMapCanvas.Width / 2 + anotherNode.X + anotherBorder.ActualWidth / 2,
-                        mindMapCanvas.Height / 2 + anotherNode.Y + anotherBorder.ActualHeight / 2,
-                        (left + pos.X + border.ActualWidth / 2 + mindMapCanvas.Width / 2 + anotherNode.X + anotherBorder.ActualWidth / 2) / 2);
+                        newX,
+                        newY,
+                        mindMapCanvas.Width / 2 + anotherNode.X,
+                        mindMapCanvas.Height / 2 + anotherNode.Y,
+                        (newX + mindMapCanvas.Width / 2 + anotherNode.X) / 2);
                     mindMapCanvas.ModifyTiePath(tie, commands);
                 }
 
@@ -368,7 +375,7 @@ namespace MindCanvas
         private void MindMapScrollViewer_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             // 移动画布
-            // 排除有点正在按下的情况
+            // 排除有点正在按下或者的情况
             if (nowPressedNode == null)
             { 
                 // 排除在使用鼠标并且处于惯性的情况

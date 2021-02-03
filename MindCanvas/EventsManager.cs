@@ -210,11 +210,11 @@ namespace MindCanvas
 
         public static void ModifyNode(Node node, double x, double y)
         {
-            mindMap.ModifyNode(node.Id, x - mindMapCanvas.Width / 2, y - mindMapCanvas.Height / 2);
+            mindMap.ModifyNode(node.Id, x, y);
 
             NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
-            Canvas.SetTop(border, y);
-            Canvas.SetLeft(border, x);
+            Canvas.SetTop(border, mindMapCanvas.Height / 2 + y - border.ActualHeight / 2);
+            Canvas.SetLeft(border, mindMapCanvas.Width / 2 + x - border.ActualWidth / 2);
             mindMapCanvas.ReDrawTies(node);
 
             Record();
