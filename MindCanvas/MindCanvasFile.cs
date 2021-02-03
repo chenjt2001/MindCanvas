@@ -104,7 +104,7 @@ namespace MindCanvas
             foreach (Tie tie in data.Ties)
                 Tie.VersionHelper(tie);
 
-            MindCanvasFileData.VersionHelper(data);
+            MindCanvasFileData.VersionHelper(ref data);
         }
     }
 }

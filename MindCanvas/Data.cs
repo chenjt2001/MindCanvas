@@ -148,7 +148,7 @@ namespace MindCanvas
         }
 
         // 版本兼容
-        public static void VersionHelper(MindCanvasFileData data)
+        public static void VersionHelper(ref MindCanvasFileData data)
         {
             // V1.1 -> V1.2
             if (data.defaultNodeBorderBrushArgb == null)
