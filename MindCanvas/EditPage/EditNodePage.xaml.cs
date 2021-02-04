@@ -75,6 +75,7 @@ namespace MindCanvas.EditPage
         {
             EventsManager.RemoveNode(node);
             mainPage.RefreshUnRedoBtn();
+            mainPage.ReturnToInfo();
         }
 
         // 选择默认边框颜色

@@ -133,9 +133,6 @@
     <Compile Include="EditPage\EditNodePage.xaml.cs">
       <DependentUpon>EditNodePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditPage\EditTiePage.xaml.cs">
-      <DependentUpon>EditTiePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EditPage\InfoPage.xaml.cs">
       <DependentUpon>InfoPage.xaml</DependentUpon>
     </Compile>
@@ -225,10 +222,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="EditPage\EditNodePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditPage\EditTiePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

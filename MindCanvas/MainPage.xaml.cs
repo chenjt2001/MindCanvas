@@ -422,5 +422,10 @@ namespace MindCanvas
                 verticalOffset: MindMapScrollViewer.VerticalOffset - (e.NewSize.Height - e.PreviousSize.Height) / 2,
                 zoomFactor: null);
         }
+
+        public void ReturnToInfo()
+        {
+            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+        }
     }
 }

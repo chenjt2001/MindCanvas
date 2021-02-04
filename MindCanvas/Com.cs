@@ -954,6 +954,9 @@ namespace MindCanvas
         // 删除点
         public static void RemoveNode(Node node)
         {
+            foreach (Tie tie in mindMap.GetTies(node))
+                mindMapCanvas.Clear(tie);
+
             mindMap.RemoveNode(node);
             mindMapCanvas.Clear(node);
             Record();
