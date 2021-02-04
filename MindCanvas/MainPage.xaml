@@ -11,109 +11,116 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Grid.Resources>
-            <ThemeShadow x:Name="SharedShadow" />
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
+        <local:AppTitleBarControl Grid.Row="0"/>
 
-        <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
-            <AppBarButton 
-                x:Name="MenuBtn" 
-                Label="菜单" 
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Center"
-                Click="MenuBtn_Click">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xEDE3;"/>
-                </AppBarButton.Icon>
-            </AppBarButton>
-        </Border>
+        <Grid Grid.Row="1">
+            <Grid.Resources>
+                <ThemeShadow x:Name="SharedShadow" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
-            <StackPanel
-                Orientation="Horizontal" 
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-
-                <AppBarButton Label="添加点" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph="&#xE7C8;"/>
-                    </AppBarButton.Icon>
-                    <!--AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
-                    所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
-                    详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
-                    <FlyoutBase.AttachedFlyout>
-                        <Flyout Placement="Bottom">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="AddNodeTextBox" PlaceholderText="点名称" Margin="0,0,12,0" Width="150"/>
-                                <Button Content="确定" Click="AddNodeBtn_Click"/>
-                            </StackPanel>
-                        </Flyout>
-                    </FlyoutBase.AttachedFlyout>
-                </AppBarButton>
-
-                <AppBarToggleButton Label="连接点" 
-                                    x:Name="TieBtn"
-                                    Click="TieBtn_Click">
-                    <AppBarToggleButton.Icon>
-                        <!--<FontIcon Glyph="&#xF7B7;"/>-->
-                        <FontIcon Glyph="&#xE71B;"/>
-                    </AppBarToggleButton.Icon>
-                </AppBarToggleButton>
-                <AppBarSeparator/>
-
-                <AppBarButton Icon="Undo" Label="撤销" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
-                <AppBarButton Icon="Redo" Label="重做" IsEnabled="False" x:Name="RedoBtn"  Click="RedoBtn_Click"/>
-
-            </StackPanel>
-        </Border>
-
-        <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
-            <TextBlock 
-                x:Name="AppNameTextBlock" 
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Center" 
-                Style="{StaticResource TitleTextBlockStyle}"
-                Text="MindCanvas"/>
-        </Border>
-
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="9*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <InkToolbar 
+            <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
+                <AppBarButton 
+                x:Name="MenuBtn" 
+                Label="菜单" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center"
+                Click="MenuBtn_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xEDE3;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
+                <StackPanel
+                Orientation="Horizontal" 
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                    <AppBarButton Label="添加点" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE7C8;"/>
+                        </AppBarButton.Icon>
+                        <!--AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
+                    所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
+                    详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout Placement="Bottom">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="AddNodeTextBox" PlaceholderText="点名称" Margin="0,0,12,0" Width="150"/>
+                                    <Button Content="确定" Click="AddNodeBtn_Click"/>
+                                </StackPanel>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
+
+                    <AppBarToggleButton Label="连接点" 
+                                    x:Name="TieBtn"
+                                    Click="TieBtn_Click">
+                        <AppBarToggleButton.Icon>
+                            <!--<FontIcon Glyph="&#xF7B7;"/>-->
+                            <FontIcon Glyph="&#xE71B;"/>
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                    <AppBarSeparator/>
+
+                    <AppBarButton Icon="Undo" Label="撤销" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
+                    <AppBarButton Icon="Redo" Label="重做" IsEnabled="False" x:Name="RedoBtn"  Click="RedoBtn_Click"/>
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
+                <TextBlock 
+                x:Name="AppNameTextBlock" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center" 
+                Style="{StaticResource TitleTextBlockStyle}"
+                Text="MindCanvas"/>
+            </Border>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="9*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <InkToolbar 
                         x:Name="MindMapInkToolbar" 
                         HorizontalAlignment="Center" 
                         IsStencilButtonCheckedChanged="MindMapInkToolbar_IsStencilButtonCheckedChanged" 
                         Margin="0,0,50,0" 
                         IsEnabled="{x:Bind InkToolToggleSwitch.IsOn, Mode=OneWay}">
-                        <!--触控书写支持-->
-                        <InkToolbarCustomToggleButton 
+                            <!--触控书写支持-->
+                            <InkToolbarCustomToggleButton 
                             x:Name="TouchWritingBtn" 
                             Click="TouchWritingBtn_Click"
                             IsChecked="True"
                             ToolTipService.ToolTip="触控书写">
-                            <FontIcon Glyph="&#xED5F;"/>
-                        </InkToolbarCustomToggleButton>
-                    </InkToolbar>
-                    <ToggleSwitch x:Name="InkToolToggleSwitch" Header="墨迹书写模式" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
-                </StackPanel>
-            </Border>
+                                <FontIcon Glyph="&#xED5F;"/>
+                            </InkToolbarCustomToggleButton>
+                        </InkToolbar>
+                        <ToggleSwitch x:Name="InkToolToggleSwitch" Header="墨迹书写模式" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
+                    </StackPanel>
+                </Border>
 
-            <ScrollViewer 
+                <ScrollViewer 
                 Grid.Row="1"
                 x:Name="MindMapScrollViewer" 
                 ZoomMode="Enabled"
@@ -124,37 +131,39 @@
                 ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
                 SizeChanged="MindMapScrollViewer_SizeChanged"
                 ManipulationMode="All">
-                <Grid Canvas.ZIndex="-1" x:Name="MindMapGrid">
-                    <Border
+                    <Grid Canvas.ZIndex="-1" x:Name="MindMapGrid">
+                        <Border
                         x:Name="MindMapInkBorder"
                         Loaded="MindMapInkBorder_Loaded"
                         Canvas.ZIndex="0"/>
-                    <Border 
+                        <Border 
                         x:Name="MindMapBorder" 
                         Loaded="MindMapBorder_Loaded"
                         Canvas.ZIndex="1"/>
-                </Grid>
+                    </Grid>
 
-            </ScrollViewer>
+                </ScrollViewer>
 
-        </Grid>
+            </Grid>
 
-        <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">
-            <Frame x:Name="EditFrame">
-                <Frame.ContentTransitions>
-                    <TransitionCollection>
-                        <NavigationThemeTransition  />
-                    </TransitionCollection>
-                </Frame.ContentTransitions>
-            </Frame>
-        </Border>
+            <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">
+                <Frame x:Name="EditFrame">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition  />
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </Border>
 
-        <!--<muxc:TeachingTip
+            <!--<muxc:TeachingTip
             x:Name="NewFunctionTip"
             Title="无限画布"
             Subtitle="使用 鼠标 或 手指 在画布上拖动，可使用画布的其他区域。手指捏合 或 按住Ctrl键并转动鼠标滚轮 可缩放画布。"
             IsOpen="False">
         </muxc:TeachingTip>-->
+
+        </Grid>
 
     </Grid>
 </Page>

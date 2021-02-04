@@ -14,7 +14,14 @@
         <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#1D2227" />
     </Page.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <local:AppTitleBarControl Grid.Row="0"/>
+
         <NavigationView 
+            Grid.Row="1"
             x:Name="NavView" 
             IsSettingsVisible="True" 
             PaneTitle="菜单"

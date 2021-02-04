@@ -97,10 +97,6 @@ namespace MindCanvas
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
-
-                // Extend acrylic
-                ExtendAcrylicIntoTitleBar(false);
-
             }
 
             if (SystemInformation.IsFirstRun || SystemInformation.IsAppUpdated)
@@ -129,15 +125,6 @@ namespace MindCanvas
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
-        }
-
-        // 将 Acrylic 扩展到标题栏
-        private void ExtendAcrylicIntoTitleBar(bool ExtendViewIntoTitleBar)
-        {
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = ExtendViewIntoTitleBar;
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
 
         // 文件激活事件

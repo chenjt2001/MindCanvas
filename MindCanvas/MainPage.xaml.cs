@@ -26,6 +26,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking.Core;
 using Windows.UI.Input.Inking;
+using Windows.ApplicationModel.Core;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -37,8 +38,6 @@ namespace MindCanvas
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
-
         private Node nowNode;// 正在操作的点
         private List<NodeControl> selectedBorderList = new List<NodeControl>();// 选中的点
         private Node nowPressedNode; // 正在按着的点
