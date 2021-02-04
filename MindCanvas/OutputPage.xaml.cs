@@ -62,17 +62,17 @@ namespace MindCanvas
                     savePicker.FileTypeChoices.Add("PNG 文件", new List<string>() { ".png" });
 
                 // 默认文件名称
-                if (App.mindCanvasFile.file == null)
+                if (App.mindCanvasFile.File == null)
                     savePicker.SuggestedFileName = "MindCanvas 思维导图";
                 else
-                    savePicker.SuggestedFileName = App.mindCanvasFile.file.DisplayName;
+                    savePicker.SuggestedFileName = App.mindCanvasFile.File.DisplayName;
 
                 StorageFile file = await savePicker.PickSaveFileAsync();
 
                 if (file != null)
                 {
-                    var pixels = Snapshot.pixels;
-                    var renderTargetBitmap = Snapshot.renderTargetBitmap;
+                    var pixels = Snapshot.Pixels;
+                    var renderTargetBitmap = Snapshot.RenderTargetBitmap;
 
                     // TIFF格式
                     if (choice == "TIFF (*.tiff)")
@@ -114,20 +114,19 @@ namespace MindCanvas
             }
         }
 
-        public async void MindMapBorder_Loaded(object sender, RoutedEventArgs e)
+        private async void MindMapBorder_Loaded(object sender, RoutedEventArgs e)
         {
             MindMapCanvas mindMapCanvas = new MindMapCanvas(showAnimation: false);
             MindMapBorder.Child = mindMapCanvas;
-            mindMapCanvas.SetMindMap(App.mindMap);
+            mindMapCanvas.MindMap = App.mindMap;
             mindMapCanvas.DrawAll();
 
             await Snapshot.NewSnapshot(mindMapCanvas);
-            PreviewImage.Source = Snapshot.renderTargetBitmap;
+            PreviewImage.Source = Snapshot.RenderTargetBitmap;
 
             // 防止PreviewImage自动缩放预览大小
-            if (Snapshot.renderTargetBitmap.PixelWidth < PreviewImage.MaxWidth)
-                PreviewImage.MaxWidth = Snapshot.renderTargetBitmap.PixelWidth;
-
+            if (Snapshot.RenderTargetBitmap.PixelWidth < PreviewImage.MaxWidth)
+                PreviewImage.MaxWidth = Snapshot.RenderTargetBitmap.PixelWidth;
 
             MindMapBorder.Visibility = Visibility.Collapsed;
         }

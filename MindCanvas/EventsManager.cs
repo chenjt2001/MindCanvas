@@ -33,7 +33,7 @@ namespace MindCanvas
         {
             mindMapCanvas = newMindMapCanvas;
 
-            mindMapCanvas.SetMindMap(mindMap);
+            mindMapCanvas.MindMap = mindMap;
             mindMapCanvas.DrawAll();
         }
 
@@ -49,7 +49,7 @@ namespace MindCanvas
             App.mindCanvasFile = mindCanvasFile = new MindCanvasFile();
 
             mindMap.Initialize();
-            mindCanvasFile.SetMindMap(mindMap);
+            mindCanvasFile.MindMap = mindMap;
             ClearRecords();
             Record();
             modified = false;
@@ -169,7 +169,7 @@ namespace MindCanvas
         // 保存文件
         public static async Task<bool> Save()
         {
-            if (mindCanvasFile.file != null)
+            if (mindCanvasFile.File != null)
             {
                 await mindCanvasFile.SaveFile();
                 modified = false;
@@ -187,7 +187,7 @@ namespace MindCanvas
 
                 if (file != null)
                 {
-                    mindCanvasFile.file = file;
+                    mindCanvasFile.File = file;
                     await mindCanvasFile.SaveFile();
                     return true;
                 }
@@ -202,7 +202,6 @@ namespace MindCanvas
             NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
 
             border.Text = newName;
-            mindMapCanvas.ReDrawTies(node);
 
             mindMap.ModifyNode(node.Id, newName, newDescription);
             Record();
@@ -252,8 +251,13 @@ namespace MindCanvas
                 border.FontSize = mindMap.defaultNodeNameFontSize;
             }
 
-            mindMapCanvas.ReDrawTies(node);
+            Record();
+        }
 
+        // 修改线
+        public static void ModifyTie(Tie tie, string newDescription)
+        {
+            mindMap.ModifyTie(tie.Id, newDescription);
             Record();
         }
 
@@ -267,16 +271,20 @@ namespace MindCanvas
         }
 
         // 新建线
-        public static void AddTie(Node node1, Node node2, string description = "暂无描述")
+        public static Tie AddTie(Node node1, Node node2, string description = "暂无描述")
         {
             Tie newTie = mindMap.AddTie(node1.Id, node2.Id, description);
             mindMapCanvas.Draw(newTie);
             Record();
+            return newTie;
         }
 
         // 删除点
         public static void RemoveNode(Node node)
         {
+            foreach (Tie tie in mindMap.GetTies(node))
+                mindMapCanvas.Clear(tie);
+            
             mindMap.RemoveNode(node);
             mindMapCanvas.Clear(node);
             Record();
@@ -349,7 +357,7 @@ namespace MindCanvas
         }
 
         // 深拷贝
-        public static T DeepCopy<T>(T obj)
+        private static T DeepCopy<T>(T obj)
         {
             object retval;
             using (MemoryStream ms = new MemoryStream())

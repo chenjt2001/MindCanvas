@@ -27,7 +27,7 @@ namespace MindCanvas
     public sealed partial class MenuPage : Page
     {
         // 声明共享的文件
-        public StorageFile SharedFile;
+        private StorageFile SharedFile;
 
         public static Frame MenuPageFrame;
 
@@ -141,8 +141,8 @@ namespace MindCanvas
             );
 
             MindCanvasFile mindCanvasFile = new MindCanvasFile();
-            mindCanvasFile.SetMindMap(App.mindMap);
-            mindCanvasFile.file = SharedFile;
+            mindCanvasFile.MindMap = App.mindMap;
+            mindCanvasFile.File = SharedFile;
             await mindCanvasFile.SaveFile(addToMru: false);
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -172,13 +172,13 @@ namespace MindCanvas
         private async void SaveAs()
         {
             // 暂时将mindCanvasFile.file设为空，然后发起保存
-            StorageFile file = App.mindCanvasFile.file;
-            App.mindCanvasFile.file = null;
+            StorageFile file = App.mindCanvasFile.File;
+            App.mindCanvasFile.File = null;
             if (await EventsManager.Save())
                 On_BackRequested();
             else
                 NavView.SelectedItem = OpenItem;
-            App.mindCanvasFile.file = file;
+            App.mindCanvasFile.File = file;
         }
 
         // 用户点击后退按钮

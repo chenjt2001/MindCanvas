@@ -127,7 +127,7 @@ namespace MindCanvas
         }
 
         // 按Id获取点
-        public Node GetNode(int id)
+        private Node GetNode(int id)
         {
             foreach (Node node in nodes)
                 if (node.Id == id)
@@ -136,7 +136,7 @@ namespace MindCanvas
         }
 
         // 按Id获取线
-        public Tie GetTie(int id)
+        private Tie GetTie(int id)
         {
             foreach (Tie tie in ties)
                 if (tie.Id == id)
@@ -177,19 +177,7 @@ namespace MindCanvas
             ties.Remove(tie);
         }
 
-        public void RemoveTie(Node node1, Node node2)
-        {
-            Tie tie = GetTie(node1, node2);
-            RemoveTie(tie);
-        }
-
         // 加载数据并清空当前的数据
-        public void Load(List<Node> nodes, List<Tie> ties)
-        {
-            this.nodes = nodes;
-            this.ties = ties;
-        }
-
         public void Load(MindCanvasFileData mindCanvasFileData)
         {
             this.nodes = mindCanvasFileData.Nodes;
@@ -220,6 +208,9 @@ namespace MindCanvas
         {
             nodes.Clear();
             ties.Clear();
+            defaultNodeBorderBrush = null;
+            defaultNodeNameFontSize = 0.0d;
+            inkStrokeContainer = null;
         }
 
         // 修改点

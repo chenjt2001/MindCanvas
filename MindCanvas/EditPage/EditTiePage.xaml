@@ -10,6 +10,33 @@
     Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
     <Grid>
+        <ScrollViewer
+                Padding="0,0,0,0"
+                VerticalScrollBarVisibility="Auto"
+                VerticalScrollMode="Auto">
 
+            <StackPanel Orientation="Vertical" Margin="20,40,20,0">
+                <StackPanel x:Name="NodeStackPanel" Orientation="Vertical" Visibility="Visible">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <ContentThemeTransition />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+
+                    <TextBlock Text="基本信息" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="描述" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" LosingFocus="DescriptionTextBox_LosingFocus"/>
+                    </Grid>
+
+                    <MenuFlyoutSeparator Margin="0,20,0,0"/>
+                    <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="删除" FontSize="15" Width="100" Click="RemoveTieBtn_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

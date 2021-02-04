@@ -18,25 +18,11 @@ namespace MindCanvas
     public class MindCanvasFile
     {
         private MindMap mindMap;
+        private StorageFile file;
         private readonly StorageItemMostRecentlyUsedList mru = StorageApplicationPermissions.MostRecentlyUsedList;
-        public StorageFile file;
 
-        // 初始化
-        public MindCanvasFile()
-        {
-        }
-
-        // 加载数据
-        public void SetMindMap(MindMap mindMap)
-        {
-            this.mindMap = mindMap;
-        }
-
-        // 获取数据
-        public MindMap GetMindMap()
-        {
-            return mindMap;
-        }
+        public StorageFile File { get => file; set => file = value; }
+        public MindMap MindMap { get => mindMap; set => mindMap = value; }
 
         // 保存文件
         public async Task SaveFile(bool addToMru = true)
@@ -70,10 +56,11 @@ namespace MindCanvas
                     using (MemoryStream ms = new MemoryStream(bytes))
                     {
                         IFormatter formatter = new BinaryFormatter();
-                        MindCanvasFileData mindCanvasFileData = (MindCanvasFileData)formatter.Deserialize(ms);
-                        VersionHelper(ref mindCanvasFileData);
+                        MindCanvasFileData data = (MindCanvasFileData)formatter.Deserialize(ms);
+                        MindCanvasFileData.VersionHelper(ref data);
+                        MindCanvasFileData.VersionHelper(ref data);
 
-                        mindMap.Load(mindCanvasFileData);
+                        mindMap.Load(data);
                         if (addToMru)
                             mru.Add(storageFile);
                     }
@@ -93,18 +80,6 @@ namespace MindCanvas
                 await dialog.ShowAsync();
                 return false;
             }
-        }
-
-        // 兼容版本
-        private void VersionHelper(ref MindCanvasFileData data)
-        {
-            foreach (Node node in data.Nodes)
-                Node.VersionHelper(node);
-
-            foreach (Tie tie in data.Ties)
-                Tie.VersionHelper(tie);
-
-            MindCanvasFileData.VersionHelper(ref data);
         }
     }
 }

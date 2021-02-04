@@ -27,7 +27,7 @@ namespace MindCanvas
             this.InitializeComponent();
         }
 
-        public string Version
+        private string Version
         {
             get
             {

@@ -13,19 +13,21 @@ namespace MindCanvas
     // 快照
     public static class Snapshot
     {
-        public static IBuffer pixels;
-        public static RenderTargetBitmap renderTargetBitmap;
+        private static IBuffer pixels;
+        private static RenderTargetBitmap renderTargetBitmap;
 
+        public static IBuffer Pixels { get => pixels; set => pixels = value; }
+        public static RenderTargetBitmap RenderTargetBitmap { get => renderTargetBitmap; set => renderTargetBitmap = value; }
 
         public static async Task<IBuffer> NewSnapshot(UIElement element)
         {
             //element.UpdateLayout();
-            renderTargetBitmap = new RenderTargetBitmap();
+            RenderTargetBitmap = new RenderTargetBitmap();
 
-            await renderTargetBitmap.RenderAsync(element);
-            pixels = await renderTargetBitmap.GetPixelsAsync();
+            await RenderTargetBitmap.RenderAsync(element);
+            Pixels = await RenderTargetBitmap.GetPixelsAsync();
 
-            return pixels;
+            return Pixels;
         }
     }
 }

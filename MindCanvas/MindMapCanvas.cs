@@ -22,6 +22,8 @@ namespace MindCanvas
         private Dictionary<int, Windows.UI.Xaml.Shapes.Path> tieIdPath = new Dictionary<int, Windows.UI.Xaml.Shapes.Path>();// 标记线id与path
         private bool showAnimation;// 是否显示动画
 
+        public MindMap MindMap { get => mindMap; set => mindMap = value; }
+
         public MindMapCanvas(bool showAnimation = true)
         {
             mindMap = new MindMap();
@@ -41,19 +43,6 @@ namespace MindCanvas
             // 画布大小
             Width = 100000;
             Height = 100000;
-        }
-
-
-        // 设置此Canvas对应的思维导图
-        public void SetMindMap(MindMap mindMap)
-        {
-            this.mindMap = mindMap;
-        }
-
-        // 获取此Canvas对应的思维导图
-        public MindMap GetMindMap()
-        {
-            return mindMap;
         }
 
         // 画一个点

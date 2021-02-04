@@ -25,6 +25,7 @@ using Windows.Storage;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking.Core;
+using Windows.UI.Input.Inking;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -70,7 +71,7 @@ namespace MindCanvas
             RefreshTheme();
             RefreshUnRedoBtn();
 
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo()); 
+            ShowFrame(typeof(EditPage.InfoPage));            
         }
 
         // 擦除所有墨迹
@@ -121,7 +122,23 @@ namespace MindCanvas
             foreach (Tie tie in needConfig)
             {
                 Windows.UI.Xaml.Shapes.Path path = mindMapCanvas.ConvertTieToPath(tie);
+                path.PointerReleased += Path_PointerReleased;// 鼠标释放
             }
+        }
+
+        // 鼠标在线内释放，算按了一下线
+        private void Path_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            Windows.UI.Xaml.Shapes.Path path = sender as Windows.UI.Xaml.Shapes.Path;
+            Tie tie = mindMapCanvas.ConvertPathToTie(path);
+
+            // 显示信息
+            Dictionary<string, object> data = new Dictionary<string, object>
+                {
+                    { "tie", tie },
+                    { "path", path },
+                };
+            ShowFrame(typeof(EditPage.EditTiePage), data);
         }
 
         // 鼠标在点内释放，算按了一下点
@@ -161,7 +178,10 @@ namespace MindCanvas
                         EventsManager.RemoveTie(tie);
                     // 否则添加
                     else
-                        EventsManager.AddTie(node1, node2);
+                    {
+                        Tie newTie = EventsManager.AddTie(node1, node2);
+                        ConfigTiesPath(new List<Tie> { newTie });
+                    }
 
                     RefreshUnRedoBtn();
 
@@ -172,7 +192,7 @@ namespace MindCanvas
 
                     // 恢复正常
                     TieBtn.IsChecked = false;
-                    EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+                    ShowFrame(typeof(EditPage.InfoPage));
                 }
             }
 
@@ -181,28 +201,17 @@ namespace MindCanvas
             {
                 // 只能同时选择一个点
                 foreach (NodeControl border in selectedBorderList)
-                    border.IsSelected = false;
-                selectedBorderList.Clear();
-
-                // 如果这个点不是在被选择选择状态就直接退出
-                // 这在用户点了一个正在查看信息的点时会遇到
-                // 因为连选点击两次相同的点IsSelected会反转
-                if (!nowNodeBorder.IsSelected)
-                {
-                    EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
-                    return;
-                }
-                    
-                selectedBorderList.Add(nowNodeBorder);
+                    if (border != nowNodeBorder)
+                        border.IsSelected = false;
+                selectedBorderList = new List<NodeControl>{nowNodeBorder};
 
                 // 显示信息
                 Dictionary<string, object> data = new Dictionary<string, object>
                 {
                     { "node", nowNode },
                     { "border", nowNodeBorder },
-                    { "mainPage", this }
                 };
-                EditFrame.Navigate(typeof(EditPage.EditNodePage), data, new DrillInNavigationTransitionInfo());
+                ShowFrame(typeof(EditPage.EditNodePage), data);
             }
         }
 
@@ -221,6 +230,9 @@ namespace MindCanvas
                 EventsManager.ModifyNode(nowPressedNode,
                     left - mindMapCanvas.Width / 2 + border.ActualWidth / 2,
                     top - mindMapCanvas.Height / 2 + border.ActualHeight / 2);
+
+                ConfigTiesPath(App.mindMap.GetTies(nowPressedNode));
+
                 RefreshUnRedoBtn();
                 isMovingNode = false;
             }
@@ -247,8 +259,8 @@ namespace MindCanvas
                 NodeControl border = mindMapCanvas.ConvertNodeToBorder(nowPressedNode);
                 var translationPoint = e.Delta.Translation;// 获取相对指针变化
 
-                var newLeft = Canvas.GetLeft(border) + translationPoint.X;
-                var newTop = Canvas.GetTop(border) + translationPoint.Y;
+                var newLeft = Canvas.GetLeft(border) + translationPoint.X * (1/MindMapScrollViewer.ZoomFactor);
+                var newTop = Canvas.GetTop(border) + translationPoint.Y * (1/MindMapScrollViewer.ZoomFactor);
 
                 Canvas.SetLeft(border, newLeft);
                 Canvas.SetTop(border, newTop);
@@ -290,9 +302,9 @@ namespace MindCanvas
             selectedBorderList.Clear();
 
             if ((bool)TieBtn.IsChecked)
-                EditFrame.Navigate(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。", new DrillInNavigationTransitionInfo());
+                ShowFrame(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。");
             else
-                EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+                ShowFrame(typeof(EditPage.InfoPage));
         }
 
         private void MenuBtn_Click(object sender, RoutedEventArgs e)
@@ -302,7 +314,7 @@ namespace MindCanvas
 
         private void AddNodeBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            ShowFrame(typeof(EditPage.InfoPage));
 
             // 退出“连接点”的状态，让所有被选中的点恢复
             TieBtn.IsChecked = false;
@@ -314,7 +326,7 @@ namespace MindCanvas
         }
 
         // 添加点
-        public void AddNodeBtn_Click(object sender, RoutedEventArgs e)
+        private void AddNodeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (AddNodeTextBox.Text != "")
             {
@@ -325,21 +337,25 @@ namespace MindCanvas
         }
 
         // 撤销
-        public void UndoBtn_Click(object sender, RoutedEventArgs e)
+        private void UndoBtn_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.Undo();
             RefreshUnRedoBtn();
             ConfigNodesBorder();
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            ConfigTiesPath();
+
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 重做
-        public void RedoBtn_Click(object sender, RoutedEventArgs e)
+        private void RedoBtn_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.Redo();
             RefreshUnRedoBtn();
             ConfigNodesBorder();
-            EditFrame.Navigate(typeof(EditPage.InfoPage), null, new DrillInNavigationTransitionInfo());
+            ConfigTiesPath();
+
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 刷新撤销重做按钮
@@ -357,6 +373,7 @@ namespace MindCanvas
 
             EventsManager.SetMindMapCanvas(mindMapCanvas);
             ConfigNodesBorder();
+            ConfigTiesPath();
 
             MindMapScrollViewer.ChangeView(horizontalOffset: MindMapScrollViewer.ScrollableWidth / 2, verticalOffset: MindMapScrollViewer.ScrollableHeight / 2, zoomFactor: 1);
         }
@@ -364,7 +381,9 @@ namespace MindCanvas
         // MindMapInkBorder加载完成
         private void MindMapInkBorder_Loaded(object sender, RoutedEventArgs e)
         {
-            TouchWritingBtn.IsChecked = false;
+            InkToolToggleSwitch.IsOn = false;
+            MindMapInkToolbar.IsStencilButtonChecked = false;
+
             mindMapInkCanvas = new MindMapInkCanvas();
             MindMapInkBorder.Child = mindMapInkCanvas;
             MindMapInkToolbar.TargetInkCanvas = mindMapInkCanvas;
@@ -403,17 +422,79 @@ namespace MindCanvas
             if (TouchWritingBtn.IsChecked == true)
             {
                 mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
-
-                Canvas.SetZIndex(MindMapInkBorder, 1);
-                Canvas.SetZIndex(MindMapBorder, 0);
             }
             else
             {
                 mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Pen;
-
-                Canvas.SetZIndex(MindMapInkBorder, 0);
-                Canvas.SetZIndex(MindMapBorder, 1);
             }
         }
+
+        // 墨迹书写模式切换
+        private void InkToolToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (InkToolToggleSwitch.IsOn)
+            {
+                Canvas.SetZIndex(MindMapInkBorder, 1);
+                Canvas.SetZIndex(MindMapBorder, 0);
+                mindMapInkCanvas.InkPresenter.IsInputEnabled = true;
+            }
+            else
+            {
+                Canvas.SetZIndex(MindMapInkBorder, 0);
+                Canvas.SetZIndex(MindMapBorder, 1);
+                mindMapInkCanvas.InkPresenter.IsInputEnabled = false;
+            }
+
+            if (TouchWritingBtn.IsChecked == true)
+                mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
+            else
+                mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Pen;
+        }
+
+        // 尺子和量角器
+        private void MindMapInkToolbar_IsStencilButtonCheckedChanged(InkToolbar sender, InkToolbarIsStencilButtonCheckedChangedEventArgs args)
+        {
+            InkPresenterRuler ruler = args.StencilButton.Ruler;// 直尺
+            InkPresenterProtractor protractor = args.StencilButton.Protractor;// 量角器
+
+            // Set Ruler Origin to Scrollviewer Viewport origin.
+            // The purpose of this behavior is to allow the user to "grab" the
+            // ruler and bring it into view no matter where the scrollviewer viewport
+            // happens to be.  Note that this is accomplished by a simple translation
+            // that adjusts to the zoom factor.  The additional ZoomFactor term is to
+            // make ensure the scale of the InkPresenterRuler is invariant to Zoom.
+            Matrix3x2 viewportTransform =
+                Matrix3x2.CreateScale(MindMapScrollViewer.ZoomFactor) *
+                Matrix3x2.CreateTranslation(
+                   (float)MindMapScrollViewer.HorizontalOffset,
+                   (float)MindMapScrollViewer.VerticalOffset) *
+                Matrix3x2.CreateScale(1.0f / MindMapScrollViewer.ZoomFactor);
+
+            ruler.Transform = viewportTransform;
+            protractor.Transform = viewportTransform;
+        }
+
+        // EditFrame跳转
+        public void ShowFrame(Type sourcePageType, object parameter=null)
+        {
+            Dictionary<string, object> data = parameter as Dictionary<string, object>;
+            if (data != null)
+            {
+                EditFrame.Navigate(sourcePageType, data, new DrillInNavigationTransitionInfo());
+            }
+            else
+                EditFrame.Navigate(sourcePageType, parameter, new DrillInNavigationTransitionInfo());
+
+        }
+
+        // 禁用鼠标滚轮
+        /*private void MindMapGrid_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            MindMapScrollViewer.ChangeView(
+                horizontalOffset: MindMapScrollViewer.HorizontalOffset,
+                verticalOffset: MindMapScrollViewer.HorizontalOffset,
+                zoomFactor: MindMapScrollViewer.ZoomFactor * e.GetCurrentPoint(MindMapScrollViewer).Properties.MouseWheelDelta/10000.0f);
+            e.Handled = true;
+        }*/
     }
 }

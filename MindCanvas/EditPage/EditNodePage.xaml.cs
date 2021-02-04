@@ -49,7 +49,7 @@ namespace MindCanvas.EditPage
         {
             node = (Node)data["node"];
             border = (NodeControl)data["border"];
-            mainPage = (MainPage)data["mainPage"];
+            mainPage = MainPage.mainPage;
 
             // 名称和描述
             NameTextBox.Text = node.Name;
@@ -73,6 +73,7 @@ namespace MindCanvas.EditPage
         {
             EventsManager.RemoveNode(node);
             mainPage.RefreshUnRedoBtn();
+            mainPage.ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 选择默认边框颜色
@@ -124,7 +125,7 @@ namespace MindCanvas.EditPage
         {
             border.Text = NameTextBox.Text;
             border.UpdateLayout();
-            Canvas.SetLeft(border, MainPage.mindMapCanvas.Width / 2 + node.X - border.ActualWidth / 2);
+            RefreshNodePosition();
         }
 
         // 使边框颜色跟随当前值改变
@@ -160,6 +161,7 @@ namespace MindCanvas.EditPage
             if (node.NameFontSize != 0.0d)
             {
                 EventsManager.ModifyNodeNameFontSize(node, null);
+                RefreshNodePosition();
                 mainPage.RefreshUnRedoBtn();
             }
         }
@@ -190,8 +192,17 @@ namespace MindCanvas.EditPage
             if (FontSizeNumberBox.Value != node.NameFontSize)
             {
                 EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
+                RefreshNodePosition();
                 mainPage.RefreshUnRedoBtn();
             }
+        }
+
+        // 刷新点位置
+        private void RefreshNodePosition()
+        {
+            border.UpdateLayout();
+            Canvas.SetLeft(border, MainPage.mindMapCanvas.Width / 2 + node.X - border.ActualWidth / 2);
+            Canvas.SetTop(border, MainPage.mindMapCanvas.Height / 2 + node.Y - border.ActualHeight / 2);
         }
     }
 }

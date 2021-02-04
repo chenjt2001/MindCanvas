@@ -49,7 +49,7 @@
 
                 <Border 
                 x:Name="MindMapBorder" 
-                Loaded="MindMapBorder_Loaded" />
+                Loaded="MindMapBorder_Loaded"/>
                 
             </StackPanel>
         </ScrollViewer>

@@ -77,9 +77,9 @@ namespace MindCanvas
         // 鼠标释放
         private void NodeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            IsSelected = !IsSelected;
+            IsSelected = true;
 
-            if (showAnimation && !IsSelected)
+            if (showAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);
                 (sender as UIElement).StartAnimation(_springAnimation);
@@ -138,8 +138,8 @@ namespace MindCanvas
         }
 
         // 背景颜色
-        public new Brush Background => new SolidColorBrush(Colors.Transparent);
-        //public new Brush Background => new SolidColorBrush(Colors.White);
+        //public new Brush Background => new SolidColorBrush(Colors.Transparent);
+        public new Brush Background => new SolidColorBrush(Colors.White);
 
         // 边框颜色
         public new Brush BorderBrush

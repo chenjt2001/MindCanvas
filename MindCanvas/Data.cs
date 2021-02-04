@@ -150,6 +150,11 @@ namespace MindCanvas
         // 版本兼容
         public static void VersionHelper(ref MindCanvasFileData data)
         {
+            foreach (Node node in data.Nodes)
+                Node.VersionHelper(node);
+            foreach (Tie tie in data.Ties)
+                Tie.VersionHelper(tie);
+
             // V1.1 -> V1.2
             if (data.defaultNodeBorderBrushArgb == null)
                 data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A, Colors.Blue.R, Colors.Blue.G, Colors.Blue.B };
