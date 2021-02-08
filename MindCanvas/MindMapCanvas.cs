@@ -75,8 +75,6 @@ namespace MindCanvas
             List<Node> nodes = mindMap.GetNodes(tie);
             Node node1 = nodes[0];
             Node node2 = nodes[1];
-            NodeControl node1Border = ConvertNodeToBorder(node1);
-            NodeControl node2Border = ConvertNodeToBorder(node2);
 
             // 绘制Path
             SolidColorBrush stroke = new SolidColorBrush(Colors.Gray);
@@ -223,6 +221,50 @@ namespace MindCanvas
             var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
             path.Data = pathData;
             UpdateLayout();
+        }
+
+        // 获取边框
+        public Rect BoundingRect
+        {
+            get
+            {
+                this.UpdateLayout();
+
+                if (this.Children.Count == 0)
+                {
+                    return new Rect();
+                }
+
+                double bottom = this.Children[0].ActualOffset.Y + this.Children[0].ActualSize.Y;
+                double top = this.Children[0].ActualOffset.Y;
+                double left = this.Children[0].ActualOffset.X;
+                double right = this.Children[0].ActualOffset.X + this.Children[0].ActualSize.X;
+
+                foreach (UIElement element in this.Children)
+                {
+                    if (element as Windows.UI.Xaml.Shapes.Path != null)
+                        continue;
+
+                    if (element.ActualOffset.X < left)
+                        left = element.ActualOffset.X;
+                    if (element.ActualOffset.Y < top)
+                        top = element.ActualOffset.Y;
+                    if (element.ActualOffset.X + element.ActualSize.X > right)
+                        right = element.ActualOffset.X + element.ActualSize.X;
+                    if (element.ActualOffset.Y + element.ActualSize.Y > bottom)
+                        bottom = element.ActualOffset.Y + element.ActualSize.Y;
+                }
+
+                Rect rect = new Rect()
+                {
+                    X = left,
+                    Y = top,
+                    Width = right - left,
+                    Height = bottom - top,
+                };
+
+                return rect;
+            }
         }
     }
 }

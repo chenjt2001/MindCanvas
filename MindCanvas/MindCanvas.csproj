@@ -170,7 +170,6 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Snapshot.cs" />
     <Compile Include="ThemeHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,8 +23,9 @@
                     Text="格式" />
 
                 <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" PlaceholderText="请选择一个格式" Width="200">
+                    <x:String>JPEG (*.jpg)</x:String>
                     <x:String>PNG (*.png)</x:String>
-                    <x:String>TIFF (*.tiff)</x:String>
+                    <x:String>HEIC (*.heic)</x:String>
                     <ComboBox.Resources>
                         <muxc:TeachingTip 
                             x:Name="FormatTip"
@@ -37,7 +38,7 @@
                     </ComboBox.Resources>
                 </ComboBox>
 
-                <Button Margin="0,10,0,0" Content="导出" Click="OutputBtn_Click"/>
+                <Button Margin="0,10,0,0" x:Name="OutputBtn" Content="导出" Click="OutputBtn_Click"/>
 
                 <TextBlock
                     Style="{StaticResource TitleTextBlockStyle}"
@@ -45,11 +46,11 @@
                     FontWeight="Normal"
                     Text="预览" />
 
-                <Image x:Name="PreviewImage" Margin="0,10,0,0" MaxWidth="840"/>
-
-                <Border 
-                x:Name="MindMapBorder" 
-                Loaded="MindMapBorder_Loaded"/>
+                <Viewbox x:Name="MindMapViewbox" MaxWidth="840" Canvas.ZIndex="-1">
+                    <Border 
+                        x:Name="MindMapBorder" 
+                        Loaded="MindMapBorder_Loaded"/>
+                </Viewbox>
                 
             </StackPanel>
         </ScrollViewer>
