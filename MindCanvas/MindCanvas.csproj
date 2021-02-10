@@ -133,6 +133,9 @@
       <DependentUpon>AppTitleBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data.cs" />
+    <Compile Include="DefaultSettingsPage.xaml.cs">
+      <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialog.cs" />
     <Compile Include="EditPage\EditNodePage.xaml.cs">
       <DependentUpon>EditNodePage.xaml</DependentUpon>
@@ -147,6 +150,7 @@
     <Compile Include="HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InitialValues.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -238,6 +242,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AppTitleBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DefaultSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

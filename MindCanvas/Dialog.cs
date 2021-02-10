@@ -45,5 +45,21 @@ namespace MindCanvas
             ContentDialogResult result = await dialog.ShowAsync();
             return result;
         }
+
+        // 询问是否保存设置
+        public async static Task<ContentDialogResult> AskForSaveSettings()
+        {
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "是否希望保存您的设置？",
+                PrimaryButtonText = "保存",
+                SecondaryButtonText = "不保存",
+                CloseButtonText = "取消",
+                DefaultButton = ContentDialogButton.Primary,
+
+            };
+            ContentDialogResult result = await dialog.ShowAsync();
+            return result;
+        }
     }
 }

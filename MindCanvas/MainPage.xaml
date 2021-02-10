@@ -34,11 +34,11 @@
 
             <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
                 <AppBarButton 
-                x:Name="MenuBtn" 
-                Label="菜单" 
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Center"
-                Click="MenuBtn_Click">
+                    x:Name="MenuBtn" 
+                    Label="菜单" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    Click="MenuBtn_Click">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="&#xEDE3;"/>
                     </AppBarButton.Icon>
@@ -46,16 +46,12 @@
             </Border>
 
             <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
-                <StackPanel
-                Orientation="Horizontal" 
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-
+                <CommandBar Background="Transparent" DefaultLabelPosition="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <AppBarButton Label="添加点" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7C8;"/>
                         </AppBarButton.Icon>
-                        <!--AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
+                        <!-- AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
                     所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
                     详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
                         <FlyoutBase.AttachedFlyout>
@@ -72,16 +68,31 @@
                                     x:Name="TieBtn"
                                     Click="TieBtn_Click">
                         <AppBarToggleButton.Icon>
-                            <!--<FontIcon Glyph="&#xF7B7;"/>-->
+                            <!--<FontIcon Glyph="&#xF7B7;"/> -->
                             <FontIcon Glyph="&#xE71B;"/>
                         </AppBarToggleButton.Icon>
                     </AppBarToggleButton>
                     <AppBarSeparator/>
 
                     <AppBarButton Icon="Undo" Label="撤销" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
-                    <AppBarButton Icon="Redo" Label="重做" IsEnabled="False" x:Name="RedoBtn"  Click="RedoBtn_Click"/>
+                    <AppBarButton Icon="Redo" Label="重做" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click"/>
+                    <AppBarSeparator/>
 
-                </StackPanel>
+                    <AppBarButton Icon="ZoomIn" Label="放大" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
+                    <AppBarButton Icon="ZoomOut" Label="缩小" x:Name="ZoomOutBtn" Tag="ZoomOut" Click="Zoom_Click"/>
+
+                    <AppBarButton Label="查看全览" x:Name="FitPageBtn" Tag="Fit" Click="Zoom_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE9A6;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator/>
+
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Icon="Setting" Label="设置默认值" x:Name="DefaultSettingsBtn" Click="DefaultSettingsBtn_Click">
+                        </AppBarButton>
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
             </Border>
 
             <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
@@ -100,50 +111,72 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <InkToolbar 
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <InkToolbar 
                         x:Name="MindMapInkToolbar" 
                         HorizontalAlignment="Center" 
                         IsStencilButtonCheckedChanged="MindMapInkToolbar_IsStencilButtonCheckedChanged" 
                         Margin="0,0,50,0" 
                         IsEnabled="{x:Bind InkToolToggleSwitch.IsOn, Mode=OneWay}">
-                            <!--触控书写支持-->
-                            <InkToolbarCustomToggleButton 
+                                <!--触控书写支持-->
+                                <InkToolbarCustomToggleButton 
                             x:Name="TouchWritingBtn" 
                             Click="TouchWritingBtn_Click"
                             IsChecked="True"
                             ToolTipService.ToolTip="触控书写">
-                                <FontIcon Glyph="&#xED5F;"/>
-                            </InkToolbarCustomToggleButton>
-                        </InkToolbar>
-                        <ToggleSwitch x:Name="InkToolToggleSwitch" Header="墨迹书写模式" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
-                    </StackPanel>
+                                    <FontIcon Glyph="&#xED5F;"/>
+                                </InkToolbarCustomToggleButton>
+                            </InkToolbar>
+                            <ToggleSwitch x:Name="InkToolToggleSwitch" Header="墨迹书写模式" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Border>
 
-                <ScrollViewer 
-                Grid.Row="1"
-                x:Name="MindMapScrollViewer" 
-                ZoomMode="Enabled"
-                MinZoomFactor="0.4"
-                MaxZoomFactor="2"
-                VerticalScrollBarVisibility="Hidden" 
-                HorizontalScrollBarVisibility="Hidden"
-                ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
-                SizeChanged="MindMapScrollViewer_SizeChanged"
-                ManipulationMode="All">
-                    <Grid Canvas.ZIndex="-1" x:Name="MindMapGrid">
-                        <Border
-                        x:Name="MindMapInkBorder"
-                        Loaded="MindMapInkBorder_Loaded"
-                        Canvas.ZIndex="0"/>
-                        <Border 
-                        x:Name="MindMapBorder" 
-                        Loaded="MindMapBorder_Loaded"
-                        Canvas.ZIndex="1"/>
-                    </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                </ScrollViewer>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="8*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
+                    <RepeatButton Tag="Up" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Down" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Left" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Right" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    
+                    <ScrollViewer 
+                        Canvas.ZIndex="-1"
+                        Grid.ColumnSpan="3"
+                        Grid.RowSpan="3"
+                        x:Name="MindMapScrollViewer" 
+                        ZoomMode="Enabled"
+                        MinZoomFactor="{x:Bind data:InitialValues.MinZoomFactor}"
+                        MaxZoomFactor="{x:Bind data:InitialValues.MaxZoomFactor}"
+                        VerticalScrollBarVisibility="Hidden" 
+                        HorizontalScrollBarVisibility="Hidden"
+                        ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
+                        SizeChanged="MindMapScrollViewer_SizeChanged"
+                        ViewChanged="MindMapScrollViewer_ViewChanged"
+                        ManipulationMode="All">
+                        <Grid Canvas.ZIndex="-1" x:Name="MindMapGrid" PointerWheelChanged="MindMapGrid_PointerWheelChanged">
+                            <Border
+                                x:Name="MindMapInkBorder"
+                                Loaded="MindMapInkBorder_Loaded"
+                                Canvas.ZIndex="0"/>
+                            <Border 
+                                x:Name="MindMapBorder" 
+                                Loaded="MindMapBorder_Loaded"
+                                Canvas.ZIndex="1"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
             </Grid>
 
             <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">

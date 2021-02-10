@@ -157,9 +157,9 @@ namespace MindCanvas
 
             // V1.1 -> V1.2
             if (data.defaultNodeBorderBrushArgb == null)
-                data.defaultNodeBorderBrushArgb = new byte[4] { Colors.Blue.A, Colors.Blue.R, Colors.Blue.G, Colors.Blue.B };
+                data.defaultNodeBorderBrushArgb = new byte[4] { InitialValues.NodeBorderBrushColor.A, InitialValues.NodeBorderBrushColor.R, InitialValues.NodeBorderBrushColor.G, InitialValues.NodeBorderBrushColor.B };
             if (data.defaultNodeNameFontSize == 0.0d)
-                data.defaultNodeNameFontSize = 20;
+                data.defaultNodeNameFontSize = InitialValues.NodeNameFontSize;
 
             // V1.2 -> V1.3
             if (data.inkStrokeContainerData == null)

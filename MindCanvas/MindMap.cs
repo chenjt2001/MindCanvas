@@ -43,8 +43,8 @@ namespace MindCanvas
 
             nodes.Add(firstNode);
 
-            defaultNodeBorderBrush = new SolidColorBrush(Colors.Blue);
-            defaultNodeNameFontSize = 20;
+            defaultNodeBorderBrush = new SolidColorBrush(InitialValues.NodeBorderBrushColor);
+            defaultNodeNameFontSize = InitialValues.NodeNameFontSize;
             inkStrokeContainer = new InkStrokeContainer();
         }
 
