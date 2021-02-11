@@ -38,7 +38,7 @@
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <TextBlock HorizontalAlignment="Center"  Margin="0,4,0,0" Style="{StaticResource HeaderTextBlockStyle}" Text="默认值设置"/>
 
-                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="默认边框颜色" />
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="点的默认边框颜色" />
                         <ColorPicker
                             Margin="0,10,0,0"
                             x:Name="BorderBrushColorPicker"
@@ -51,7 +51,7 @@
                             IsAlphaSliderVisible="True"
                             IsAlphaTextInputVisible="True"/>
 
-                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="默认文字大小" />
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="点的默认文字大小" />
                     <muxc:NumberBox 
                         Margin="0,10,0,0"
                         x:Name="FontSizeNumberBox" 

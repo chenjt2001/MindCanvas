@@ -38,14 +38,8 @@ namespace MindCanvas
         // 保存
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
+            EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color, FontSizeNumberBox.Value);
             On_BackRequested();
-        }
-
-        private void SaveSettings()
-        {
-            App.mindMap.defaultNodeBorderBrush = new SolidColorBrush(BorderBrushColorPicker.Color);
-            App.mindMap.defaultNodeNameFontSize = FontSizeNumberBox.Value;
         }
 
         private bool On_BackRequested()
@@ -77,7 +71,7 @@ namespace MindCanvas
                 // 用户选择保存
                 if (result == ContentDialogResult.Primary)
                 {
-                    SaveSettings();
+                    EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color, FontSizeNumberBox.Value);
                     On_BackRequested();
                 }
 

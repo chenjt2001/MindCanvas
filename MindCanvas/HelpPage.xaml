@@ -23,7 +23,7 @@
 
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
                     <Paragraph>
-                        MindCanvas 是一款用来制作思维导图的软件。
+                        MindCanvas 是一款制作思维导图的软件。使用 MindCanvas，你可以通过添加点、线和墨迹轻松创造出自己的思维导图，并导出或分享。
                     </Paragraph>
                 </RichTextBlock>
                 
@@ -38,7 +38,7 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
-                    Text="评价" />
+                    Text="反馈" />
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
                     <Paragraph>
                         您的评价对 MindCanvas 的发展至关重要，请

@@ -65,12 +65,16 @@ namespace MindCanvas
             // 设置阴影
             SharedShadow.Receivers.Add(MindMapScrollViewer);
             EditBorder.Translation += new Vector3(0, 0, 32);
-            InkToolbarBorder.Translation += new Vector3(0, 0, 32);
+            InkToolbarBorder.Translation += new Vector3(0, 0, 32);            
+        }
 
-            RefreshTheme();
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             RefreshUnRedoBtn();
+            RefreshTheme();
 
-            ShowFrame(typeof(EditPage.InfoPage));            
+            InkToolToggleSwitch.IsOn = false;
+            MindMapInkToolbar.IsStencilButtonChecked = false;
         }
 
         // 擦除所有墨迹
@@ -383,9 +387,6 @@ namespace MindCanvas
         // MindMapInkBorder加载完成
         private void MindMapInkBorder_Loaded(object sender, RoutedEventArgs e)
         {
-            InkToolToggleSwitch.IsOn = false;
-            MindMapInkToolbar.IsStencilButtonChecked = false;
-
             mindMapInkCanvas = new MindMapInkCanvas();
             MindMapInkBorder.Child = mindMapInkCanvas;
             MindMapInkToolbar.TargetInkCanvas = mindMapInkCanvas;
@@ -594,6 +595,11 @@ namespace MindCanvas
             }
             
             e.Handled = true;
+        }
+
+        private void EditFrame_Loaded(object sender, RoutedEventArgs e)
+        {
+            ShowFrame(typeof(EditPage.InfoPage));
         }
     }
 }

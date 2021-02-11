@@ -305,6 +305,14 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改默认值
+        public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor, double defaultNodeNameFontSize)
+        {
+            App.mindMap.defaultNodeBorderBrush = new SolidColorBrush(defaultNodeBorderBrushColor);
+            App.mindMap.defaultNodeNameFontSize = defaultNodeNameFontSize;
+            Record();
+        }
+
         // 撤销
         public static void Undo()
         {

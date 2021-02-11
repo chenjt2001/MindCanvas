@@ -46,7 +46,7 @@
             </Border>
 
             <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
-                <CommandBar Background="Transparent" DefaultLabelPosition="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <CommandBar Background="Transparent" DefaultLabelPosition="Right" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <AppBarButton Label="添加点" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7C8;"/>
@@ -150,7 +150,7 @@
                     <RepeatButton Tag="Down" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
                     <RepeatButton Tag="Left" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
                     <RepeatButton Tag="Right" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    
+
                     <ScrollViewer 
                         Canvas.ZIndex="-1"
                         Grid.ColumnSpan="3"
@@ -180,7 +180,7 @@
             </Grid>
 
             <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">
-                <Frame x:Name="EditFrame">
+                <Frame x:Name="EditFrame" Loaded="EditFrame_Loaded">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
                             <NavigationThemeTransition  />
