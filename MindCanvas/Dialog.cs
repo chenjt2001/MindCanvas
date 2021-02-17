@@ -49,7 +49,7 @@ namespace MindCanvas
             return result;
         }
 
-        // 询问是否保存设置
+        // 导出失败
         public async static Task<ContentDialogResult> AskForSaveSettings()
         {
             ContentDialog dialog = new ContentDialog()
@@ -63,6 +63,18 @@ namespace MindCanvas
             };
             ContentDialogResult result = await dialog.ShowAsync();
             return result;
+        }
+
+        // 询问是否保存设置
+        public async static Task OutputError()
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "导出错误",
+                Content = "请确认已选择导出格式且已安装此格式对应的的编解码器！",
+                CloseButtonText = "好的"
+            };
+            await dialog.ShowAsync();
         }
     }
 }

@@ -50,13 +50,7 @@ namespace MindCanvas
             if (choice == null)
             {
                 //FormatTip.IsOpen = true;
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "导出错误",
-                    Content = "请选择导出格式！",
-                    CloseButtonText = "好的"
-                };
-                await dialog.ShowAsync();
+                await Dialog.OutputError();
             }
             else
             {
@@ -81,26 +75,31 @@ namespace MindCanvas
 
                 if (file != null)
                 {
-
-                    // JPEG格式
-                    if (choice == "JPEG (*.jpg)")
+                    try
                     {
-                        await OutPut(file, BitmapEncoder.JpegEncoderId);
+                        // JPEG格式
+                        if (choice == "JPEG (*.jpg)")
+                        {
+                            await OutPut(file, BitmapEncoder.JpegEncoderId);
+                        }
+
+                        // PNG格式
+                        else if (choice == "PNG (*.png)")
+                        {
+                            await OutPut(file, BitmapEncoder.PngEncoderId);
+                        }
+
+                        // HEIC格式
+                        else if (choice == "HEIC (*.heic)")
+                        {
+                            await OutPut(file, BitmapEncoder.HeifEncoderId);
+                        }
                     }
-
-                    // PNG格式
-                    else if (choice == "PNG (*.png)")
+                    catch
                     {
-                        await OutPut(file, BitmapEncoder.PngEncoderId);
-                    }
-
-                    // HEIC格式
-                    else if (choice == "HEIC (*.heic)")
-                    {
-                        await OutPut(file, BitmapEncoder.HeifEncoderId);
+                        await Dialog.OutputError();
                     }
                 }
-
             }
         }
 
