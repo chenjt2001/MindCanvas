@@ -24,7 +24,7 @@
             Grid.Row="1"
             x:Name="NavView" 
             IsSettingsVisible="True" 
-            PaneTitle="菜单"
+            x:Uid="MenuPage_Menu"
             BackRequested="NavView_BackRequested"
             IsBackEnabled="True"
             PaneDisplayMode="Left"

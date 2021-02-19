@@ -35,7 +35,7 @@
             <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
                 <AppBarButton 
                     x:Name="MenuBtn" 
-                    Label="菜单" 
+                    x:Uid="MainPage_Menu"
                     VerticalAlignment="Center" 
                     HorizontalAlignment="Center"
                     Click="MenuBtn_Click">
@@ -47,7 +47,7 @@
 
             <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
                 <CommandBar Background="Transparent" DefaultLabelPosition="Right" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <AppBarButton Label="添加点" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
+                    <AppBarButton x:Uid="MainPage_AddNode" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7C8;"/>
                         </AppBarButton.Icon>
@@ -57,14 +57,14 @@
                         <FlyoutBase.AttachedFlyout>
                             <Flyout Placement="Bottom">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="AddNodeTextBox" PlaceholderText="点名称" Margin="0,0,12,0" Width="150"/>
-                                    <Button Content="确定" Click="AddNodeBtn_Click"/>
+                                    <TextBox x:Name="AddNodeTextBox" x:Uid="MainPage_NodeName" Margin="0,0,12,0" Width="150"/>
+                                    <Button x:Uid="MainPage_Confirm" Click="AddNodeBtn_Click"/>
                                 </StackPanel>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
 
-                    <AppBarToggleButton Label="连接点" 
+                    <AppBarToggleButton x:Uid="MainPage_TieNodes"
                                     x:Name="TieBtn"
                                     Click="TieBtn_Click">
                         <AppBarToggleButton.Icon>
@@ -74,14 +74,14 @@
                     </AppBarToggleButton>
                     <AppBarSeparator/>
 
-                    <AppBarButton Icon="Undo" Label="撤销" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
-                    <AppBarButton Icon="Redo" Label="重做" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click"/>
+                    <AppBarButton Icon="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
+                    <AppBarButton Icon="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click"/>
                     <AppBarSeparator/>
 
-                    <AppBarButton Icon="ZoomIn" Label="放大" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
-                    <AppBarButton Icon="ZoomOut" Label="缩小" x:Name="ZoomOutBtn" Tag="ZoomOut" Click="Zoom_Click"/>
+                    <AppBarButton Icon="ZoomIn" x:Uid="MainPage_ZoomIn" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
+                    <AppBarButton Icon="ZoomOut" x:Uid="MainPage_ZoomOut" x:Name="ZoomOutBtn" Tag="ZoomOut" Click="Zoom_Click"/>
 
-                    <AppBarButton Label="查看全览" x:Name="FitPageBtn" Tag="Fit" Click="Zoom_Click">
+                    <AppBarButton x:Uid="MainPage_FitPage" x:Name="FitPageBtn" Tag="Fit" Click="Zoom_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE9A6;"/>
                         </AppBarButton.Icon>
@@ -89,7 +89,7 @@
                     <AppBarSeparator/>
 
                     <CommandBar.SecondaryCommands>
-                        <AppBarButton Icon="Setting" Label="设置默认值" x:Name="DefaultSettingsBtn" Click="DefaultSettingsBtn_Click">
+                        <AppBarButton Icon="Setting" x:Uid="MainPage_SetDefaultValues" x:Name="DefaultSettingsBtn" Click="DefaultSettingsBtn_Click">
                         </AppBarButton>
                     </CommandBar.SecondaryCommands>
                 </CommandBar>
@@ -114,21 +114,21 @@
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <InkToolbar 
-                        x:Name="MindMapInkToolbar" 
-                        HorizontalAlignment="Center" 
-                        IsStencilButtonCheckedChanged="MindMapInkToolbar_IsStencilButtonCheckedChanged" 
-                        Margin="0,0,50,0" 
-                        IsEnabled="{x:Bind InkToolToggleSwitch.IsOn, Mode=OneWay}">
+                                x:Name="MindMapInkToolbar" 
+                                HorizontalAlignment="Center" 
+                                IsStencilButtonCheckedChanged="MindMapInkToolbar_IsStencilButtonCheckedChanged" 
+                                Margin="0,0,50,0" 
+                                IsEnabled="{x:Bind InkToolToggleSwitch.IsOn, Mode=OneWay}">
                                 <!--触控书写支持-->
                                 <InkToolbarCustomToggleButton 
-                            x:Name="TouchWritingBtn" 
-                            Click="TouchWritingBtn_Click"
-                            IsChecked="True"
-                            ToolTipService.ToolTip="触控书写">
+                                    x:Name="TouchWritingBtn" 
+                                    Click="TouchWritingBtn_Click"
+                                    IsChecked="True"
+                                    x:Uid="MainPage_TouchWriting">
                                     <FontIcon Glyph="&#xED5F;"/>
                                 </InkToolbarCustomToggleButton>
                             </InkToolbar>
-                            <ToggleSwitch x:Name="InkToolToggleSwitch" Header="墨迹书写模式" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
+                            <ToggleSwitch x:Name="InkToolToggleSwitch" x:Uid="MainPage_InkingMode" IsOn="False" Toggled="InkToolToggleSwitch_Toggled"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
