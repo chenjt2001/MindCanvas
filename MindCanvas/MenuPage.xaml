@@ -32,18 +32,18 @@
             SelectionChanged="NavView_SelectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Add" Tag="New" Content="新建"/>
-                <NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" Content="打开" />
-                <NavigationViewItem Icon="Save" Tag="Save" Content="保存" />
+                <NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/><!--icon: Page-->
+                <NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" x:Uid="MenuPage_Open" />
+                <NavigationViewItem Icon="Save" Tag="Save" x:Uid="MenuPage_Save"/>
 
-                <NavigationViewItem Tag="SaveAs" Content="另存为" >
+                <NavigationViewItem Tag="SaveAs" x:Uid="MenuPage_SaveAs" >
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE792;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItemSeparator/>
 
-                <NavigationViewItem Tag="Output" Content="导出" >
+                <NavigationViewItem Tag="Export" x:Uid="MenuPage_Export" >
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDE1;"/>
                     </NavigationViewItem.Icon>
@@ -55,10 +55,10 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>-->
 
-                <NavigationViewItem Icon="Share" Tag="Share" Content="共享" />
+                <NavigationViewItem Icon="Share" Tag="Share" x:Uid="MenuPage_Share"/>
                 <NavigationViewItemSeparator/>
 
-                <NavigationViewItem Icon="Help" Tag="Help" Content="帮助" />
+                <NavigationViewItem Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>
 
             </NavigationView.MenuItems>
 

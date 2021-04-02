@@ -27,7 +27,7 @@ namespace MindCanvas
         [OptionalField]
         private byte[] borderBrushArgb;// 边框颜色
         [OptionalField]
-        private double nameFontSize;// 名称字体大小
+        private double? nameFontSize;// 名称字体大小
 
         // 相对于画布中心的位置
         private double x;
@@ -70,7 +70,7 @@ namespace MindCanvas
         public byte[] BorderBrushArgb { get => borderBrushArgb; set => borderBrushArgb = value; }
         public double X { get => x; set => x = value; }
         public double Y { get => y; set => y = value; }
-        public double NameFontSize { get => nameFontSize; set => nameFontSize = value; }
+        public double? NameFontSize { get => nameFontSize; set => nameFontSize = value; }
     };
 
     [Serializable]
@@ -100,9 +100,15 @@ namespace MindCanvas
         [OptionalField]
         private byte[] defaultNodeBorderBrushArgb;// 默认边框颜色
         [OptionalField]
-        private double defaultNodeNameFontSize;// 默认点名称字体大小
+        private double? defaultNodeNameFontSize;// 默认点名称字体大小
         [OptionalField]
         private byte[] inkStrokeContainerData;// 墨迹数据
+        [OptionalField]
+        private double? visualCenterX;// 可视中心点X
+        [OptionalField]
+        private double? visualCenterY;// 可视中心点Y
+        [OptionalField]
+        private float? zoomFactor;// 可视区放大倍数
 
         public Brush DefaultNodeBorderBrush
         {
@@ -158,7 +164,7 @@ namespace MindCanvas
             // V1.1 -> V1.2
             if (data.defaultNodeBorderBrushArgb == null)
                 data.defaultNodeBorderBrushArgb = new byte[4] { InitialValues.NodeBorderBrushColor.A, InitialValues.NodeBorderBrushColor.R, InitialValues.NodeBorderBrushColor.G, InitialValues.NodeBorderBrushColor.B };
-            if (data.defaultNodeNameFontSize == 0.0d)
+            if (data.defaultNodeNameFontSize == null)
                 data.defaultNodeNameFontSize = InitialValues.NodeNameFontSize;
 
             // V1.2 -> V1.3
@@ -170,10 +176,29 @@ namespace MindCanvas
                     data.inkStrokeContainerData = ms.ToArray();
                 }
             }
+
+            // V1.3 -> V1.4
+            if (data.visualCenterX == null)
+                if (data.Nodes.Count() > 0)
+                    data.visualCenterX = data.Nodes[0].X;
+                else 
+                    data.visualCenterX = 0;
+
+            if (data.visualCenterY == null)
+                if (data.Nodes.Count() > 0)
+                    data.visualCenterY = data.Nodes[0].Y;
+                else
+                    data.visualCenterY = 0;
+
+            if (data.zoomFactor == null)
+                data.zoomFactor = 1;
         }
 
         public List<Node> Nodes { get => nodes; set => nodes = value; }
         public List<Tie> Ties { get => ties; set => ties = value; }
-        public double DefaultNodeNameFontSize { get => defaultNodeNameFontSize; set => defaultNodeNameFontSize = value; }
+        public double DefaultNodeNameFontSize { get => defaultNodeNameFontSize.Value; set => defaultNodeNameFontSize = value; }
+        public float ZoomFactor { get => zoomFactor.Value; set => zoomFactor = value; }
+        public double VisualCenterX { get => visualCenterX.Value; set => visualCenterX = value; }
+        public double VisualCenterY { get => visualCenterY.Value; set => visualCenterY = value; }
     }
 }

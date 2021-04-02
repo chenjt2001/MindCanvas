@@ -62,7 +62,7 @@ namespace MindCanvas.EditPage
                 CustomBorderBrushRadioButton.IsChecked = true;
 
             // 字体大小
-            if (node.NameFontSize == 0.0d)
+            if (node.NameFontSize == null)
                 DefaultFontSizeRadioButton.IsChecked = true;
             else
                 CustomFontSizeRadioButton.IsChecked = true;
@@ -158,7 +158,7 @@ namespace MindCanvas.EditPage
         // 选择默认字体大小
         private void DefaultFontSizeRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (node.NameFontSize != 0.0d)
+            if (node.NameFontSize != null)
             {
                 EventsManager.ModifyNodeNameFontSize(node, null);
                 RefreshNodePosition();
@@ -171,7 +171,7 @@ namespace MindCanvas.EditPage
         {
             FontSizeNumberBox.Value = border.FontSize;
 
-            if (node.NameFontSize == 0.0d)
+            if (node.NameFontSize == null)
             {
                 EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
                 mainPage.RefreshUnRedoBtn();

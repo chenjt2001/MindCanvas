@@ -15,7 +15,7 @@
                 VerticalScrollMode="Auto">
 
             <StackPanel Orientation="Vertical" Margin="20,40,20,0">
-                <TextBlock  x:Name="InfoTextBlock" Text="从左侧选择一个元素以查看或编辑它。" HorizontalAlignment="Center" FontSize="16" TextWrapping="Wrap"/>
+                <TextBlock  x:Name="InfoTextBlock" x:Uid="InfoPage_Info" HorizontalAlignment="Center" FontSize="16" TextWrapping="Wrap"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

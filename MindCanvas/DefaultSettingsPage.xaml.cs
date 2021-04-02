@@ -63,7 +63,7 @@ namespace MindCanvas
             if (BorderBrushColorPicker.Color != App.mindMap.defaultNodeBorderBrush.Color || 
                 FontSizeNumberBox.Value != App.mindMap.defaultNodeNameFontSize)
             {
-                ContentDialogResult result = await Dialog.AskForSaveSettings();
+                ContentDialogResult result = await Dialog.Show.AskForSaveSettings();
                 //用户选择取消
                 if (result == ContentDialogResult.None)
                     return;

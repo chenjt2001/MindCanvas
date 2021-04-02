@@ -36,9 +36,9 @@
             
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    <TextBlock HorizontalAlignment="Center"  Margin="0,4,0,0" Style="{StaticResource HeaderTextBlockStyle}" Text="默认值设置"/>
+                    <TextBlock HorizontalAlignment="Center"  Margin="0,4,0,0" Style="{StaticResource HeaderTextBlockStyle}" x:Uid="DefaultSettingsPage_DefaultValueSettings"/>
 
-                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="点的默认边框颜色" />
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" x:Uid="DefaultSettingsPage_TheDefaultBorderColorOfTheNode" />
                         <ColorPicker
                             Margin="0,10,0,0"
                             x:Name="BorderBrushColorPicker"
@@ -51,22 +51,21 @@
                             IsAlphaSliderVisible="True"
                             IsAlphaTextInputVisible="True"/>
 
-                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" Text="点的默认文字大小" />
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" x:Uid="DefaultSettingsPage_TheDefaultFontSizeOfTheNode" />
                     <muxc:NumberBox 
                         Margin="0,10,0,0"
-                        x:Name="FontSizeNumberBox" 
-                        Header="设置字号：" 
-                        PlaceholderText="1-100的数" 
+                        x:Name="FontSizeNumberBox"
+                        x:Uid="DefaultSettingsPage_SetFontSize"
                         Minimum="10"
                         Maximum="100"
                         SpinButtonPlacementMode="Inline" 
                         ValueChanged="FontSizeNumberBox_ValueChanged"/>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
-                    <Button x:Name="InitializeBtn" Margin="0,20,0,0" HorizontalAlignment="Right" Content="恢复初始值" FontSize="15" Width="150" Click="InitializeBtn_Click"/>
+                    <Button x:Name="InitializeBtn" Margin="0,20,0,0" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_RestoreInitialValue" FontSize="15" Width="150" Click="InitializeBtn_Click"/>
 
-                    <Button x:Name="CancelBtn" Margin="0,40,0,0" HorizontalAlignment="Right" Content="取消" FontSize="15" Width="100" Click="CancelBtn_Click"/>
-                    <Button x:Name="SaveBtn" Margin="0,10,0,0" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" Content="保存" FontSize="15" Width="100" Click="SaveBtn_Click"/>
+                    <Button x:Name="CancelBtn" Margin="0,40,0,0" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_Cancel" FontSize="15" Width="100" Click="CancelBtn_Click"/>
+                    <Button x:Name="SaveBtn" Margin="0,10,0,0" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_Save" FontSize="15" Width="100" Click="SaveBtn_Click"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

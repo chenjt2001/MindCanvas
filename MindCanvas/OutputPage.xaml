@@ -20,13 +20,13 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,4,0,0"
                     FontWeight="Normal"
-                    Text="格式" />
+                    x:Uid="OutputPage_Format" />
 
-                <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" PlaceholderText="请选择一个格式" Width="200">
+                <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" x:Uid="OutputPage_PleaseSelectAFormat" Width="200">
                     <x:String>JPEG (*.jpg)</x:String>
                     <x:String>PNG (*.png)</x:String>
                     <x:String>HEIC (*.heic)</x:String>
-                    <ComboBox.Resources>
+                    <!--<ComboBox.Resources>
                         <muxc:TeachingTip 
                             x:Name="FormatTip"
 	                        Target="{x:Bind FormatComboBox}"
@@ -35,16 +35,16 @@
                             IsLightDismissEnabled="True"
                             PreferredPlacement="Right">
                         </muxc:TeachingTip>
-                    </ComboBox.Resources>
+                    </ComboBox.Resources>-->
                 </ComboBox>
 
-                <Button Margin="0,10,0,0" x:Name="OutputBtn" Content="导出" Click="OutputBtn_Click"/>
+                <Button Margin="0,10,0,0" x:Name="OutputBtn" x:Uid="OutputPage_Export" Click="OutputBtn_Click"/>
 
                 <TextBlock
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
-                    Text="预览" />
+                    x:Uid="OutputPage_Preview"/>
 
                 <Viewbox x:Name="MindMapViewbox" MaxWidth="840" Canvas.ZIndex="-1">
                     <Border 

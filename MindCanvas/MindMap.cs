@@ -20,6 +20,9 @@ namespace MindCanvas
         public SolidColorBrush defaultNodeBorderBrush;// 默认边框颜色
         public double defaultNodeNameFontSize;// 默认点名称文字大小
         public InkStrokeContainer inkStrokeContainer;// 墨迹
+        public double visualCenterX;// 可视中心点X
+        public double visualCenterY;// 可视中心点Y
+        public float zoomFactor;// 可视区放大倍数
 
         public MindMap()
         {
@@ -28,24 +31,31 @@ namespace MindCanvas
         }
 
         // 初始化成新的思维导图
-        public void Initialize()
+        public void Initialize(bool createFirst=true)
         {
-            RemoveAll();
+            nodes.Clear();
+            ties.Clear();
 
-            Node firstNode = new Node
+            if (createFirst)
             {
-                Id = 0,
-                Name = "主节点",
-                Description = "第一个节点",
-                X = 0,
-                Y = 0,
-            };
+                Node firstNode = new Node
+                {
+                    Id = 0,
+                    Name = "主节点",
+                    Description = "第一个节点",
+                    X = 0,
+                    Y = 0,
+                };
 
-            nodes.Add(firstNode);
+                nodes.Add(firstNode);
+            }
 
             defaultNodeBorderBrush = new SolidColorBrush(InitialValues.NodeBorderBrushColor);
             defaultNodeNameFontSize = InitialValues.NodeNameFontSize;
             inkStrokeContainer = new InkStrokeContainer();
+            visualCenterX = 0;
+            visualCenterY = 0;
+            zoomFactor = 1;
         }
 
         // 添加点
@@ -186,6 +196,9 @@ namespace MindCanvas
             this.defaultNodeBorderBrush = mindCanvasFileData.DefaultNodeBorderBrush as SolidColorBrush;
             this.defaultNodeNameFontSize = mindCanvasFileData.DefaultNodeNameFontSize;
             this.inkStrokeContainer = mindCanvasFileData.InkStrokeContainer;
+            this.zoomFactor = mindCanvasFileData.ZoomFactor;
+            this.visualCenterX = mindCanvasFileData.VisualCenterX;
+            this.visualCenterY = mindCanvasFileData.VisualCenterY;
         }
 
         // 获取可序列化的数据
@@ -198,19 +211,12 @@ namespace MindCanvas
                 DefaultNodeBorderBrush = defaultNodeBorderBrush,
                 DefaultNodeNameFontSize = defaultNodeNameFontSize,
                 InkStrokeContainer = inkStrokeContainer,
+                ZoomFactor = zoomFactor,
+                VisualCenterX = visualCenterX,
+                VisualCenterY = visualCenterY
             };
 
             return mindCanvasFileData;
-        }
-
-        // 清空
-        private void RemoveAll()
-        {
-            nodes.Clear();
-            ties.Clear();
-            defaultNodeBorderBrush = null;
-            defaultNodeNameFontSize = 0.0d;
-            inkStrokeContainer = null;
         }
 
         // 修改点

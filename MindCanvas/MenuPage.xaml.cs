@@ -83,7 +83,7 @@ namespace MindCanvas
                 page = typeof(OpenPage);
                 header = "打开";
             }
-            else if (navItemTag == "Output")
+            else if (navItemTag == "Export")
             {
                 page = typeof(OutputPage);
                 header = "导出";

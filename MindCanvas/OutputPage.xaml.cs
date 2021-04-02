@@ -50,7 +50,7 @@ namespace MindCanvas
             if (choice == null)
             {
                 //FormatTip.IsOpen = true;
-                await Dialog.OutputError();
+                await Dialog.Show.OutputError();
             }
             else
             {
@@ -97,7 +97,7 @@ namespace MindCanvas
                     }
                     catch
                     {
-                        await Dialog.OutputError();
+                        await Dialog.Show.OutputError();
                     }
                 }
             }

@@ -38,7 +38,7 @@ namespace MindCanvas
 
         private async void NewFunctionBtn_Click(object sender, RoutedEventArgs e)
         {
-            await Dialog.ShowNewFunction();
+            await Dialog.Show.ShowNewFunction();
         }
     }
 }

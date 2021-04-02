@@ -56,10 +56,10 @@ namespace MindCanvas
                 borderBrush = node.BorderBrush;
 
             // 文字大小
-            if (node.NameFontSize == 0.0d)// 默认
+            if (node.NameFontSize == null)// 默认
                 fontSize = mindMap.defaultNodeNameFontSize;
             else// 已设置
-                fontSize = node.NameFontSize;
+                fontSize = node.NameFontSize.Value;
 
             // 事件
             PointerEntered += NodeControl_PointerEntered;// 鼠标进入

@@ -61,7 +61,7 @@ namespace MindCanvas
         {
             if (modified)
             {
-                ContentDialogResult result = await Dialog.AskForSave();
+                ContentDialogResult result = await Dialog.Show.AskForSave();
                 // 用户选择取消
                 if (result == ContentDialogResult.None)
                     return false;
@@ -108,7 +108,7 @@ namespace MindCanvas
             // 当前文件已修改
             if (modified)
             {
-                ContentDialogResult result = await Dialog.AskForSave();
+                ContentDialogResult result = await Dialog.Show.AskForSave();
 
                 //用户选择取消
                 if (result == ContentDialogResult.None)
@@ -179,10 +179,15 @@ namespace MindCanvas
             {
                 var savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+
                 // Dropdown of file types the user can save the file as
-                savePicker.FileTypeChoices.Add("MindCanvas 文件", new List<string>() { ".mindcanvas" });
+                //savePicker.FileTypeChoices.Add("MindCanvas 文件", new List<string>() { ".mindcanvas" });
+                savePicker.FileTypeChoices.Add("MindCanvas File", new List<string>() { ".mindcanvas" });
+
                 // Default file name if the user does not type one in or select a file to replace
-                savePicker.SuggestedFileName = "无标题";
+                //savePicker.SuggestedFileName = "无标题";
+                savePicker.SuggestedFileName = "Untitled";
+
                 StorageFile file = await savePicker.PickSaveFileAsync();
 
                 if (file != null)
@@ -196,7 +201,7 @@ namespace MindCanvas
             }
         }
 
-        // 修改点
+        // 修改点的名称和描述
         public static void ModifyNode(Node node, string newName, string newDescription)
         {
             NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
@@ -207,6 +212,7 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改点的坐标
         public static void ModifyNode(Node node, double x, double y)
         {
             mindMap.ModifyNode(node.Id, x, y);
@@ -219,12 +225,13 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改点的边框颜色
         public static void ModifyNodeBorderBrushColor(Node node, Color? borderBrushColor)
         {
             NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
             if (borderBrushColor != null)
             {
-                SolidColorBrush borderBrush = new SolidColorBrush((Color)borderBrushColor);
+                SolidColorBrush borderBrush = new SolidColorBrush(borderBrushColor.Value);
                 border.BorderBrush = borderBrush;
                 node.BorderBrush = borderBrush;
             }
@@ -237,24 +244,22 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改点的字体大小
         public static void ModifyNodeNameFontSize(Node node, double? nameFontSize)
         {
             NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
+
+            node.NameFontSize = nameFontSize;
+
             if (nameFontSize != null)
-            {
-                node.NameFontSize = (double)nameFontSize;
-                border.FontSize = (double)nameFontSize;
-            }
+                border.FontSize = nameFontSize.Value;
             else
-            {
-                node.NameFontSize = 0.0d;
                 border.FontSize = mindMap.defaultNodeNameFontSize;
-            }
 
             Record();
         }
 
-        // 修改线
+        // 修改线的描述
         public static void ModifyTie(Tie tie, string newDescription)
         {
             mindMap.ModifyTie(tie.Id, newDescription);
@@ -313,6 +318,16 @@ namespace MindCanvas
             Record();
         }
 
+        // 修改可视区域
+        public static void ModifyViewport(double? visualCenterX, double? visualCenterY, float? zoomFactor)
+        {
+            if (visualCenterX != null)
+                App.mindMap.visualCenterX = visualCenterX.Value;
+            if (visualCenterY != null)
+                App.mindMap.visualCenterY = visualCenterY.Value;
+            if (zoomFactor != null)
+                App.mindMap.zoomFactor = zoomFactor.Value;
+        }
         // 撤销
         public static void Undo()
         {

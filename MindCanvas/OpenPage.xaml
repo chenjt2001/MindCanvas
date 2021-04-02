@@ -19,15 +19,15 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,4,0,0"
                     FontWeight="Normal"
-                    Text="打开文件" />
+                    x:Uid="OpenPage_OpenFile"/>
 
-                <Button Margin="0,10,0,0" Content="浏览文件" Click="Button_Click"/>
+                <Button Margin="0,10,0,0" x:Uid="OpenPage_BrowseFiles" Click="Button_Click"/>
 
                 <TextBlock
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
-                    Text="最近打开的文件" />
+                    x:Uid="OpenPage_RecentlyOpenedFiles"/>
 
                 <ListView x:Name="FileListView" IsItemClickEnabled="True" ItemClick="FileListView_ItemClick" Margin="0,10,0,0"></ListView>
 

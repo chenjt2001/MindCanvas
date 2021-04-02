@@ -23,13 +23,13 @@
                         </TransitionCollection>
                     </StackPanel.ChildrenTransitions>
 
-                    <TextBlock Text="基本信息" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock x:Uid="EditNodePage_BasicInformation" Style="{StaticResource TitleTextBlockStyle}"/>
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="名称" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Uid="EditNodePage_Name" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" LosingFocus="NameTextBox_LosingFocus" TextChanged="NameTextBox_TextChanged"/>
                     </Grid>
                     <Grid Margin="0,20,0,0">
@@ -37,17 +37,17 @@
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="描述" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Uid="EditNodePage_Description" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" LosingFocus="DescriptionTextBox_LosingFocus"/>
                     </Grid>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
 
-                    <TextBlock Text="边框颜色" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock x:Uid="EditNodePage_BorderColor" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
                     
                     <muxc:RadioButtons>
-                        <RadioButton Margin="0,20,0,0" Content="默认" x:Name="DefaultBorderBrushRadioButton" Checked="DefaultBorderBrushRadioButton_Checked"/>
-                        <RadioButton Content="自定义" x:Name="CustomBorderBrushRadioButton" Checked="CustomBorderBrushRadioButton_Checked"/>
+                        <RadioButton Margin="0,20,0,0" x:Uid="EditNodePage_Default" x:Name="DefaultBorderBrushRadioButton" Checked="DefaultBorderBrushRadioButton_Checked"/>
+                        <RadioButton x:Uid="EditNodePage_Custom" x:Name="CustomBorderBrushRadioButton" Checked="CustomBorderBrushRadioButton_Checked"/>
                     </muxc:RadioButtons>
 
                     <Viewbox MaxWidth="200" Visibility="{x:Bind CustomBorderBrushRadioButton.IsChecked,Mode=OneWay}">
@@ -68,17 +68,16 @@
                     
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
 
-                    <TextBlock Text="文字大小" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock x:Uid="EditNodePage_FontSize" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
 
                     <muxc:RadioButtons>
-                        <RadioButton Margin="0,20,0,0" Content="默认" x:Name="DefaultFontSizeRadioButton" Checked="DefaultFontSizeRadioButton_Checked"/>
-                        <RadioButton Content="自定义" x:Name="CustomFontSizeRadioButton" Checked="CustomFontSizeRadioButton_Checked"/>
+                        <RadioButton Margin="0,20,0,0" x:Uid="EditNodePage_Default" x:Name="DefaultFontSizeRadioButton" Checked="DefaultFontSizeRadioButton_Checked"/>
+                        <RadioButton x:Uid="EditNodePage_Custom" x:Name="CustomFontSizeRadioButton" Checked="CustomFontSizeRadioButton_Checked"/>
                     </muxc:RadioButtons>
 
                     <muxc:NumberBox 
                         x:Name="FontSizeNumberBox" 
-                        Header="设置字号：" 
-                        PlaceholderText="1-100的数" 
+                        x:Uid="EditNodePage_SetFontSize"
                         Minimum="10" 
                         Maximum="100" 
                         SpinButtonPlacementMode="Compact" 
@@ -86,7 +85,7 @@
                         Visibility="{x:Bind CustomFontSizeRadioButton.IsChecked, Mode=OneWay}"/>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
-                    <Button Margin="0,20,0,0" HorizontalAlignment="Right" Content="删除" FontSize="15" Width="100" Click="RemoveNodeBtn_Click"/>
+                    <Button Margin="0,20,0,0" HorizontalAlignment="Right" x:Uid="EditNodePage_Delete" FontSize="15" Width="100" Click="RemoveNodeBtn_Click"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

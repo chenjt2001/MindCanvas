@@ -381,13 +381,7 @@ namespace MindCanvas
             ConfigNodesBorder();
             ConfigTiesPath();
 
-            if (App.mindMap.nodes.Count() == 0)
-                MindMapScrollViewer.ChangeView(horizontalOffset: MindMapScrollViewer.ScrollableWidth / 2, verticalOffset: MindMapScrollViewer.ScrollableHeight / 2, zoomFactor: MindMapScrollViewer.ZoomFactor);
-            else
-                MindMapScrollViewer.ChangeView(
-                    horizontalOffset: MindMapScrollViewer.ScrollableWidth / 2 + App.mindMap.nodes.Last().X * MindMapScrollViewer.ZoomFactor, 
-                    verticalOffset: MindMapScrollViewer.ScrollableHeight / 2 + App.mindMap.nodes.Last().Y * MindMapScrollViewer.ZoomFactor, 
-                    zoomFactor: MindMapScrollViewer.ZoomFactor);
+            ChangeView(App.mindMap.visualCenterX, App.mindMap.visualCenterY, App.mindMap.zoomFactor);
         }
 
         // MindMapInkBorder加载完成
@@ -408,10 +402,10 @@ namespace MindCanvas
             {
                 // 排除在使用鼠标并且处于惯性的情况
                 if (!(e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse && e.IsInertial))
-                    MindMapScrollViewer.ChangeView(
-                        horizontalOffset: MindMapScrollViewer.HorizontalOffset - e.Delta.Translation.X,
-                        verticalOffset: MindMapScrollViewer.VerticalOffset - e.Delta.Translation.Y,
-                        zoomFactor: null);
+                    MoveView(
+                        relx: -e.Delta.Translation.X * (1 / MindMapScrollViewer.ZoomFactor) * 0.6,
+                        rely: -e.Delta.Translation.Y * (1 / MindMapScrollViewer.ZoomFactor) * 0.6
+                    );
             }
         }
 
@@ -419,10 +413,7 @@ namespace MindCanvas
         private void MindMapScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // 保持显示的相对位置不变
-            MindMapScrollViewer.ChangeView(
-                horizontalOffset: MindMapScrollViewer.HorizontalOffset - (e.NewSize.Width - e.PreviousSize.Width) / 2,
-                verticalOffset: MindMapScrollViewer.VerticalOffset - (e.NewSize.Height - e.PreviousSize.Height) / 2,
-                zoomFactor: null);
+            MoveView(relx: -(e.NewSize.Width - e.PreviousSize.Width) / 2,rely: -(e.NewSize.Height - e.PreviousSize.Height) / 2);
         }
 
         // 触控书写支持
@@ -493,7 +484,6 @@ namespace MindCanvas
             }
             else
                 EditFrame.Navigate(sourcePageType, parameter, new DrillInNavigationTransitionInfo());
-
         }
 
         // 默认值设置
@@ -509,21 +499,21 @@ namespace MindCanvas
 
             if (tag == "Up")
             {
-                MindMapScrollViewer.ChangeView(null, MindMapScrollViewer.VerticalOffset - 20, null);
+                MoveView(rely: -20);
             }
 
             else if (tag == "Down")
             {
-                MindMapScrollViewer.ChangeView(null, MindMapScrollViewer.VerticalOffset + 20, null);
+                MoveView(rely: 20);
             }
 
             else if (tag == "Left")
             {
-                MindMapScrollViewer.ChangeView(MindMapScrollViewer.HorizontalOffset - 20, null, null);
+                MoveView(relx: -20);
             }
             else if (tag == "Right")
             {
-                MindMapScrollViewer.ChangeView(MindMapScrollViewer.HorizontalOffset + 20, null, null);
+                MoveView(relx: 20);
             }
         }
 
@@ -532,42 +522,30 @@ namespace MindCanvas
         {
             string tag = (string)(sender as Button).Tag;
 
-            double horizontalOffset = 0, verticalOffset = 0;
-            float zoomFactor = 1;
             // 缩小
             if (tag == "ZoomOut")
             {
-                horizontalOffset = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2) / 1.2 - MindMapScrollViewer.ActualWidth / 2;
-                verticalOffset = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2) / 1.2 - MindMapScrollViewer.ActualHeight / 2;
-                zoomFactor = MindMapScrollViewer.ZoomFactor / 1.2f;
+                MoveView(power: 1 / 1.2f);
             }
 
             // 放大
             else if (tag == "ZoomIn")
             {
-                horizontalOffset = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2) * 1.2 - MindMapScrollViewer.ActualWidth / 2;
-                verticalOffset = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2) * 1.2 - MindMapScrollViewer.ActualHeight / 2;
-                zoomFactor = MindMapScrollViewer.ZoomFactor * 1.2f;
+                MoveView(power: 1.2f);
             }
 
             // 查看全览
             else if (tag == "Fit")
             {
-                zoomFactor = InitialValues.MinZoomFactor;
                 if (App.mindMap.nodes.Count() == 0)
                 {
-                    horizontalOffset = (mindMapCanvas.Width * InitialValues.MinZoomFactor - MindMapScrollViewer.ActualWidth) / 2;
-                    verticalOffset = (mindMapCanvas.Height * InitialValues.MinZoomFactor - MindMapScrollViewer.ActualHeight) / 2;
+                    ChangeView(0, 0, InitialValues.MinZoomFactor);
                 }
                 else
                 {
-                    horizontalOffset = mindMapCanvas.Width * InitialValues.MinZoomFactor / 2 + App.mindMap.nodes[0].X * InitialValues.MinZoomFactor - MindMapScrollViewer.ActualWidth / 2;
-                    verticalOffset = mindMapCanvas.Height * InitialValues.MinZoomFactor / 2 + App.mindMap.nodes[0].Y * InitialValues.MinZoomFactor - MindMapScrollViewer.ActualHeight / 2;
+                    ChangeView(App.mindMap.nodes[0].X, App.mindMap.nodes[0].Y, InitialValues.MinZoomFactor);
                 }
             }
-
-            MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
-
         }
 
         private void MindMapScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -585,19 +563,14 @@ namespace MindCanvas
             float power = e.GetCurrentPoint(MindMapScrollViewer).Properties.MouseWheelDelta > 0 ? 1.1f : 1 / 1.1f;
             double left = e.GetCurrentPoint(MindMapScrollViewer).Position.X;
             double top = e.GetCurrentPoint(MindMapScrollViewer).Position.Y;
-            double right = MindMapScrollViewer.ActualWidth - MindMapScrollViewer.ActualWidth / 2 - (left - MindMapScrollViewer.ActualWidth / 2) * 0.1;
-            double bottom = MindMapScrollViewer.ActualHeight - MindMapScrollViewer.ActualHeight / 2 - (top - MindMapScrollViewer.ActualHeight / 2) * 0.1;
-
+            double relx, rely;
 
             if (MindMapScrollViewer.ZoomFactor * power > InitialValues.MinZoomFactor && MindMapScrollViewer.ZoomFactor * power < InitialValues.MaxZoomFactor)
             {
-                //double horizontalOffset = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2) * power - MindMapScrollViewer.ActualWidth / 2;
-                double horizontalOffset = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2) * power - right;
-                //double verticalOffset = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2) * power - MindMapScrollViewer.ActualHeight / 2;
-                double verticalOffset = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2) * power - bottom;
-                float zoomFactor = MindMapScrollViewer.ZoomFactor * power;
+                relx = (left - MindMapScrollViewer.ActualWidth / 2) * power * 0.1;
+                rely = (top - MindMapScrollViewer.ActualHeight / 2) * power * 0.1;
 
-                MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
+                MoveView(relx, rely, power);
             }
 
             e.Handled = true;
@@ -606,6 +579,51 @@ namespace MindCanvas
         private void EditFrame_Loaded(object sender, RoutedEventArgs e)
         {
             ShowFrame(typeof(EditPage.InfoPage));
+        }
+
+        // 改变可视区域（接受相对于画布中间的x和y）
+        private void ChangeView(double? x, double? y, float? zoomFactor)
+        {
+            double horizontalOffset, verticalOffset;
+
+            if (!MindMapBorder.IsLoaded)
+                return;
+
+            if (zoomFactor == null)
+                zoomFactor = MindMapScrollViewer.ZoomFactor;
+
+            if (x == null)
+                x = App.mindMap.visualCenterX;
+
+            if (y == null)
+                y = App.mindMap.visualCenterY;
+
+            horizontalOffset = mindMapCanvas.Width * zoomFactor.Value / 2 + x.Value * zoomFactor.Value - MindMapScrollViewer.ActualWidth / 2;
+            verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
+
+            MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
+
+            EventsManager.ModifyViewport(x, y, zoomFactor);
+        }
+
+        // 移动可视区域（接受相对于画布中间的x和y的相对移动值和相对缩放倍数）
+        private void MoveView(double relx=0, double rely=0, float power=1)
+        {
+            double horizontalOffset, verticalOffset, x, y;
+            float zoomFactor;
+
+            if (!MindMapBorder.IsLoaded)
+                return;
+
+            x = relx + App.mindMap.visualCenterX;
+            y = rely + App.mindMap.visualCenterY;
+
+            zoomFactor = MindMapScrollViewer.ZoomFactor * power;
+            horizontalOffset = mindMapCanvas.Width * zoomFactor / 2 + x * zoomFactor - MindMapScrollViewer.ActualWidth / 2;
+            verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
+            MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
+
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
     }
 }

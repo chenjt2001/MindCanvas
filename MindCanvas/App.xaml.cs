@@ -100,7 +100,7 @@ namespace MindCanvas
             }
 
             if (SystemInformation.IsFirstRun || SystemInformation.IsAppUpdated)
-                await Dialog.ShowNewFunction();
+                await Dialog.Show.ShowNewFunction();
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace MindCanvas
             Window.Current.Activate();
 
             if (SystemInformation.IsFirstRun || SystemInformation.IsAppUpdated)
-                await Dialog.ShowNewFunction();
+                await Dialog.Show.ShowNewFunction();
         }
 
         // 在ThemeHelper中用到

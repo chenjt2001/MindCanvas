@@ -71,13 +71,7 @@ namespace MindCanvas
             }
             catch (Exception)
             {
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "错误",
-                    Content = "文件打开失败！请确认此文件为 MindCanvas 格式的文件并尝试将 MindCanvas 更新至最新版本！",
-                    CloseButtonText = "好的"
-                };
-                await dialog.ShowAsync();
+                await Dialog.Show.OpenFileError();
                 return false;
             }
         }
