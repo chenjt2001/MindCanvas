@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Windows.Foundation;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.Foundation;
 
 namespace MindCanvas
 {
@@ -58,7 +54,8 @@ namespace MindCanvas
             Size visualSize = border.DesiredSize;
             border.Arrange(new Rect(new Point(0, 0), visualSize));
 
-            border.CenterPoint = new System.Numerics.Vector3{
+            border.CenterPoint = new System.Numerics.Vector3
+            {
                 X = (float)(visualSize.Width / 2),
                 Y = (float)(visualSize.Height / 2),
             };

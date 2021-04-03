@@ -1,29 +1,22 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.Effects;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.Storage.Streams;
-using Windows.Storage;
-using Windows.Graphics.Imaging;
-using Windows.UI;
-using Microsoft.Graphics.Canvas;
-using System.Numerics;
-using System.Threading.Tasks;
-using Windows.Graphics.Display;
-using Microsoft.Graphics.Canvas.Effects;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -164,7 +157,7 @@ namespace MindCanvas
                     DisplayInformation displayInformation = DisplayInformation.GetForCurrentView();
                     int scaledWidth = (int)(canvasWidth / displayInformation.RawPixelsPerViewPixel);
                     int scaledHeight = (int)(canvasHeight / displayInformation.RawPixelsPerViewPixel);
-                    
+
                     SoftwareBitmap canvasSoftwareBitmap = SoftwareBitmap.CreateCopyFromBuffer(canvasPixelData.AsBuffer(), BitmapPixelFormat.Bgra8, canvasWidth, canvasHeight);
                     var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ms);
                     encoder.SetSoftwareBitmap(canvasSoftwareBitmap);
@@ -173,7 +166,7 @@ namespace MindCanvas
                     var decoder = await BitmapDecoder.CreateAsync(BitmapDecoder.PngDecoderId, ms);
                     var transform = new BitmapTransform() { ScaledWidth = (uint)scaledWidth, ScaledHeight = (uint)scaledHeight, InterpolationMode = BitmapInterpolationMode.Cubic };
                     var pixelData = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, transform, ExifOrientationMode.RespectExifOrientation, ColorManagementMode.ColorManageToSRgb);
-                    
+
                     canvasPixelData = pixelData.DetachPixelData();
                     canvasWidth = scaledWidth;
                     canvasHeight = scaledHeight;

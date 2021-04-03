@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -60,7 +49,7 @@ namespace MindCanvas
         {
 
             // 默认设置已修改
-            if (BorderBrushColorPicker.Color != App.mindMap.defaultNodeBorderBrush.Color || 
+            if (BorderBrushColorPicker.Color != App.mindMap.defaultNodeBorderBrush.Color ||
                 FontSizeNumberBox.Value != App.mindMap.defaultNodeNameFontSize)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSaveSettings();

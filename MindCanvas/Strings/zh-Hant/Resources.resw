@@ -117,46 +117,265 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AskForSave.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AskForSave.PrimaryButtonText" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="AskForSave.SecondaryButtonText" xml:space="preserve">
+    <value>不保存</value>
+  </data>
+  <data name="AskForSave.Title" xml:space="preserve">
+    <value>是否希望保存您的心智圖？</value>
+  </data>
+  <data name="AskForSaveSettings.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AskForSaveSettings.PrimaryButtonText" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="AskForSaveSettings.SecondaryButtonText" xml:space="preserve">
+    <value>不保存</value>
+  </data>
+  <data name="AskForSaveSettings.Title" xml:space="preserve">
+    <value>是否希望保存您的設定？</value>
+  </data>
+  <data name="DefaultSettingsPage_Cancel.Content" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="DefaultSettingsPage_DefaultValueSettings.Text" xml:space="preserve">
+    <value>預設值設定</value>
+  </data>
+  <data name="DefaultSettingsPage_RestoreInitialValue.Content" xml:space="preserve">
+    <value>恢復初始值</value>
+  </data>
+  <data name="DefaultSettingsPage_Save.Content" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="DefaultSettingsPage_SetFontSize.Header" xml:space="preserve">
+    <value>設定字型大小：</value>
+  </data>
+  <data name="DefaultSettingsPage_SetFontSize.PlaceholderText" xml:space="preserve">
+    <value>1-100的數</value>
+  </data>
+  <data name="DefaultSettingsPage_TheDefaultBorderColorOfTheNode.Text" xml:space="preserve">
+    <value>點的默認邊框顏色</value>
+  </data>
+  <data name="DefaultSettingsPage_TheDefaultFontSizeOfTheNode.Text" xml:space="preserve">
+    <value>點的默認文字大小</value>
+  </data>
+  <data name="EditNodePage_BasicInformation.Text" xml:space="preserve">
+    <value>基本資訊</value>
+  </data>
+  <data name="EditNodePage_BorderColor.Text" xml:space="preserve">
+    <value>邊框顏色</value>
+  </data>
+  <data name="EditNodePage_Custom.Content" xml:space="preserve">
+    <value>自定義</value>
+  </data>
+  <data name="EditNodePage_Default.Content" xml:space="preserve">
+    <value>默認</value>
+  </data>
+  <data name="EditNodePage_Delete.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="EditNodePage_Description.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="EditNodePage_FontSize.Text" xml:space="preserve">
+    <value>文字大小</value>
+  </data>
+  <data name="EditNodePage_Name.Text" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="EditNodePage_SetFontSize.Header" xml:space="preserve">
+    <value>設定字型大小：</value>
+  </data>
+  <data name="EditNodePage_SetFontSize.PlaceholderText" xml:space="preserve">
+    <value>1-100的數</value>
+  </data>
+  <data name="EditTiePage_BasicInformation.Text" xml:space="preserve">
+    <value>基本資訊</value>
+  </data>
+  <data name="EditTiePage_Delete.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="EditTiePage_Description.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="HelpPage_About.Text" xml:space="preserve">
+    <value>關於</value>
+  </data>
+  <data name="HelpPage_Feedback.Text" xml:space="preserve">
+    <value>迴響</value>
+  </data>
+  <data name="HelpPage_Introduction.Text" xml:space="preserve">
+    <value>介紹</value>
+  </data>
+  <data name="HelpPage_NewContent.Text" xml:space="preserve">
+    <value>新增內容</value>
+  </data>
+  <data name="HelpPage_Paragraph1.Text" xml:space="preserve">
+    <value>MindCanvas是一款製作心智圖的軟件。使用MindCanvas，你可以通過添加點、線和墨蹟輕鬆創造出自己的心智圖，並匯出或分享。</value>
+  </data>
+  <data name="HelpPage_Paragraph2_1.Text" xml:space="preserve">
+    <value>您的評估對MindCanvas的發展至關重要，請</value>
+  </data>
+  <data name="HelpPage_Paragraph2_2.Text" xml:space="preserve">
+    <value>為MindCanvas評分</value>
+  </data>
+  <data name="HelpPage_Paragraph3.Text" xml:space="preserve">
+    <value>作者：珒陶（陳錦濤）</value>
+  </data>
+  <data name="HelpPage_Paragraph4.Text" xml:space="preserve">
+    <value>版本：</value>
+  </data>
+  <data name="HelpPage_Paragraph5.Text" xml:space="preserve">
+    <value>Copyright © 2021 珒陶. All rights reserved.</value>
+  </data>
+  <data name="HelpPage_Paragraph6_1.Text" xml:space="preserve">
+    <value>更多資訊可訪問</value>
+  </data>
+  <data name="HelpPage_Paragraph6_2.Text" xml:space="preserve">
+    <value>官方網站</value>
+  </data>
+  <data name="HelpPage_Paragraph6_3.Text" xml:space="preserve">
+    <value>及</value>
+  </data>
+  <data name="HelpPage_Paragraph6_4.Text" xml:space="preserve">
+    <value>隱私策略</value>
+  </data>
+  <data name="HelpPage_Paragraph6_5.Text" xml:space="preserve">
+    <value>。</value>
+  </data>
+  <data name="HelpPage_VersionNewFeatures.Content" xml:space="preserve">
+    <value>版本新功能</value>
+  </data>
+  <data name="InfoPage_Info.Text" xml:space="preserve">
+    <value>從左側選擇一個元素以查看或編輯它。</value>
+  </data>
   <data name="MainPage_AddNode.Label" xml:space="preserve">
-    <value>添加点</value>
+    <value>添加點</value>
   </data>
   <data name="MainPage_Confirm.Content" xml:space="preserve">
-    <value>确定</value>
+    <value>確定</value>
   </data>
   <data name="MainPage_FitPage.Label" xml:space="preserve">
-    <value>查看全览</value>
+    <value>查看全覽</value>
   </data>
   <data name="MainPage_InkingMode.Header" xml:space="preserve">
-    <value>墨迹书写模式</value>
+    <value>墨蹟書寫模式</value>
   </data>
   <data name="MainPage_Menu.Label" xml:space="preserve">
-    <value>菜单</value>
+    <value>選單</value>
   </data>
   <data name="MainPage_NodeName.PlaceholderText" xml:space="preserve">
-    <value>点名称</value>
+    <value>點名稱</value>
   </data>
   <data name="MainPage_Redo.Label" xml:space="preserve">
     <value>重做</value>
   </data>
   <data name="MainPage_SetDefaultValues.Label" xml:space="preserve">
-    <value>设置默认值</value>
+    <value>設定預設值</value>
   </data>
   <data name="MainPage_TieNodes.Label" xml:space="preserve">
-    <value>连接点</value>
+    <value>連接點</value>
   </data>
   <data name="MainPage_TouchWriting.ToolTipService.ToolTip" xml:space="preserve">
-    <value>触摸写入</value>
+    <value>觸摸寫入</value>
   </data>
   <data name="MainPage_Undo.Label" xml:space="preserve">
-    <value>撤销</value>
+    <value>撤銷</value>
   </data>
   <data name="MainPage_ZoomIn.Label" xml:space="preserve">
     <value>放大</value>
   </data>
   <data name="MainPage_ZoomOut.Label" xml:space="preserve">
-    <value>缩小</value>
+    <value>縮小</value>
+  </data>
+  <data name="MenuPage_Export.Content" xml:space="preserve">
+    <value>匯出</value>
+  </data>
+  <data name="MenuPage_Help.Content" xml:space="preserve">
+    <value>幫助</value>
   </data>
   <data name="MenuPage_Menu.PaneTitle" xml:space="preserve">
-    <value>菜单</value>
+    <value>選單</value>
+  </data>
+  <data name="MenuPage_New.Content" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="MenuPage_Open.Content" xml:space="preserve">
+    <value>打開</value>
+  </data>
+  <data name="MenuPage_Save.Content" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="MenuPage_SaveAs.Content" xml:space="preserve">
+    <value>另存為</value>
+  </data>
+  <data name="MenuPage_Share.Content" xml:space="preserve">
+    <value>共亯</value>
+  </data>
+  <data name="OpenFileError.CloseButtonText" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="OpenFileError.Content" xml:space="preserve">
+    <value>檔案打開失敗！請確認此檔案為MindCanvas格式的檔案並嘗試將MindCanvas更新至最新版本！</value>
+  </data>
+  <data name="OpenFileError.Title" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+  <data name="OpenPage_BrowseFiles.Content" xml:space="preserve">
+    <value>瀏覽檔案</value>
+  </data>
+  <data name="OpenPage_OpenFile.Text" xml:space="preserve">
+    <value>打開檔案</value>
+  </data>
+  <data name="OpenPage_RecentlyOpenedFiles.Text" xml:space="preserve">
+    <value>最近打開的檔案</value>
+  </data>
+  <data name="OutputError.CloseButtonText" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="OutputError.Content" xml:space="preserve">
+    <value>請確認已選擇匯出格式且已安裝此格式對應的的轉碼器！</value>
+  </data>
+  <data name="OutputError.Title" xml:space="preserve">
+    <value>匯出錯誤</value>
+  </data>
+  <data name="OutputPage_Export.Content" xml:space="preserve">
+    <value>匯出</value>
+  </data>
+  <data name="OutputPage_Format.Text" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="OutputPage_PleaseSelectAFormat.PlaceholderText" xml:space="preserve">
+    <value>請選擇一個格式</value>
+  </data>
+  <data name="OutputPage_Preview.Text" xml:space="preserve">
+    <value>預覽</value>
+  </data>
+  <data name="SettingsPage_Dark.Content" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="SettingsPage_Light.Content" xml:space="preserve">
+    <value>淺色</value>
+  </data>
+  <data name="SettingsPage_ThemeMode.Text" xml:space="preserve">
+    <value>主題模式</value>
+  </data>
+  <data name="SettingsPage_UseSystemSetting.Content" xml:space="preserve">
+    <value>使用系統設置</value>
+  </data>
+  <data name="ShowNewFunction.CloseButtonText" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="ShowNewFunction.Content" xml:space="preserve">
+    <value>多國語言：支持簡體中文、繁體中文、英文（自動選擇）。</value>
+  </data>
+  <data name="ShowNewFunction.Title" xml:space="preserve">
+    <value>新功能</value>
   </data>
 </root>

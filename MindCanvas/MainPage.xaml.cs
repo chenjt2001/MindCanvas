@@ -1,32 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Numerics;
+using Windows.UI;
+using Windows.UI.Core;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI;
-using Windows.UI.Composition;
-using System.Numerics;
-using Windows.Storage.AccessCache;
-using Windows.UI.Core.Preview;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Toolkit.Uwp.Helpers;
-using Windows.Storage;
-using Microsoft.UI.Xaml.Controls;
-using Windows.UI.Core;
-using Windows.UI.Input.Inking.Core;
-using Windows.UI.Input.Inking;
-using Windows.ApplicationModel.Core;
+using Windows.UI.Xaml.Navigation;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -55,6 +40,7 @@ namespace MindCanvas
             // 这两个事件用来实现移动点
             ManipulationDelta += MainPage_ManipulationDelta;// 鼠标移动事件
             PointerReleased += MainPage_PointerReleased;// 鼠标释放事件
+            ManipulationCompleted += MainPage_ManipulationCompleted;
 
             // 擦除所有墨迹事件
             MindMapInkToolbar.EraseAllClicked += MindMapInkToolbar_EraseAllClicked;
@@ -244,6 +230,10 @@ namespace MindCanvas
                                   // 那MainPage_PointerReleased就不能获取nowPressedNode了
         }
 
+        private void MainPage_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+        }
+
         // 鼠标按下border
         private void Node_Pressed(object sender, PointerRoutedEventArgs e)
         {
@@ -413,7 +403,7 @@ namespace MindCanvas
         private void MindMapScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // 保持显示的相对位置不变
-            MoveView(relx: -(e.NewSize.Width - e.PreviousSize.Width) / 2,rely: -(e.NewSize.Height - e.PreviousSize.Height) / 2);
+            MoveView(relx: -(e.NewSize.Width - e.PreviousSize.Width) / 2, rely: -(e.NewSize.Height - e.PreviousSize.Height) / 2);
         }
 
         // 触控书写支持
@@ -607,7 +597,7 @@ namespace MindCanvas
         }
 
         // 移动可视区域（接受相对于画布中间的x和y的相对移动值和相对缩放倍数）
-        private void MoveView(double relx=0, double rely=0, float power=1)
+        private void MoveView(double relx = 0, double rely = 0, float power = 1)
         {
             double horizontalOffset, verticalOffset, x, y;
             float zoomFactor;

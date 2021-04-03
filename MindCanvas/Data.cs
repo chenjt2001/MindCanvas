@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Windows.UI;
-using Windows.UI.Xaml.Media;
-using System.Runtime.Serialization;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using Windows.UI;
 using Windows.UI.Input.Inking;
+using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
 {
@@ -62,6 +59,10 @@ namespace MindCanvas
             // V1.0 -> V1.1
             if (node.title != null && node.name == null)
                 node.name = node.title;
+
+            // V1.3 -> V1.4
+            if (node.nameFontSize == 0.0d)
+                node.nameFontSize = null;
         }
 
         public int Id { get => id; set => id = value; }
@@ -115,9 +116,9 @@ namespace MindCanvas
             get
             {
                 return new SolidColorBrush(Color.FromArgb(
-                    defaultNodeBorderBrushArgb[0], 
-                    defaultNodeBorderBrushArgb[1], 
-                    defaultNodeBorderBrushArgb[2], 
+                    defaultNodeBorderBrushArgb[0],
+                    defaultNodeBorderBrushArgb[1],
+                    defaultNodeBorderBrushArgb[2],
                     defaultNodeBorderBrushArgb[3]));
             }
             set
@@ -181,7 +182,7 @@ namespace MindCanvas
             if (data.visualCenterX == null)
                 if (data.Nodes.Count() > 0)
                     data.visualCenterX = data.Nodes[0].X;
-                else 
+                else
                     data.visualCenterX = 0;
 
             if (data.visualCenterY == null)

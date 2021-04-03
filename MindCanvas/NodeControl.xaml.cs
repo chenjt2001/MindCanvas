@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.ComponentModel;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-using Windows.UI;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Windows.UI.Composition;
-using System.Numerics;
 
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
@@ -168,7 +158,7 @@ namespace MindCanvas
         public new CornerRadius CornerRadius => new CornerRadius(5);
 
         // 文字内容
-        public string Text 
+        public string Text
         {
             get
             {

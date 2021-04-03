@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-
-using Windows.UI.Core;
-using Windows.UI.Input.Inking;
-using Windows.UI.Input.Inking.Core;
+﻿using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 
 namespace MindCanvas
 {
-    public class MindMapInkCanvas: InkCanvas
+    public class MindMapInkCanvas : InkCanvas
     {
         public MindMapInkCanvas()
         {

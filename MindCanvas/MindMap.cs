@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Windows.UI;
-using Windows.UI.Xaml.Media;
-using MindCanvas;
 using Windows.UI.Input.Inking;
-using System.IO;
+using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
 {
@@ -31,7 +24,7 @@ namespace MindCanvas
         }
 
         // 初始化成新的思维导图
-        public void Initialize(bool createFirst=true)
+        public void Initialize(bool createFirst = true)
         {
             nodes.Clear();
             ties.Clear();

@@ -1,29 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
+using System;
+using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-using Windows.UI.ViewManagement;
-using Windows.ApplicationModel.Core;
-using Windows.UI;
-using System.Threading.Tasks;
-using Windows.Storage.Pickers;
-using Windows.Storage;
-using Windows.UI.Core.Preview;
-using System.Reflection;
-using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace MindCanvas
 {
@@ -99,7 +84,7 @@ namespace MindCanvas
                 Window.Current.Activate();
             }
 
-            if (SystemInformation.IsFirstRun || SystemInformation.IsAppUpdated)
+            if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
                 await Dialog.Show.ShowNewFunction();
         }
 
@@ -151,7 +136,7 @@ namespace MindCanvas
             frame.Navigate(typeof(MainPage));
             Window.Current.Activate();
 
-            if (SystemInformation.IsFirstRun || SystemInformation.IsAppUpdated)
+            if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
                 await Dialog.Show.ShowNewFunction();
         }
 
@@ -164,6 +149,6 @@ namespace MindCanvas
                 throw new InvalidOperationException("Generic parameter 'TEnum' must be an enum.");
             }
             return (TEnum)Enum.Parse(typeof(TEnum), text);
-        }        
+        }
     }
 }

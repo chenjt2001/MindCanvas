@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
-
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Windows.UI.Input.Inking;
 
 namespace MindCanvas
 {
@@ -289,7 +287,7 @@ namespace MindCanvas
         {
             foreach (Tie tie in mindMap.GetTies(node))
                 mindMapCanvas.Clear(tie);
-            
+
             mindMap.RemoveNode(node);
             mindMapCanvas.Clear(node);
             Record();
