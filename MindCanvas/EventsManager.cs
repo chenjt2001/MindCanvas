@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI;
@@ -26,6 +27,8 @@ namespace MindCanvas
         private static bool modified = false;
         private static int nowIndex;
 
+        // 资源加载器，用于翻译
+        private static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         public static void SetMindMapCanvas(MindMapCanvas newMindMapCanvas)
         {
@@ -179,12 +182,12 @@ namespace MindCanvas
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
 
                 // Dropdown of file types the user can save the file as
-                //savePicker.FileTypeChoices.Add("MindCanvas 文件", new List<string>() { ".mindcanvas" });
-                savePicker.FileTypeChoices.Add("MindCanvas File", new List<string>() { ".mindcanvas" });
+                string fileTypeName = resourceLoader.GetString("Code_MindCanvasFile");// MindCanvas 文件
+                savePicker.FileTypeChoices.Add(fileTypeName, new List<string>() { ".mindcanvas" });
 
                 // Default file name if the user does not type one in or select a file to replace
-                //savePicker.SuggestedFileName = "无标题";
-                savePicker.SuggestedFileName = "Untitled";
+                string suggestedFileName = resourceLoader.GetString("Code_Untitled");// 无标题
+                savePicker.SuggestedFileName = suggestedFileName;
 
                 StorageFile file = await savePicker.PickSaveFileAsync();
 
@@ -265,8 +268,11 @@ namespace MindCanvas
         }
 
         // 新建点
-        public static Node AddNode(string name, string description = "暂无描述")
+        public static Node AddNode(string name, string description = null)
         {
+            if (description == null)
+                description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
+
             Node newNode = mindMap.AddNode(name, description);
             mindMapCanvas.Draw(newNode);
             Record();
@@ -274,8 +280,11 @@ namespace MindCanvas
         }
 
         // 新建线
-        public static Tie AddTie(Node node1, Node node2, string description = "暂无描述")
+        public static Tie AddTie(Node node1, Node node2, string description = null)
         {
+            if (description == null)
+                description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
+
             Tie newTie = mindMap.AddTie(node1.Id, node2.Id, description);
             mindMapCanvas.Draw(newTie);
             Record();

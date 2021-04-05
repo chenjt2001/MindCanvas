@@ -51,12 +51,20 @@ namespace MindCanvas
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
 
                 // 文件类型
-                if (choice == "JPEG (*.jpg)")
-                    savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
-                else if (choice == "PNG (*.png)")
-                    savePicker.FileTypeChoices.Add("PNG 文件", new List<string>() { ".png" });
-                else if (choice == "HEIC (*.heic)")
-                    savePicker.FileTypeChoices.Add("HEIC 文件", new List<string>() { ".heic" });
+                switch (choice)
+                {
+                    case "JPEG (*.jpg)":
+                        savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
+                        break;
+
+                    case "PNG (*.png)":
+                        savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
+                        break;
+
+                    case "HEIC (*.heic)":
+                        savePicker.FileTypeChoices.Add("HEIC 文件", new List<string>() { ".heic" });
+                        break;
+                }
 
                 // 默认文件名称
                 if (App.mindCanvasFile.File == null)
@@ -70,22 +78,19 @@ namespace MindCanvas
                 {
                     try
                     {
-                        // JPEG格式
-                        if (choice == "JPEG (*.jpg)")
+                        switch (choice)
                         {
-                            await OutPut(file, BitmapEncoder.JpegEncoderId);
-                        }
+                            case "JPEG (*.jpg)":
+                                await OutPut(file, BitmapEncoder.JpegEncoderId);
+                                break;
 
-                        // PNG格式
-                        else if (choice == "PNG (*.png)")
-                        {
-                            await OutPut(file, BitmapEncoder.PngEncoderId);
-                        }
+                            case "PNG (*.png)":
+                                await OutPut(file, BitmapEncoder.PngEncoderId);
+                                break;
 
-                        // HEIC格式
-                        else if (choice == "HEIC (*.heic)")
-                        {
-                            await OutPut(file, BitmapEncoder.HeifEncoderId);
+                            case "HEIC(*.heic)":
+                                await OutPut(file, BitmapEncoder.HeifEncoderId);
+                                break;
                         }
                     }
                     catch

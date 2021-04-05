@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media;
 
@@ -16,6 +17,9 @@ namespace MindCanvas
         public double visualCenterX;// 可视中心点X
         public double visualCenterY;// 可视中心点Y
         public float zoomFactor;// 可视区放大倍数
+
+        // 资源加载器，用于翻译
+        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         public MindMap()
         {
@@ -34,8 +38,8 @@ namespace MindCanvas
                 Node firstNode = new Node
                 {
                     Id = 0,
-                    Name = "主节点",
-                    Description = "第一个节点",
+                    Name = resourceLoader.GetString("Code_MasterNode"),// 主节点
+                    Description = resourceLoader.GetString("Code_TheFirstNode"),// 第一个节点
                     X = 0,
                     Y = 0,
                 };
@@ -52,7 +56,7 @@ namespace MindCanvas
         }
 
         // 添加点
-        public Node AddNode(string name, string description = "暂无描述")
+        public Node AddNode(string name, string description)
         {
             Node newNode;
 
@@ -84,7 +88,7 @@ namespace MindCanvas
         }
 
         // 添加连接
-        public Tie AddTie(int node1id, int node2id, string description = "暂无描述")
+        public Tie AddTie(int node1id, int node2id, string description)
         {
             int id;
             if (ties.Count() == 0)

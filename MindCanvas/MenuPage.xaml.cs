@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -18,6 +19,9 @@ namespace MindCanvas
         private StorageFile SharedFile;
 
         public static Frame MenuPageFrame;
+
+        // 资源加载器
+        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
 
         public MenuPage()
@@ -53,41 +57,44 @@ namespace MindCanvas
             Type page = null;
             string header = null;
 
-            if (navItemTag == "settings")
+            switch (navItemTag)
             {
-                page = typeof(SettingsPage);
-                header = "设置";
+                case "settings":
+                    page = typeof(SettingsPage);
+                    header = resourceLoader.GetString("Code_Settings");// 设置
+                    break;
+
+                case "Help":
+                    page = typeof(HelpPage);
+                    header = resourceLoader.GetString("Code_Help");// 帮助
+                    break;
+
+                case "Open":
+                    page = typeof(OpenPage);
+                    header = resourceLoader.GetString("Code_Open");// 打开
+                    break;
+
+                case "Export":
+                    page = typeof(OutputPage);
+                    header = resourceLoader.GetString("Code_Export");// 导出
+                    break;
+
+                case "Save":
+                    Save();
+                    break;
+
+                case "SaveAs":
+                    SaveAs();
+                    break;
+
+                case "Share":
+                    Share();
+                    break;
+
+                case "New":
+                    NewFile();
+                    break;
             }
-
-            else if (navItemTag == "Help")
-            {
-                page = typeof(HelpPage);
-                header = "帮助";
-            }
-
-            else if (navItemTag == "Open")
-            {
-                page = typeof(OpenPage);
-                header = "打开";
-            }
-            else if (navItemTag == "Export")
-            {
-                page = typeof(OutputPage);
-                header = "导出";
-            }
-
-            else if (navItemTag == "Save")
-                Save();
-
-            else if (navItemTag == "SaveAs")
-                SaveAs();
-
-            else if (navItemTag == "Share")
-                Share();
-
-            else if (navItemTag == "New")
-                NewFile();
-
 
             // Get the page type before navigation so you can prevent duplicate
             // entries in the backstack.
@@ -151,7 +158,7 @@ namespace MindCanvas
 
                 DataRequest request = args.Request;
                 request.Data.Properties.Title = SharedFile.Name;
-                request.Data.Properties.Description = "已从 MindCanvas 共享";
+                request.Data.Properties.Description = resourceLoader.GetString("Code_SharedFromMindCanvas");// 已从 MindCanvas 共享
                 request.Data.SetStorageItems(storageItems);
             }
         }

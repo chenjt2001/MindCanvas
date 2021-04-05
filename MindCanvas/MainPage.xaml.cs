@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Windows.ApplicationModel.Resources;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
@@ -31,6 +32,9 @@ namespace MindCanvas
         public static MindMapInkCanvas mindMapInkCanvas;
         public static MainPage mainPage;
 
+        // 资源加载器，用于翻译
+        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -40,7 +44,6 @@ namespace MindCanvas
             // 这两个事件用来实现移动点
             ManipulationDelta += MainPage_ManipulationDelta;// 鼠标移动事件
             PointerReleased += MainPage_PointerReleased;// 鼠标释放事件
-            ManipulationCompleted += MainPage_ManipulationCompleted;
 
             // 擦除所有墨迹事件
             MindMapInkToolbar.EraseAllClicked += MindMapInkToolbar_EraseAllClicked;
@@ -230,10 +233,6 @@ namespace MindCanvas
                                   // 那MainPage_PointerReleased就不能获取nowPressedNode了
         }
 
-        private void MainPage_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-        }
-
         // 鼠标按下border
         private void Node_Pressed(object sender, PointerRoutedEventArgs e)
         {
@@ -296,8 +295,9 @@ namespace MindCanvas
                 border.IsSelected = false;
             selectedBorderList.Clear();
 
-            if ((bool)TieBtn.IsChecked)
-                ShowFrame(typeof(EditPage.InfoPage), "从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。");
+            if (TieBtn.IsChecked.Value)
+                // 从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。
+                ShowFrame(typeof(EditPage.InfoPage), resourceLoader.GetString("Code_SelectTwoUntiedNodes"));
             else
                 ShowFrame(typeof(EditPage.InfoPage));
         }
@@ -403,7 +403,7 @@ namespace MindCanvas
         private void MindMapScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // 保持显示的相对位置不变
-            MoveView(relx: -(e.NewSize.Width - e.PreviousSize.Width) / 2, rely: -(e.NewSize.Height - e.PreviousSize.Height) / 2);
+            MoveView();
         }
 
         // 触控书写支持
@@ -487,23 +487,12 @@ namespace MindCanvas
         {
             string tag = (string)(sender as RepeatButton).Tag;
 
-            if (tag == "Up")
+            switch (tag)
             {
-                MoveView(rely: -20);
-            }
-
-            else if (tag == "Down")
-            {
-                MoveView(rely: 20);
-            }
-
-            else if (tag == "Left")
-            {
-                MoveView(relx: -20);
-            }
-            else if (tag == "Right")
-            {
-                MoveView(relx: 20);
+                case "Up": MoveView(rely: -20); break;
+                case "Down": MoveView(rely: 20); break;
+                case "Left": MoveView(relx: -20); break;
+                case "Right": MoveView(relx: 20); break;
             }
         }
 
@@ -512,29 +501,18 @@ namespace MindCanvas
         {
             string tag = (string)(sender as Button).Tag;
 
-            // 缩小
-            if (tag == "ZoomOut")
+            switch (tag)
             {
-                MoveView(power: 1 / 1.2f);
-            }
+                case "ZoomOut": MoveView(power: 1 / 1.2f); break;// 缩小
+                case "ZoomIn": MoveView(power: 1.2f); break;// 放大
+                case "Fit":// 查看全览
+                    if (App.mindMap.nodes.Count() == 0)
+                        ChangeView(0, 0, InitialValues.MinZoomFactor);
 
-            // 放大
-            else if (tag == "ZoomIn")
-            {
-                MoveView(power: 1.2f);
-            }
+                    else
+                        ChangeView(App.mindMap.nodes[0].X, App.mindMap.nodes[0].Y, InitialValues.MinZoomFactor);
 
-            // 查看全览
-            else if (tag == "Fit")
-            {
-                if (App.mindMap.nodes.Count() == 0)
-                {
-                    ChangeView(0, 0, InitialValues.MinZoomFactor);
-                }
-                else
-                {
-                    ChangeView(App.mindMap.nodes[0].X, App.mindMap.nodes[0].Y, InitialValues.MinZoomFactor);
-                }
+                    break;
             }
         }
 

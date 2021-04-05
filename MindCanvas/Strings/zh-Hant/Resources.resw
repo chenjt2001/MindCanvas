@@ -141,6 +141,39 @@
   <data name="AskForSaveSettings.Title" xml:space="preserve">
     <value>是否希望保存您的設定？</value>
   </data>
+  <data name="Code_Export" xml:space="preserve">
+    <value>匯出</value>
+  </data>
+  <data name="Code_Help" xml:space="preserve">
+    <value>幫助</value>
+  </data>
+  <data name="Code_MasterNode" xml:space="preserve">
+    <value>主節點</value>
+  </data>
+  <data name="Code_MindCanvasFile" xml:space="preserve">
+    <value>MindCanvas 檔案</value>
+  </data>
+  <data name="Code_NoDescription" xml:space="preserve">
+    <value>暫無描述</value>
+  </data>
+  <data name="Code_Open" xml:space="preserve">
+    <value>打開</value>
+  </data>
+  <data name="Code_SelectTwoUntiedNodes" xml:space="preserve">
+    <value>從左側選擇兩個未連接點以連接它們，或者選擇兩個已連接的點以取消它們之間的連接。</value>
+  </data>
+  <data name="Code_Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Code_SharedFromMindCanvas" xml:space="preserve">
+    <value>已從 MindCanvas 共亯</value>
+  </data>
+  <data name="Code_TheFirstNode" xml:space="preserve">
+    <value>第一個節點</value>
+  </data>
+  <data name="Code_Untitled" xml:space="preserve">
+    <value>無標題</value>
+  </data>
   <data name="DefaultSettingsPage_Cancel.Content" xml:space="preserve">
     <value>取消</value>
   </data>
@@ -157,7 +190,7 @@
     <value>設定字型大小：</value>
   </data>
   <data name="DefaultSettingsPage_SetFontSize.PlaceholderText" xml:space="preserve">
-    <value>1-100的數</value>
+    <value>10-100的數</value>
   </data>
   <data name="DefaultSettingsPage_TheDefaultBorderColorOfTheNode.Text" xml:space="preserve">
     <value>點的默認邊框顏色</value>
