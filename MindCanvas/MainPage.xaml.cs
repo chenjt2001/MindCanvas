@@ -620,7 +620,6 @@ namespace MindCanvas
                 && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / 2
                 && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / 2 < y
                 && y <  App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
-
         }
     }
 }
