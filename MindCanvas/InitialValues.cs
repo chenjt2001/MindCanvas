@@ -9,5 +9,7 @@ namespace MindCanvas
         public const int NodeNameFontSize = 20;
         public const float MinZoomFactor = 0.4f;
         public const float MaxZoomFactor = 2;
+        public const int MindMapCanvasWidth = 100000;
+        public const int MindMapCanvasHeight = 100000;
     }
 }

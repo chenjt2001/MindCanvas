@@ -37,8 +37,8 @@ namespace MindCanvas
             }
 
             // 画布大小
-            Width = 100000;
-            Height = 100000;
+            Width = InitialValues.MindMapCanvasWidth;
+            Height = InitialValues.MindMapCanvasHeight;
         }
 
         // 画一个点

@@ -82,12 +82,14 @@ namespace MindCanvas
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
                 AppNameBorder.Background = new SolidColorBrush(Colors.White);
+                MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.White);
             }
             else if (ThemeHelper.ActualTheme == ElementTheme.Dark)
             {
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
                 AppNameBorder.Background = new SolidColorBrush(Colors.Black);
+                MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.Black);
             }
         }
 
@@ -227,6 +229,9 @@ namespace MindCanvas
 
                 RefreshUnRedoBtn();
                 isMovingNode = false;
+
+                // 移动点完成，允许使用RepeatButton
+                SetRepeatButtonIsHitTestVisible(true);
             }
             nowPressedNode = null;// 没有点被按下，之所以这句话不写在Node_Released里面
                                   // 是因为当鼠标释放时Node_Released会比MainPage_PointerReleased先运行
@@ -281,6 +286,9 @@ namespace MindCanvas
 
                 isMovingNode = true;
 
+                // 移动点期间，禁用RepeatButton
+                SetRepeatButtonIsHitTestVisible(false);
+
                 // 不用现在提交EventManager，因为鼠标还没释放（nowPressedNode != null）
             }
         }
@@ -329,6 +337,10 @@ namespace MindCanvas
                 ConfigNodesBorder(new List<Node> { newNode });
                 RefreshUnRedoBtn();
                 InkToolToggleSwitch.IsOn = false;
+
+                // 如果新的点在可视区域外则移动可视区域到以新的点为中心
+                if (!IsInViewport(newNode.X, newNode.Y))
+                    ChangeView(newNode.X, newNode.Y, null);
             }
         }
 
@@ -424,14 +436,12 @@ namespace MindCanvas
         {
             if (InkToolToggleSwitch.IsOn)
             {
-                Canvas.SetZIndex(MindMapInkBorder, 1);
-                Canvas.SetZIndex(MindMapBorder, 0);
+                MindMapInkBorder.IsHitTestVisible = true;
                 mindMapInkCanvas.InkPresenter.IsInputEnabled = true;
             }
             else
             {
-                Canvas.SetZIndex(MindMapInkBorder, 0);
-                Canvas.SetZIndex(MindMapBorder, 1);
+                MindMapInkBorder.IsHitTestVisible = false;
                 mindMapInkCanvas.InkPresenter.IsInputEnabled = false;
             }
 
@@ -592,6 +602,25 @@ namespace MindCanvas
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
             EventsManager.ModifyViewport(x, y, zoomFactor);
+        }
+
+        // 设置RepeatButton的IsHitTestVisible
+        private void SetRepeatButtonIsHitTestVisible(bool value)
+        {
+            UpRepeatButton.IsHitTestVisible = value;
+            DownRepeatButton.IsHitTestVisible = value;
+            LeftRepeatButton.IsHitTestVisible = value;
+            RightRepeatButton.IsHitTestVisible = value;
+        }
+
+        // 判断某点是否在可视区域
+        private bool IsInViewport(double x, double y)
+        {
+            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / 2 < x 
+                && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / 2
+                && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / 2 < y
+                && y <  App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
+
         }
     }
 }

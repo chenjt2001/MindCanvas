@@ -146,10 +146,10 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <RepeatButton Tag="Up" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Down" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Left" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Right" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
 
                     <ScrollViewer 
                         Canvas.ZIndex="-1"
@@ -169,11 +169,23 @@
                             <Border
                                 x:Name="MindMapInkBorder"
                                 Loaded="MindMapInkBorder_Loaded"
-                                Canvas.ZIndex="0"/>
+                                IsHitTestVisible="False"
+                                Canvas.ZIndex="1"/>
                             <Border 
                                 x:Name="MindMapBorder" 
                                 Loaded="MindMapBorder_Loaded"
-                                Canvas.ZIndex="1"/>
+                                IsHitTestVisible="True"
+                                Canvas.ZIndex="0"/>
+
+                            <!--因为MindMapInkBorder的IsHitTestVisible为False
+                            导致MindMapGrid_PointerWheelChanged捕获不到
+                            所以需要这一个Border-->
+                            <Border 
+                                x:Name="MindMapBackgroundBorder" 
+                                Canvas.ZIndex="-1" 
+                                Height="{x:Bind local:InitialValues.MindMapCanvasWidth}" 
+                                Width="{x:Bind local:InitialValues.MindMapCanvasHeight}"/>
+
                         </Grid>
                     </ScrollViewer>
                 </Grid>
