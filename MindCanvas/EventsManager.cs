@@ -28,7 +28,7 @@ namespace MindCanvas
         private static int nowIndex;
 
         // 资源加载器，用于翻译
-        private static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         public static void SetMindMapCanvas(MindMapCanvas newMindMapCanvas)
         {
@@ -56,7 +56,6 @@ namespace MindCanvas
             modified = false;
         }
 
-
         // 新建文件
         public static async Task<bool> NewFile()
         {
@@ -68,7 +67,7 @@ namespace MindCanvas
                     return false;
 
                 // 用户选择保存
-                if (result == ContentDialogResult.Primary)
+                else if (result == ContentDialogResult.Primary)
                 {
                     if (await Save())
                     {
@@ -116,7 +115,7 @@ namespace MindCanvas
                     return false;
 
                 // 用户选择保存
-                if (result == ContentDialogResult.Primary)
+                else if (result == ContentDialogResult.Primary)
                 {
                     // 要保存好了才能加载
                     if (await Save())
@@ -158,6 +157,38 @@ namespace MindCanvas
                 modified = false;
                 return true;
             }
+        }
+
+        // 退出应用
+        public static async void CloseRequested()
+        {
+            // 当前文件已修改
+            if (modified)
+            {
+                ContentDialogResult result = await Dialog.Show.AskForSave();
+
+                //用户选择取消
+                if (result == ContentDialogResult.None)
+                    return;
+
+                // 用户选择保存
+                else if (result == ContentDialogResult.Primary)
+                {
+                    // 要保存好了才能退出
+                    if (await Save())
+                        Windows.UI.Xaml.Application.Current.Exit();
+                    else
+                        return;// 用户取消了保存
+                }
+
+                // 用户选择不保存，直接退出
+                else if (result == ContentDialogResult.Secondary)
+                    Windows.UI.Xaml.Application.Current.Exit();
+            }
+
+            // 当前文件未修改，直接退出
+            else
+                Windows.UI.Xaml.Application.Current.Exit();
         }
 
         // 清除主页面缓存

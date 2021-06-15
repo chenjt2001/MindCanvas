@@ -19,7 +19,7 @@ namespace MindCanvas
         public float zoomFactor;// 可视区放大倍数
 
         // 资源加载器，用于翻译
-        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         public MindMap()
         {

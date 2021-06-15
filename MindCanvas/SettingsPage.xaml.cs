@@ -11,23 +11,45 @@ namespace MindCanvas
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private bool isLanguageComboBoxLoaded = false;// 判断LanguageComboBox是否加载好
+
         public SettingsPage()
         {
             this.InitializeComponent();
 
-            var currentTheme = ThemeHelper.RootTheme.ToString();
+            // 主题
+            string currentTheme = Settings.Theme;
+
             (ThemePanel.Children.Cast<RadioButton>().FirstOrDefault(c => c?.Tag?.ToString() == currentTheme)).IsChecked = true;
+
+            // 语言
+            string currentLanguage = Settings.Language;
+
+            foreach (ComboBoxItem item in LanguageComboBox.Items)
+                if (item.Tag.ToString() == currentLanguage)
+                    LanguageComboBox.SelectedItem = item;
+
+            isLanguageComboBoxLoaded = true;
         }
 
+        // 设置主题
         private void OnThemeRadioButtonChecked(object sender, RoutedEventArgs e)
         {
             var selectedTheme = ((RadioButton)sender)?.Tag?.ToString();
 
-            if (selectedTheme != null)
-            {
-                ThemeHelper.RootTheme = App.GetEnum<ElementTheme>(selectedTheme);
-                MainPage.mainPage.RefreshTheme();
-            }
+            Settings.Theme = selectedTheme;
+        }
+
+        // 设置语言
+        private async void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!isLanguageComboBoxLoaded)
+                return;
+
+            string selectedLanguage = ((ComboBoxItem)LanguageComboBox.SelectedItem).Tag.ToString();
+            Settings.Language = selectedLanguage;
+
+            await Dialog.Show.ChangeLanguageTip();
         }
     }
 }

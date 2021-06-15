@@ -20,7 +20,11 @@ namespace MindCanvas
             get
             {
                 var version = Windows.ApplicationModel.Package.Current.Id.Version;
-                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                string result = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+#if DEBUG
+                result += " (DEBUG Mode)";
+#endif
+                return result;
             }
         }
 

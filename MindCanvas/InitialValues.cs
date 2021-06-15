@@ -11,5 +11,6 @@ namespace MindCanvas
         public const float MaxZoomFactor = 2;
         public const int MindMapCanvasWidth = 100000;
         public const int MindMapCanvasHeight = 100000;
+        public const string ReviewUri = "ms-windows-store://review/?ProductId=9MZ0K1FKVZP1";
     }
 }

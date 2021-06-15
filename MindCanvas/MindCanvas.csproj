@@ -142,6 +142,9 @@
     <Compile Include="Dialog\AskForSaveSettings.xaml.cs">
       <DependentUpon>AskForSaveSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\ChangeLanguageTip.xaml.cs">
+      <DependentUpon>ChangeLanguageTip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\OpenFileError.xaml.cs">
       <DependentUpon>OpenFileError.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,7 @@
       <DependentUpon>OutputPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -190,6 +194,7 @@
       <DependentUpon>ShowNewFunction.xaml</DependentUpon>
     </Compile>
     <Compile Include="ThemeHelper.cs" />
+    <Compile Include="Toast.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -275,6 +280,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialog\ChangeLanguageTip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialog\OpenFileError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -336,13 +345,16 @@
       <Version>10.1705.16001</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
-      <Version>7.0.1</Version>
+      <Version>7.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
+      <Version>7.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
-      <Version>7.0.1</Version>
+      <Version>7.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>7.0.1</Version>
+      <Version>7.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.5.0</Version>

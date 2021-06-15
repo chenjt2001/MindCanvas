@@ -28,12 +28,13 @@ namespace MindCanvas
         private List<NodeControl> selectedBorderList = new List<NodeControl>();// 选中的点
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
+
         public static MindMapCanvas mindMapCanvas;
         public static MindMapInkCanvas mindMapInkCanvas;
         public static MainPage mainPage;
 
         // 资源加载器，用于翻译
-        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         public MainPage()
         {
@@ -55,6 +56,13 @@ namespace MindCanvas
             SharedShadow.Receivers.Add(MindMapScrollViewer);
             EditBorder.Translation += new Vector3(0, 0, 32);
             InkToolbarBorder.Translation += new Vector3(0, 0, 32);
+
+            // 应用设置
+            Settings.Apply();
+
+            // 请求评分
+            if (Settings.TotalLaunchCount == 3)
+                Toast.RequestRatingsAndReviews();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -89,7 +97,7 @@ namespace MindCanvas
                 MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
                 AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
                 AppNameBorder.Background = new SolidColorBrush(Colors.Black);
-                MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.Black);
+                MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.DimGray);
             }
         }
 
@@ -477,11 +485,8 @@ namespace MindCanvas
         // EditFrame跳转
         public void ShowFrame(Type sourcePageType, object parameter = null)
         {
-            Dictionary<string, object> data = parameter as Dictionary<string, object>;
-            if (data != null)
-            {
+            if (parameter is Dictionary<string, object> data)
                 EditFrame.Navigate(sourcePageType, data, new DrillInNavigationTransitionInfo());
-            }
             else
                 EditFrame.Navigate(sourcePageType, parameter, new DrillInNavigationTransitionInfo());
         }
@@ -616,10 +621,10 @@ namespace MindCanvas
         // 判断某点是否在可视区域
         private bool IsInViewport(double x, double y)
         {
-            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / 2 < x 
+            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / 2 < x
                 && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / 2
                 && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / 2 < y
-                && y <  App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
+                && y < App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
         }
     }
 }

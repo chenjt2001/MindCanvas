@@ -50,5 +50,12 @@ namespace MindCanvas.Dialog
             OpenFileError dialog = new OpenFileError();
             await dialog.ShowAsync();
         }
+
+        // 修改了语言设置
+        public async static Task ChangeLanguageTip()
+        {
+            ChangeLanguageTip dialog = new ChangeLanguageTip();
+            await dialog.ShowAsync();
+        }
     }
 }

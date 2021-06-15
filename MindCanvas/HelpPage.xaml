@@ -45,7 +45,7 @@
                     <Paragraph>
                         <!--您的评价对 MindCanvas 的发展至关重要，请-->
                         <Run x:Uid="HelpPage_Paragraph2_1"></Run>
-                        <Hyperlink NavigateUri="ms-windows-store://review/?ProductId=9MZ0K1FKVZP1">
+                        <Hyperlink NavigateUri="{x:Bind local:InitialValues.ReviewUri}">
                             <!--为 MindCanvas 评分-->
                             <Run x:Uid="HelpPage_Paragraph2_2"></Run>
                         </Hyperlink>

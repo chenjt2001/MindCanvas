@@ -141,6 +141,15 @@
   <data name="AskForSaveSettings.Title" xml:space="preserve">
     <value>是否希望保存您的設定？</value>
   </data>
+  <data name="ChangeLanguageTip.CloseButtonText" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="ChangeLanguageTip.Content" xml:space="preserve">
+    <value>重啟應用後完全生效！</value>
+  </data>
+  <data name="ChangeLanguageTip.Title" xml:space="preserve">
+    <value>提示</value>
+  </data>
   <data name="Code_Export" xml:space="preserve">
     <value>匯出</value>
   </data>
@@ -158,6 +167,12 @@
   </data>
   <data name="Code_Open" xml:space="preserve">
     <value>打開</value>
+  </data>
+  <data name="Code_RequestRatingsAndReviewsToastText1" xml:space="preserve">
+    <value>為 MindCanvas 評分</value>
+  </data>
+  <data name="Code_RequestRatingsAndReviewsToastText2" xml:space="preserve">
+    <value>您對 MindCanvas 滿意嗎？</value>
   </data>
   <data name="Code_SelectTwoUntiedNodes" xml:space="preserve">
     <value>從左側選擇兩個未連接點以連接它們，或者選擇兩個已連接的點以取消它們之間的連接。</value>
@@ -393,8 +408,14 @@
   <data name="SettingsPage_Dark.Content" xml:space="preserve">
     <value>深色</value>
   </data>
+  <data name="SettingsPage_Language.Text" xml:space="preserve">
+    <value>語言</value>
+  </data>
   <data name="SettingsPage_Light.Content" xml:space="preserve">
     <value>淺色</value>
+  </data>
+  <data name="SettingsPage_PleaseSelectALangauge.Header" xml:space="preserve">
+    <value>請選擇一個語言：</value>
   </data>
   <data name="SettingsPage_ThemeMode.Text" xml:space="preserve">
     <value>主題模式</value>

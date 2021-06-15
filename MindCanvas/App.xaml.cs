@@ -1,10 +1,14 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Core.Preview;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -31,10 +35,9 @@ namespace MindCanvas
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-
             // DEBUG模式则清除所有应用设置
 #if DEBUG
-            ApplicationData.Current.LocalSettings.Values.Clear();
+            Settings.Clear();
 #endif
         }
 
@@ -45,47 +48,7 @@ namespace MindCanvas
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            // 初始化
-            await EventsManager.NewFile();
-
-            // 设置最小窗口大小
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
-
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // 不要在窗口已包含内容时重复应用程序初始化，
-            // 只需确保窗口处于活动状态
-            if (rootFrame == null)
-            {
-                // 创建要充当导航上下文的框架，并导航到第一页
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: 从之前挂起的应用程序加载状态
-                }
-
-                // 将框架放在当前窗口中
-                Window.Current.Content = rootFrame;
-            }
-
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    // 当导航堆栈尚未还原时，导航到第一页，
-                    // 并通过将所需信息作为导航参数传入来配置
-                    // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                }
-                // 确保当前窗口处于活动状态
-                Window.Current.Activate();
-            }
-
-            if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
-                await Dialog.Show.ShowNewFunction();
+            await OnLaunchedOrActivated(e);
         }
 
         /// <summary>
@@ -113,31 +76,134 @@ namespace MindCanvas
         }
 
         // 文件激活事件
-        protected override async void OnFileActivated(FileActivatedEventArgs args)
+        protected override async void OnFileActivated(FileActivatedEventArgs e)
         {
-            // The number of files received is args.Files.Size
-            // The name of the first file is args.Files[0].Name
-            var file = (StorageFile)args.Files[0];
+            await OnLaunchedOrActivated(e);
+        }
+
+        // 用户单击通知
+        protected override async void OnActivated(IActivatedEventArgs e)
+        {
+            await OnLaunchedOrActivated(e);
+        }
+
+        private async Task OnLaunchedOrActivated(IActivatedEventArgs e)
+        {
+            // 参考https://stackoverflow.com/questions/41715738/azure-notification-hub-uwp-uwp-toast-notifications-dont-launch-app
+
+            // Initialize things like registering background task before the app is loaded
+
+            // 初始化
+            await EventsManager.NewFile();
 
             // 设置最小窗口大小
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
 
-            Frame frame = Window.Current.Content as Frame;
-            if (frame == null)
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            // 不要在窗口已包含内容时重复应用程序初始化，
+            // 只需确保窗口处于活动状态
+            if (rootFrame == null)
             {
-                frame = new Frame();
-                Window.Current.Content = frame;
+                // 创建要充当导航上下文的框架，并导航到第一页
+                rootFrame = new Frame();
+
+                rootFrame.NavigationFailed += OnNavigationFailed;
+
+                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                {
+                    //TODO: 从之前挂起的应用程序加载状态
+                }
+
+                // 将框架放在当前窗口中
+                Window.Current.Content = rootFrame;
             }
 
-            if (mindMap == null)
-                EventsManager.Initialize();
+            // 通过Toast激活
+            if (e is ToastNotificationActivatedEventArgs toastNotificationActivatedEventArgs)
+            {
+                // If empty args, no specific action (just launch the app)
+                if (toastNotificationActivatedEventArgs.Argument.Length == 0)
+                {
+                    if (rootFrame.Content == null)
+                        rootFrame.Navigate(typeof(MainPage));
+                }
+                // Otherwise an action is provided
+                else
+                {
+                    // Obtain the arguments from the notification
+                    ToastArguments args = ToastArguments.Parse(toastNotificationActivatedEventArgs.Argument);
 
-            await EventsManager.OpenFile(file);
-            frame.Navigate(typeof(MainPage));
+                    // Obtain any user input (text boxes, menu selections) from the notification
+                    ValueSet userInput = toastNotificationActivatedEventArgs.UserInput;
+
+                    // See what action is being requested
+                    if (args["action"] == "RequestReviews")
+                    {
+                        await Windows.System.Launcher.LaunchUriAsync(new Uri(InitialValues.ReviewUri));
+                        if (rootFrame.Content == null)
+                            rootFrame.Navigate(typeof(MainPage));
+                    }
+
+                    // If we're loading the app for the first time, place the main page on the back stack
+                    // so that user can go back after they've been navigated to the specific page
+                    if (rootFrame.BackStack.Count == 0)
+                        rootFrame.BackStack.Add(new PageStackEntry(typeof(MainPage), null, null));
+                }
+            }
+
+            // 正常启动
+            else if (e is LaunchActivatedEventArgs launchActivatedEventArgs)
+            {
+                if (launchActivatedEventArgs.PrelaunchActivated == false)
+                {
+                    if (rootFrame.Content == null)
+                    {
+                        // 当导航堆栈尚未还原时，导航到第一页，
+                        // 并通过将所需信息作为导航参数传入来配置参数
+                        rootFrame.Navigate(typeof(MainPage), launchActivatedEventArgs.Arguments);
+                    }
+                }
+            }
+
+            // 文件激活
+            else if (e is FileActivatedEventArgs fileActivatedEventArgs)
+            {
+                // The number of files received is args.Files.Size
+                // The name of the first file is args.Files[0].Name
+                var file = (StorageFile)fileActivatedEventArgs.Files[0];
+
+                if (mindMap == null)
+                    EventsManager.Initialize();
+
+                await EventsManager.OpenFile(file);
+                rootFrame.Navigate(typeof(MainPage));
+            }
+
+            else
+            {
+                // TODO: Handle other types of activation
+            }
+
+            // 确保当前窗口处于活动状态
             Window.Current.Activate();
 
+            // 退出应用程序
+            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += App_CloseRequested;
+
+            // 显示新功能
             if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
                 await Dialog.Show.ShowNewFunction();
+
+            // 统计应用使用次数
+            Settings.TotalLaunchCount += 1;
+        }
+
+        // 退出应用程序
+        private void App_CloseRequested(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        {
+            e.Handled = true;
+            EventsManager.CloseRequested();
         }
 
         // 在ThemeHelper中用到

@@ -5,9 +5,7 @@
     xmlns:local="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    xmlns:data="using:MindCanvas"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -19,7 +17,7 @@
 
         <Grid Grid.Row="1">
             <Grid.Resources>
-                <ThemeShadow x:Name="SharedShadow" />
+                <ThemeShadow x:Name="SharedShadow"/>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -97,11 +95,12 @@
 
             <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
                 <TextBlock 
-                x:Name="AppNameTextBlock" 
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Center" 
-                Style="{StaticResource TitleTextBlockStyle}"
-                Text="MindCanvas"/>
+                    x:Name="AppNameTextBlock" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    TextAlignment="Center"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="MindCanvas"/>
             </Border>
 
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -157,8 +156,8 @@
                         Grid.RowSpan="3"
                         x:Name="MindMapScrollViewer" 
                         ZoomMode="Enabled"
-                        MinZoomFactor="{x:Bind data:InitialValues.MinZoomFactor}"
-                        MaxZoomFactor="{x:Bind data:InitialValues.MaxZoomFactor}"
+                        MinZoomFactor="{x:Bind local:InitialValues.MinZoomFactor}"
+                        MaxZoomFactor="{x:Bind local:InitialValues.MaxZoomFactor}"
                         VerticalScrollBarVisibility="Hidden" 
                         HorizontalScrollBarVisibility="Hidden"
                         ManipulationDelta="MindMapScrollViewer_ManipulationDelta"
@@ -195,7 +194,7 @@
                 <Frame x:Name="EditFrame" Loaded="EditFrame_Loaded">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
-                            <NavigationThemeTransition  />
+                            <NavigationThemeTransition/>
                         </TransitionCollection>
                     </Frame.ContentTransitions>
                 </Frame>
@@ -211,4 +210,5 @@
         </Grid>
 
     </Grid>
+    
 </Page>

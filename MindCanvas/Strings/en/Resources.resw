@@ -141,6 +141,15 @@
   <data name="AskForSaveSettings.Title" xml:space="preserve">
     <value>Do you want to save your settings?</value>
   </data>
+  <data name="ChangeLanguageTip.CloseButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ChangeLanguageTip.Content" xml:space="preserve">
+    <value>Fully effective after restarting MindCanvas!</value>
+  </data>
+  <data name="ChangeLanguageTip.Title" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="Code_Export" xml:space="preserve">
     <value>Export</value>
   </data>
@@ -158,6 +167,12 @@
   </data>
   <data name="Code_Open" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="Code_RequestRatingsAndReviewsToastText1" xml:space="preserve">
+    <value>Rating MindCanvas</value>
+  </data>
+  <data name="Code_RequestRatingsAndReviewsToastText2" xml:space="preserve">
+    <value>Are you satisfied with MindCanvas?</value>
   </data>
   <data name="Code_SelectTwoUntiedNodes" xml:space="preserve">
     <value>Select two untied nodes from the left to tie them, or select two tied nodes to cancel the tie between them.</value>
@@ -393,8 +408,14 @@
   <data name="SettingsPage_Dark.Content" xml:space="preserve">
     <value>Dark</value>
   </data>
+  <data name="SettingsPage_Language.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
   <data name="SettingsPage_Light.Content" xml:space="preserve">
     <value>Light</value>
+  </data>
+  <data name="SettingsPage_PleaseSelectALangauge.Header" xml:space="preserve">
+    <value>Please select a langauge:</value>
   </data>
   <data name="SettingsPage_ThemeMode.Text" xml:space="preserve">
     <value>Theme Mode</value>

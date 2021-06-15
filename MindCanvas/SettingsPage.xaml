@@ -26,6 +26,18 @@
                     <RadioButton Tag="Default" Checked="OnThemeRadioButtonChecked" x:Uid="SettingsPage_UseSystemSetting"/>
                 </StackPanel>
 
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    x:Uid="SettingsPage_Language"/>
+
+                <ComboBox x:Name="LanguageComboBox" SelectionChanged="LanguageComboBox_SelectionChanged" Margin="0,10,0,0" x:Uid="SettingsPage_PleaseSelectALangauge" Width="200">
+                    <ComboBoxItem Tag="Default" x:Uid="SettingsPage_UseSystemSetting"></ComboBoxItem>
+                    <ComboBoxItem Tag="zh-Hans" Content="简体中文"></ComboBoxItem>
+                    <ComboBoxItem Tag="zh-Hant" Content="繁體中文"></ComboBoxItem>
+                    <ComboBoxItem Tag="en" Content="English"></ComboBoxItem>
+                </ComboBox>
+
             </StackPanel>
         </ScrollViewer>
     </Grid>
