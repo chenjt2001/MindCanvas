@@ -59,6 +59,8 @@ namespace MindCanvas
         // 新建文件
         public static async Task<bool> NewFile()
         {
+            LogHelper.Info("NewFile");
+
             if (modified)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSave();
@@ -69,7 +71,7 @@ namespace MindCanvas
                 // 用户选择保存
                 else if (result == ContentDialogResult.Primary)
                 {
-                    if (await Save())
+                    if (await SaveFile())
                     {
                         Initialize();
                         ResetMainPageCache();
@@ -105,6 +107,8 @@ namespace MindCanvas
         // 打开文件
         public static async Task<bool> OpenFile(StorageFile file)
         {
+            LogHelper.Info("OpenFile");
+
             // 当前文件已修改
             if (modified)
             {
@@ -118,7 +122,7 @@ namespace MindCanvas
                 else if (result == ContentDialogResult.Primary)
                 {
                     // 要保存好了才能加载
-                    if (await Save())
+                    if (await SaveFile())
                     {
                         ClearRecords();
                         await mindCanvasFile.LoadFile(file);
@@ -175,7 +179,7 @@ namespace MindCanvas
                 else if (result == ContentDialogResult.Primary)
                 {
                     // 要保存好了才能退出
-                    if (await Save())
+                    if (await SaveFile())
                         Windows.UI.Xaml.Application.Current.Exit();
                     else
                         return;// 用户取消了保存
@@ -199,8 +203,10 @@ namespace MindCanvas
         }
 
         // 保存文件
-        public static async Task<bool> Save()
+        public static async Task<bool> SaveFile()
         {
+            LogHelper.Info("SaveFile");
+
             if (mindCanvasFile.File != null)
             {
                 await mindCanvasFile.SaveFile();
@@ -226,6 +232,7 @@ namespace MindCanvas
                 {
                     mindCanvasFile.File = file;
                     await mindCanvasFile.SaveFile();
+                    modified = false;
                     return true;
                 }
                 else
@@ -301,6 +308,8 @@ namespace MindCanvas
         // 新建点
         public static Node AddNode(string name, string description = null)
         {
+            LogHelper.Info("AddNode");
+
             if (description == null)
                 description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
 
@@ -313,6 +322,8 @@ namespace MindCanvas
         // 新建线
         public static Tie AddTie(Node node1, Node node2, string description = null)
         {
+            LogHelper.Info("AddTie");
+
             if (description == null)
                 description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
 

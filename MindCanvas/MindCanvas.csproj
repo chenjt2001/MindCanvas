@@ -148,8 +148,8 @@
     <Compile Include="Dialog\OpenFileError.xaml.cs">
       <DependentUpon>OpenFileError.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\OutputError.xaml.cs">
-      <DependentUpon>OutputError.xaml</DependentUpon>
+    <Compile Include="Dialog\ExportError.xaml.cs">
+      <DependentUpon>ExportError.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialog\Show.cs" />
     <Compile Include="EditPage\EditNodePage.xaml.cs">
@@ -166,6 +166,7 @@
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="InitialValues.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -182,8 +183,8 @@
     <Compile Include="OpenPage.xaml.cs">
       <DependentUpon>OpenPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OutputPage.xaml.cs">
-      <DependentUpon>OutputPage.xaml</DependentUpon>
+    <Compile Include="ExportPage.xaml.cs">
+      <DependentUpon>ExportPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
@@ -288,7 +289,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialog\OutputError.xaml">
+    <Page Include="Dialog\ExportError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,7 +325,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="OutputPage.xaml">
+    <Page Include="ExportPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -362,6 +363,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Certificate.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+      <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

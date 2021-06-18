@@ -39,6 +39,17 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
+                    x:Uid="HelpPage_QuestionAndAnswer"/>
+                <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
+                    <Paragraph>
+                        <Run x:Uid="HelpPage_Paragraph7"></Run>
+                    </Paragraph>
+                </RichTextBlock>
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    FontWeight="Normal"
                     x:Uid="HelpPage_Feedback"/>
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
                     

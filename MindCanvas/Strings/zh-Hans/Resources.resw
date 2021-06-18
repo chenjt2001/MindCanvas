@@ -162,6 +162,9 @@
   <data name="Code_MindCanvasFile" xml:space="preserve">
     <value>MindCanvas 文件</value>
   </data>
+  <data name="Code_MindCanvasMindMap" xml:space="preserve">
+    <value>MindCanvas 思维导图</value>
+  </data>
   <data name="Code_NoDescription" xml:space="preserve">
     <value>暂无描述</value>
   </data>
@@ -297,6 +300,16 @@
   <data name="HelpPage_Paragraph6_5.Text" xml:space="preserve">
     <value>。</value>
   </data>
+  <data name="HelpPage_Paragraph7.Text" xml:space="preserve">
+    <value>Q: 点的名称可以有多行吗？
+A: 在输入点的名称时，按Shift+Enter键即可换行。
+
+Q: 为什么即使在墨迹书写模式下，除了使用笔设备，我无法用其他的方式进行墨迹书写？
+A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写入”功能。</value>
+  </data>
+  <data name="HelpPage_QuestionAndAnswer.Text" xml:space="preserve">
+    <value>常见问题</value>
+  </data>
   <data name="HelpPage_VersionNewFeatures.Content" xml:space="preserve">
     <value>版本新功能</value>
   </data>
@@ -384,25 +397,25 @@
   <data name="OpenPage_RecentlyOpenedFiles.Text" xml:space="preserve">
     <value>最近打开的文件</value>
   </data>
-  <data name="OutputError.CloseButtonText" xml:space="preserve">
+  <data name="ExportError.CloseButtonText" xml:space="preserve">
     <value>好的</value>
   </data>
-  <data name="OutputError.Content" xml:space="preserve">
+  <data name="ExportError.Content" xml:space="preserve">
     <value>请确认已选择导出格式且已安装此格式对应的的编解码器！</value>
   </data>
-  <data name="OutputError.Title" xml:space="preserve">
+  <data name="ExportError.Title" xml:space="preserve">
     <value>导出错误</value>
   </data>
-  <data name="OutputPage_Export.Content" xml:space="preserve">
+  <data name="ExportPage_Export.Content" xml:space="preserve">
     <value>导出</value>
   </data>
-  <data name="OutputPage_Format.Text" xml:space="preserve">
+  <data name="ExportPage_Format.Text" xml:space="preserve">
     <value>格式</value>
   </data>
-  <data name="OutputPage_PleaseSelectAFormat.PlaceholderText" xml:space="preserve">
+  <data name="ExportPage_PleaseSelectAFormat.PlaceholderText" xml:space="preserve">
     <value>请选择一个格式</value>
   </data>
-  <data name="OutputPage_Preview.Text" xml:space="preserve">
+  <data name="ExportPage_Preview.Text" xml:space="preserve">
     <value>预览</value>
   </data>
   <data name="SettingsPage_Dark.Content" xml:space="preserve">
@@ -427,7 +440,7 @@
     <value>好的</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.支持手动设置多国语言（简体中文、繁体中文、英文）。
+    <value>1.支持手动选择多国语言（使用系统设置、简体中文、繁体中文、英文）。
 2.如果文件未保存，退出 MindCanvas 时将询问是否保存。
 3.修复了一些BUG。
 4.优化了一些细节。</value>

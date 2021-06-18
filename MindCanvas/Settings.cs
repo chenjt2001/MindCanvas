@@ -24,6 +24,7 @@ namespace MindCanvas
             ApplicationLanguages.PrimaryLanguageOverride = GlobalizationPreferences.Languages.First();
         }
 
+        // 主题
         public static string Theme
         {
             get
@@ -41,6 +42,7 @@ namespace MindCanvas
 
         }
 
+        // 语言
         public static string Language
         {
             get
@@ -58,6 +60,7 @@ namespace MindCanvas
             }
         }
 
+        // 总启动次数
         public static long TotalLaunchCount
         {
             get
@@ -70,5 +73,17 @@ namespace MindCanvas
             }
         }
 
+        // 上一错误
+        public static string LastError
+        {
+            get
+            {
+                return localSettings.Values["LastError"]?.ToString();
+            }
+            set
+            {
+                localSettings.Values["LastError"] = value;
+            }
+        }
     }
 }

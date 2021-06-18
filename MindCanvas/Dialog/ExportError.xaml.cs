@@ -4,9 +4,9 @@
 
 namespace MindCanvas.Dialog
 {
-    public sealed partial class OutputError : ContentDialog
+    public sealed partial class ExportError : ContentDialog
     {
-        public OutputError()
+        public ExportError()
         {
             this.InitializeComponent();
         }

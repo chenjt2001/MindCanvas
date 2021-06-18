@@ -74,11 +74,10 @@ namespace MindCanvas
 
         private async void FileListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            TextBlock listViewItem = e.ClickedItem as TextBlock;
             string path, mruToken, mruMetadata;
             StorageFile fileItem;
 
-            if (listViewItem != null)
+            if (e.ClickedItem is TextBlock listViewItem)
             {
                 path = listViewItem.Text;
 

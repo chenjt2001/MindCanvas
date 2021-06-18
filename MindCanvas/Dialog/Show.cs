@@ -38,9 +38,9 @@ namespace MindCanvas.Dialog
         }
 
         // 导出失败
-        public async static Task OutputError()
+        public async static Task ExportError()
         {
-            OutputError dialog = new OutputError();
+            ExportError dialog = new ExportError();
             await dialog.ShowAsync();
         }
 

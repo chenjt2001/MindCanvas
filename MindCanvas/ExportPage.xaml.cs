@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
@@ -25,17 +26,20 @@ namespace MindCanvas
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class OutputPage : Page
+    public sealed partial class ExportPage : Page
     {
         private MindMapCanvas mindMapCanvas;
         private MindMapInkCanvas mindMapInkCanvas;
 
-        public OutputPage()
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
+        public ExportPage()
         {
             this.InitializeComponent();
         }
 
-        private async void OutputBtn_Click(object sender, RoutedEventArgs e)
+        private async void ExportBtn_Click(object sender, RoutedEventArgs e)
         {
             // 获取选择的项
             string choice = (string)FormatComboBox.SelectedItem;
@@ -43,7 +47,7 @@ namespace MindCanvas
             if (choice == null)
             {
                 //FormatTip.IsOpen = true;
-                await Dialog.Show.OutputError();
+                await Dialog.Show.ExportError();
             }
             else
             {
@@ -54,21 +58,21 @@ namespace MindCanvas
                 switch (choice)
                 {
                     case "JPEG (*.jpg)":
-                        savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
+                        savePicker.FileTypeChoices.Add("JPEG", new List<string>() { ".jpg" });
                         break;
 
                     case "PNG (*.png)":
-                        savePicker.FileTypeChoices.Add("JPEG 文件", new List<string>() { ".jpg" });
+                        savePicker.FileTypeChoices.Add("PNG", new List<string>() { ".png" });
                         break;
 
                     case "HEIC (*.heic)":
-                        savePicker.FileTypeChoices.Add("HEIC 文件", new List<string>() { ".heic" });
+                        savePicker.FileTypeChoices.Add("HEIC", new List<string>() { ".heic" });
                         break;
                 }
 
                 // 默认文件名称
                 if (App.mindCanvasFile.File == null)
-                    savePicker.SuggestedFileName = "MindCanvas 思维导图";
+                    savePicker.SuggestedFileName = resourceLoader.GetString("Code_MindCanvasMindMap");//MindCanvas 思维导图
                 else
                     savePicker.SuggestedFileName = App.mindCanvasFile.File.DisplayName;
 
@@ -81,29 +85,31 @@ namespace MindCanvas
                         switch (choice)
                         {
                             case "JPEG (*.jpg)":
-                                await OutPut(file, BitmapEncoder.JpegEncoderId);
+                                await Export(file, BitmapEncoder.JpegEncoderId);
                                 break;
 
                             case "PNG (*.png)":
-                                await OutPut(file, BitmapEncoder.PngEncoderId);
+                                await Export(file, BitmapEncoder.PngEncoderId);
                                 break;
 
-                            case "HEIC(*.heic)":
-                                await OutPut(file, BitmapEncoder.HeifEncoderId);
+                            case "HEIC (*.heic)":
+                                await Export(file, BitmapEncoder.HeifEncoderId);
                                 break;
                         }
                     }
                     catch
                     {
-                        await Dialog.Show.OutputError();
+                        await Dialog.Show.ExportError();
                     }
                 }
             }
         }
 
         // 导出
-        private async Task OutPut(StorageFile file, Guid format)
+        private async Task Export(StorageFile file, Guid format)
         {
+            LogHelper.Info("Export");
+
             // 合成准备
             Rect inkBoundingRect = mindMapInkCanvas.InkPresenter.StrokeContainer.BoundingRect;
             Rect canvasBoundingRect = mindMapCanvas.BoundingRect;
@@ -471,7 +477,7 @@ namespace MindCanvas
             }
             else
             {
-                OutputBtn.IsEnabled = false;
+                ExportBtn.IsEnabled = false;
                 FormatComboBox.IsEnabled = false;
                 return;
             }

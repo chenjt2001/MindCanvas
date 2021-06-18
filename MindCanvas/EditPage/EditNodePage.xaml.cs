@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -193,6 +195,14 @@ namespace MindCanvas.EditPage
             border.UpdateLayout();
             Canvas.SetLeft(border, MainPage.mindMapCanvas.Width / 2 + node.X - border.ActualWidth / 2);
             Canvas.SetTop(border, MainPage.mindMapCanvas.Height / 2 + node.Y - border.ActualHeight / 2);
+        }
+
+        // 按Shift+Enter键才能换行
+        private void NameTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+                if (!Window.Current.CoreWindow.GetKeyState(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down))
+                    e.Handled = true;
         }
     }
 }

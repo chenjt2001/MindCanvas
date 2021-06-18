@@ -162,6 +162,9 @@
   <data name="Code_MindCanvasFile" xml:space="preserve">
     <value>MindCanvas File</value>
   </data>
+  <data name="Code_MindCanvasMindMap" xml:space="preserve">
+    <value>MindCanvas Mind Map</value>
+  </data>
   <data name="Code_NoDescription" xml:space="preserve">
     <value>No description</value>
   </data>
@@ -297,6 +300,16 @@
   <data name="HelpPage_Paragraph6_5.Text" xml:space="preserve">
     <value>.</value>
   </data>
+  <data name="HelpPage_Paragraph7.Text" xml:space="preserve">
+    <value>Q: Can the name of node have multiple lines?
+A: When inputting the name of node, press Shift+Enter to wrap the line.
+
+Q: Why can't I write ink in any other way except using a pen device even in the Inking Mode?
+A: If you want to use touch or mouse for inking writing, make sure to enable the "Touch Writing" function.</value>
+  </data>
+  <data name="HelpPage_QuestionAndAnswer.Text" xml:space="preserve">
+    <value>Q&amp;A</value>
+  </data>
   <data name="HelpPage_VersionNewFeatures.Content" xml:space="preserve">
     <value>Version New Features</value>
   </data>
@@ -384,25 +397,25 @@
   <data name="OpenPage_RecentlyOpenedFiles.Text" xml:space="preserve">
     <value>Recently opened files</value>
   </data>
-  <data name="OutputError.CloseButtonText" xml:space="preserve">
+  <data name="ExportError.CloseButtonText" xml:space="preserve">
     <value>OK</value>
   </data>
-  <data name="OutputError.Content" xml:space="preserve">
+  <data name="ExportError.Content" xml:space="preserve">
     <value>Please confirm that the export format has been selected and the corresponding codec has been installed!</value>
   </data>
-  <data name="OutputError.Title" xml:space="preserve">
+  <data name="ExportError.Title" xml:space="preserve">
     <value>Export Error</value>
   </data>
-  <data name="OutputPage_Export.Content" xml:space="preserve">
+  <data name="ExportPage_Export.Content" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="OutputPage_Format.Text" xml:space="preserve">
+  <data name="ExportPage_Format.Text" xml:space="preserve">
     <value>Format</value>
   </data>
-  <data name="OutputPage_PleaseSelectAFormat.PlaceholderText" xml:space="preserve">
+  <data name="ExportPage_PleaseSelectAFormat.PlaceholderText" xml:space="preserve">
     <value>Please select a format</value>
   </data>
-  <data name="OutputPage_Preview.Text" xml:space="preserve">
+  <data name="ExportPage_Preview.Text" xml:space="preserve">
     <value>Preview</value>
   </data>
   <data name="SettingsPage_Dark.Content" xml:space="preserve">
@@ -427,7 +440,10 @@
     <value>OK</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>Multi-language: support Simplified Chinese, Traditional Chinese, English (automatic selection).</value>
+    <value>1.Support manual selection of multiple languages (Use system setting, Simplified Chinese, Traditional Chinese, English).
+2.If the file is not saved, it will ask whether to save it when exiting MindCanvas.
+3.Fixed some bugs.
+4.Optimized some details.</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>New Function</value>

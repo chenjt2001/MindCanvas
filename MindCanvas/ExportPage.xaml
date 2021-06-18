@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="MindCanvas.OutputPage"
+    x:Class="MindCanvas.ExportPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MindCanvas"
@@ -20,9 +20,9 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,4,0,0"
                     FontWeight="Normal"
-                    x:Uid="OutputPage_Format" />
+                    x:Uid="ExportPage_Format" />
 
-                <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" x:Uid="OutputPage_PleaseSelectAFormat" Width="200">
+                <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" x:Uid="ExportPage_PleaseSelectAFormat" Width="200">
                     <x:String>JPEG (*.jpg)</x:String>
                     <x:String>PNG (*.png)</x:String>
                     <x:String>HEIC (*.heic)</x:String>
@@ -38,13 +38,13 @@
                     </ComboBox.Resources>-->
                 </ComboBox>
 
-                <Button Margin="0,10,0,0" x:Name="OutputBtn" x:Uid="OutputPage_Export" Click="OutputBtn_Click"/>
+                <Button Margin="0,10,0,0" x:Name="ExportBtn" x:Uid="ExportPage_Export" Click="ExportBtn_Click"/>
 
                 <TextBlock
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     FontWeight="Normal"
-                    x:Uid="OutputPage_Preview"/>
+                    x:Uid="ExportPage_Preview"/>
 
                 <Viewbox x:Name="MindMapViewbox" MaxWidth="840" Canvas.ZIndex="-1">
                     <Border 

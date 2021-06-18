@@ -21,7 +21,7 @@ namespace MindCanvas
         public static Frame MenuPageFrame;
 
         // 资源加载器
-        private ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
 
         public MenuPage()
@@ -75,7 +75,7 @@ namespace MindCanvas
                     break;
 
                 case "Export":
-                    page = typeof(OutputPage);
+                    page = typeof(ExportPage);
                     header = resourceLoader.GetString("Code_Export");// 导出
                     break;
 
@@ -120,7 +120,7 @@ namespace MindCanvas
         // 保存文件
         private async void Save()
         {
-            if (await EventsManager.Save())
+            if (await EventsManager.SaveFile())
                 On_BackRequested();// 保存成功则返回
             else
                 NavView.SelectedItem = OpenItem;// 没保存，回到打开文件界面
@@ -167,13 +167,15 @@ namespace MindCanvas
         private async void SaveAs()
         {
             // 暂时将mindCanvasFile.file设为空，然后发起保存
-            StorageFile file = App.mindCanvasFile.File;
+            StorageFile originalFile = App.mindCanvasFile.File;
             App.mindCanvasFile.File = null;
-            if (await EventsManager.Save())
+            if (await EventsManager.SaveFile())
                 On_BackRequested();
             else
+            {
+                App.mindCanvasFile.File = originalFile;
                 NavView.SelectedItem = OpenItem;
-            App.mindCanvasFile.File = file;
+            }
         }
 
         // 用户点击后退按钮

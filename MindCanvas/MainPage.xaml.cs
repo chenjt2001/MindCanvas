@@ -38,6 +38,8 @@ namespace MindCanvas
 
         public MainPage()
         {
+            LogHelper.Debug("MainPage");
+
             this.InitializeComponent();
 
             mainPage = this;
