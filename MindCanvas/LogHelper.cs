@@ -18,8 +18,10 @@ namespace MindCanvas
 #if DEBUG
             System.Diagnostics.Debug.WriteLine(message);
 #endif
+#if !DEBUG
             string eventName = string.Format("[INFO][{0}]{1}", version, message);
             logger.Log(eventName);
+#endif
         }
 
         public static void Error(string message)
@@ -30,8 +32,10 @@ namespace MindCanvas
                 System.Diagnostics.Debug.WriteLine(message);
 #endif
                 Settings.LastError = message;
+#if !DEBUG
                 string eventName = string.Format("[ERROR][{0}]{1}", version, message);
                 logger.Log(eventName);
+#endif
             }
             catch { }
         }

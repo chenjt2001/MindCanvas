@@ -7,55 +7,76 @@ namespace MindCanvas.Dialog
 {
     static class Show
     {
+        private static ContentDialog dialog = null;
+
+        // 显示版本新功能
         public static async Task ShowNewFunction()
         {
-            // To get if the app is being used for the first time since it was installed.
-            //bool isFirstUse = SystemInformation.IsFirstRun;
-            // To get if the app is being used for the first time since being upgraded from an older version.
-            //bool IsAppUpdated = SystemInformation.IsAppUpdated;
-
-            //if (isFirstUse || IsAppUpdated)
+            if (dialog == null)
             {
-                ShowNewFunction dialog = new ShowNewFunction();
+                dialog = new ShowNewFunction();
                 await dialog.ShowAsync();
+                dialog = null;
             }
         }
 
         // 询问是否保存
         public async static Task<ContentDialogResult> AskForSave()
         {
-            AskForSave dialog = new AskForSave();
-            ContentDialogResult result = await dialog.ShowAsync();
-            return result;
+            if (dialog == null)
+            {
+                dialog = new AskForSave();
+                ContentDialogResult result = await dialog.ShowAsync();
+                dialog = null;
+                return result;
+            }
+            return ContentDialogResult.None;
         }
 
         // 询问是否保存设置
         public async static Task<ContentDialogResult> AskForSaveSettings()
         {
-            AskForSaveSettings dialog = new AskForSaveSettings();
-            ContentDialogResult result = await dialog.ShowAsync();
-            return result;
+            if (dialog == null)
+            {
+                dialog = new AskForSaveSettings();
+                ContentDialogResult result = await dialog.ShowAsync();
+                dialog = null;
+                return result;
+            }
+            return ContentDialogResult.None;
         }
 
         // 导出失败
         public async static Task ExportError()
         {
-            ExportError dialog = new ExportError();
-            await dialog.ShowAsync();
+            if (dialog == null)
+            {
+                dialog = new ExportError();
+                await dialog.ShowAsync();
+                dialog = null;
+            }
         }
 
         // 文件打开失败
         public async static Task OpenFileError()
         {
-            OpenFileError dialog = new OpenFileError();
-            await dialog.ShowAsync();
+            if (dialog == null)
+            {
+                dialog = new OpenFileError();
+                await dialog.ShowAsync();
+                dialog = null;
+            }
         }
 
         // 修改了语言设置
         public async static Task ChangeLanguageTip()
         {
-            ChangeLanguageTip dialog = new ChangeLanguageTip();
-            await dialog.ShowAsync();
+            if (dialog == null)
+            {
+                dialog = new ChangeLanguageTip();
+                await dialog.ShowAsync();
+                dialog = null;
+            }
         }
     }
 }
