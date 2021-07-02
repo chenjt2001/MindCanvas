@@ -63,7 +63,7 @@ namespace MindCanvas
             Settings.Apply();
 
             // 请求评分
-            if (Settings.TotalLaunchCount == 3)
+            if (Settings.TotalLaunchCount == 5)
                 Toast.RequestRatingsAndReviews();
         }
 
@@ -111,10 +111,32 @@ namespace MindCanvas
 
             foreach (Node node in needConfig)
             {
-                NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
-                border.PointerPressed += this.Node_Pressed;// 鼠标按下
-                border.PointerReleased += this.Node_Released;// 鼠标释放
+                NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
+                nodeControl.PointerPressed += this.Node_Pressed;// 鼠标按下
+                nodeControl.PointerReleased += this.Node_Released;// 鼠标释放
+                nodeControl.RightTapped += NodeControl_RightTapped;// 右键
             }
+        }
+
+        // 右键单击点
+        private void NodeControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            // 创建右键菜单
+            ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
+            MenuFlyoutItem item = contextMenuFlyout.AddItem("删除",
+                                                            Windows.System.VirtualKey.D,
+                                                            Windows.System.VirtualKeyModifiers.Control,
+                                                            "\xE74D");
+            item.Click += DeleteNodeMenuFlyoutItem_Click;
+
+            contextMenuFlyout.ShowAt(this, e.GetPosition(this));
+        }
+
+        // 点击了右键的删除点按钮
+        private void DeleteNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.RemoveNode(mindMapCanvas.ConvertBorderToNode(sender as NodeControl));
+            RefreshUnRedoBtn();
         }
 
         // 配置线Path
@@ -127,7 +149,29 @@ namespace MindCanvas
             {
                 Windows.UI.Xaml.Shapes.Path path = mindMapCanvas.ConvertTieToPath(tie);
                 path.PointerReleased += Path_PointerReleased;// 鼠标释放
+                path.RightTapped += Path_RightTapped;
             }
+        }
+
+        // 右键单击线
+        private void Path_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            // 创建右键菜单
+            ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
+            MenuFlyoutItem item = contextMenuFlyout.AddItem("删除",
+                                                            Windows.System.VirtualKey.D,
+                                                            Windows.System.VirtualKeyModifiers.Control,
+                                                            "\xE74D");
+            item.Click += DeleteTieMenuFlyoutItem_Click;
+
+            contextMenuFlyout.ShowAt(this, e.GetPosition(this));
+        }
+
+        // 点击了右键的删除线按钮
+        private void DeleteTieMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.RemoveTie(mindMapCanvas.ConvertPathToTie(sender as Windows.UI.Xaml.Shapes.Path));
+            RefreshUnRedoBtn();
         }
 
         // 鼠标在线内释放，算按了一下线
@@ -285,13 +329,11 @@ namespace MindCanvas
                     else
                         anotherNode = nodes[1];
 
-                    string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
-                        newX,
-                        newY,
-                        mindMapCanvas.Width / 2 + anotherNode.X,
-                        mindMapCanvas.Height / 2 + anotherNode.Y,
-                        (newX + mindMapCanvas.Width / 2 + anotherNode.X) / 2);
-                    mindMapCanvas.ModifyTiePath(tie, commands);
+                    PathHelper.ModifyPath(mindMapCanvas.ConvertTieToPath(tie),
+                                          newX,
+                                          newY,
+                                          mindMapCanvas.Width / 2 + anotherNode.X,
+                                          mindMapCanvas.Height / 2 + anotherNode.Y);
                 }
 
                 isMovingNode = true;
@@ -339,7 +381,7 @@ namespace MindCanvas
         }
 
         // 添加点
-        private void AddNodeBtn_Click(object sender, RoutedEventArgs e)
+        private void ConfirmAddingNodeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (AddNodeTextBox.Text != "")
             {
@@ -487,10 +529,16 @@ namespace MindCanvas
         // EditFrame跳转
         public void ShowFrame(Type sourcePageType, object parameter = null)
         {
-            if (parameter is Dictionary<string, object> data)
-                EditFrame.Navigate(sourcePageType, data, new DrillInNavigationTransitionInfo());
+            NavigationTransitionInfo info;
+            if (sourcePageType.IsInstanceOfType(EditFrame.Content))
+                info = new SuppressNavigationTransitionInfo();
             else
-                EditFrame.Navigate(sourcePageType, parameter, new DrillInNavigationTransitionInfo());
+                info = new DrillInNavigationTransitionInfo();
+
+            if (parameter is Dictionary<string, object> data)
+                EditFrame.Navigate(sourcePageType, data, info);
+            else
+                EditFrame.Navigate(sourcePageType, parameter, info);
         }
 
         // 默认值设置
@@ -627,6 +675,35 @@ namespace MindCanvas
                 && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / 2
                 && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / 2 < y
                 && y < App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
+        }
+
+        // 按下Enter键就输入完成
+        private void AddNodeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && AddNodeTextBox.Text != "")
+            {
+                ConfirmAddingNodeBtn_Click(sender, e);
+            }
+        }
+
+        // 右键或触摸设备长按
+        private void MindMapBackgroundBorder_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            ContextMenuFlyout.ShowAt(this, e.GetPosition(this));
+        }
+
+        // 删除所有点
+        private void DeleteAllNodesMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.RemoveAllNodes();
+            RefreshUnRedoBtn();
+        }
+
+        // 删除所有线
+        private void DeleteAllTiesMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.RemoveAllTies();
+            RefreshUnRedoBtn();
         }
     }
 }

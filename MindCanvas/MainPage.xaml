@@ -55,8 +55,8 @@
                         <FlyoutBase.AttachedFlyout>
                             <Flyout Placement="Bottom">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="AddNodeTextBox" x:Uid="MainPage_NodeName" Margin="0,0,12,0" Width="150"/>
-                                    <Button x:Uid="MainPage_Confirm" Click="AddNodeBtn_Click"/>
+                                    <TextBox x:Name="AddNodeTextBox" KeyDown="AddNodeTextBox_KeyDown" x:Uid="MainPage_NodeName" Margin="0,0,12,0" Width="150"/>
+                                    <Button x:Name="ConfirmAddingNodeBtn" x:Uid="MainPage_Confirm" Click="ConfirmAddingNodeBtn_Click"/>
                                 </StackPanel>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
@@ -164,7 +164,10 @@
                         SizeChanged="MindMapScrollViewer_SizeChanged"
                         ViewChanged="MindMapScrollViewer_ViewChanged"
                         ManipulationMode="All">
-                        <Grid Canvas.ZIndex="-1" x:Name="MindMapGrid" PointerWheelChanged="MindMapGrid_PointerWheelChanged">
+                        <Grid 
+                            Canvas.ZIndex="-1" 
+                            x:Name="MindMapGrid" 
+                            PointerWheelChanged="MindMapGrid_PointerWheelChanged">
                             <Border
                                 x:Name="MindMapInkBorder"
                                 Loaded="MindMapInkBorder_Loaded"
@@ -183,8 +186,17 @@
                                 x:Name="MindMapBackgroundBorder" 
                                 Canvas.ZIndex="-1" 
                                 Height="{x:Bind local:InitialValues.MindMapCanvasWidth}" 
-                                Width="{x:Bind local:InitialValues.MindMapCanvasHeight}"/>
+                                Width="{x:Bind local:InitialValues.MindMapCanvasHeight}"
+                                RightTapped="MindMapBackgroundBorder_RightTapped">
 
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout x:Name="ContextMenuFlyout">
+                                        <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" Text="删除所有点" Click="DeleteAllNodesMenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" Text="删除所有线" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                                
+                            </Border>
                         </Grid>
                     </ScrollViewer>
                 </Grid>

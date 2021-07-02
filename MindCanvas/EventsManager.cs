@@ -344,11 +344,34 @@ namespace MindCanvas
             Record();
         }
 
+        // 删除所有点
+        public static void RemoveAllNodes()
+        {
+            if (mindMap.nodes.Count() == 0)
+                return;
+
+            mindMap.ties.Clear();
+            mindMap.nodes.Clear();
+            mindMapCanvas.ReDraw();
+            Record();
+        }
+
         // 删除线
         public static void RemoveTie(Tie tie)
         {
             mindMap.RemoveTie(tie);
             mindMapCanvas.Clear(tie);
+            Record();
+        }
+
+        // 删除所有线
+        public static void RemoveAllTies()
+        {
+            if (mindMap.ties.Count() == 0)
+                return;
+
+            mindMap.ties.Clear();
+            mindMapCanvas.ReDraw();
             Record();
         }
 
@@ -382,8 +405,10 @@ namespace MindCanvas
         {
             MindCanvasFileData lastData = DeepCopy(records[--nowIndex]);
             mindMap.Load(lastData);
+            mindMapCanvas.ShowAnimation = false;
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             mindMapInkCanvas.InkPresenter.StrokeContainer = lastData.InkStrokeContainer;// 墨迹
+            mindMapCanvas.ShowAnimation = true;
             modified = true;
         }
 
@@ -401,8 +426,10 @@ namespace MindCanvas
         {
             MindCanvasFileData nextData = DeepCopy(records[++nowIndex]);
             mindMap.Load(nextData);
+            mindMapCanvas.ShowAnimation = false;
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             mindMapInkCanvas.InkPresenter.StrokeContainer = nextData.InkStrokeContainer;// 墨迹
+            mindMapCanvas.ShowAnimation = true;
             modified = true;
         }
 

@@ -112,12 +112,18 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 使显示的点跟随输入框改变
+        // 使显示的点名称跟随输入框改变
         private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             border.Text = NameTextBox.Text;
             border.UpdateLayout();
             RefreshNodePosition();
+        }
+
+        // 使点描述提示跟随输入框改变
+        private void DescriptionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            border.ToolTipContent = DescriptionTextBox.Text;
         }
 
         // 使边框颜色跟随当前值改变

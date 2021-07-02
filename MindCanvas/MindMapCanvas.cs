@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Windows.Foundation;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace MindCanvas
@@ -17,6 +14,7 @@ namespace MindCanvas
         private Dictionary<int, NodeControl> nodeIdBorder = new Dictionary<int, NodeControl>();// 标记点id与border
         private Dictionary<int, Windows.UI.Xaml.Shapes.Path> tieIdPath = new Dictionary<int, Windows.UI.Xaml.Shapes.Path>();// 标记线id与path
         private bool showAnimation;// 是否显示动画
+        private TransitionCollection transitionCollection = new TransitionCollection();
 
         public MindMap MindMap { get => mindMap; set => mindMap = value; }
 
@@ -28,41 +26,50 @@ namespace MindCanvas
             //Background = new SolidColorBrush(Colors.White);
 
             // 设置动画
-            this.showAnimation = showAnimation;
-            if (showAnimation)
-            {
-                TransitionCollection tc = new TransitionCollection() { };
-                tc.Add(new EntranceThemeTransition() { IsStaggeringEnabled = true });
-                ChildrenTransitions = tc;
-            }
+            transitionCollection.Add(new EntranceThemeTransition() { IsStaggeringEnabled = false });
+            ShowAnimation = showAnimation;
 
             // 画布大小
             Width = InitialValues.MindMapCanvasWidth;
             Height = InitialValues.MindMapCanvasHeight;
         }
 
+        public bool ShowAnimation
+        {
+            get => showAnimation;
+            set
+            {
+                showAnimation = value;
+
+                foreach (NodeControl nodeControl in this.nodeIdBorder.Values)
+                    nodeControl.ShowAnimation = value;
+
+                ChildrenTransitions = value ? this.transitionCollection : new TransitionCollection();
+            }
+        }
+
         // 画一个点
         public void Draw(Node node)
         {
-            NodeControl border = new NodeControl(node, mindMap, showAnimation: showAnimation);
+            NodeControl nodeControl = new NodeControl(node, mindMap, showAnimation: showAnimation);
 
-            nodeIdBorder[node.Id] = border;
-            Children.Add(border);
+            nodeIdBorder[node.Id] = nodeControl;
+            Children.Add(nodeControl);
 
             // 在UpdateLayout前获取大小
-            border.Measure(new Size(Double.MaxValue, Double.MaxValue));
-            Size visualSize = border.DesiredSize;
-            border.Arrange(new Rect(new Point(0, 0), visualSize));
+            nodeControl.Measure(new Size(Double.MaxValue, Double.MaxValue));
+            Size visualSize = nodeControl.DesiredSize;
+            nodeControl.Arrange(new Rect(new Point(0, 0), visualSize));
 
-            border.CenterPoint = new System.Numerics.Vector3
+            nodeControl.CenterPoint = new System.Numerics.Vector3
             {
                 X = (float)(visualSize.Width / 2),
                 Y = (float)(visualSize.Height / 2),
             };
-            SetTop(border, this.Height / 2 + node.Y - visualSize.Height / 2);
-            SetLeft(border, this.Width / 2 + node.X - visualSize.Width / 2);
+            SetTop(nodeControl, this.Height / 2 + node.Y - visualSize.Height / 2);
+            SetLeft(nodeControl, this.Width / 2 + node.X - visualSize.Width / 2);
 
-            border.UpdateLayout();
+            nodeControl.UpdateLayout();
         }
 
         // 画一条线
@@ -73,29 +80,7 @@ namespace MindCanvas
             Node node1 = nodes[0];
             Node node2 = nodes[1];
 
-            // 绘制Path
-            SolidColorBrush stroke = new SolidColorBrush(Colors.Gray);
-            Windows.UI.Xaml.Shapes.Path path = new Windows.UI.Xaml.Shapes.Path()
-            {
-                Stroke = stroke,// 线条颜色
-                StrokeThickness = 3,// 线条粗细
-            };
-
-            // https://docs.microsoft.com/zh-cn/windows/uwp/xaml-platform/move-draw-commands-syntax
-            // 移动和绘制命令语法
-            // 起点和三次方贝塞尔曲线
-            // 三次方贝塞尔曲线命令:C controlPoint1 controlPoint2 endPoint
-            // controlPoint1: 曲线的第一个控制点，它决定曲线的起始切线
-            // controlPoint2: 曲线的第二个控制点，它决定曲线的结束切线。
-            // endPoint: 终结点，绘制曲线将通过的点
-            string commands = string.Format("M {0} {1} C {4} {1} {4} {3} {2} {3}",
-                Width / 2 + node1.X,
-                Height / 2 + node1.Y,
-                Width / 2 + node2.X,
-               Height / 2 + node2.Y,
-                (Width / 2 + node1.X + Width / 2 + node2.X) / 2);
-            var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
-            path.Data = pathData;
+            Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + node1.X, Height / 2 + node1.Y, Width / 2 + node2.X, Height / 2 + node2.Y);
 
             SetZIndex(path, -10000);// 确保线在点下面
             Children.Add(path);
@@ -209,15 +194,6 @@ namespace MindCanvas
         {
             foreach (Tie tie in mindMap.GetTies(node))
                 ReDraw(tie);
-        }
-
-        // 修改线的path
-        public void ModifyTiePath(Tie tie, string commands)
-        {
-            Windows.UI.Xaml.Shapes.Path path = ConvertTieToPath(tie);
-            var pathData = (Geometry)(XamlBindingHelper.ConvertValue(typeof(Geometry), commands));
-            path.Data = pathData;
-            UpdateLayout();
         }
 
         // 获取边框

@@ -20,5 +20,9 @@
             FontSize="{x:Bind FontSize, Mode=OneWay}"
             Foreground="{x:Bind Foreground, Mode=OneWay}">
         </TextBlock>
+
+        <ToolTipService.ToolTip>
+            <ToolTip x:Name="DescriptionToolTip" Content="{x:Bind ToolTipContent, Mode=OneWay}" VerticalOffset="-80"/>
+        </ToolTipService.ToolTip>
     </Border>
 </UserControl>

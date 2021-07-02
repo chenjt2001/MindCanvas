@@ -21,12 +21,11 @@ namespace MindCanvas
         private string text;
         private Brush borderBrush;
         private double fontSize;
+        private string toolTipContent;
 
         // 关于动画
         private Compositor _compositor = Window.Current.Compositor;
         private SpringVector3NaturalMotionAnimation _springAnimation;
-        private bool showAnimation;
-
         private bool isSelected;// 是否处于选中状态
 
         public NodeControl(Node node, MindMap mindMap, bool showAnimation = true)
@@ -35,9 +34,10 @@ namespace MindCanvas
 
             this.node = node;
             this.mindMap = mindMap;
-            this.showAnimation = showAnimation;
+            this.ShowAnimation = showAnimation;
 
             text = node.Name;
+            toolTipContent = node.Description;
 
             // 边框颜色
             if (node.BorderBrush == null)// 默认
@@ -56,20 +56,16 @@ namespace MindCanvas
             PointerPressed += NodeControl_PointerPressed;// 鼠标按下
             PointerReleased += NodeControl_PointerReleased;// 鼠标释放
             PointerExited += NodeControl_PointerExited;// 鼠标退出
-            RightTapped += NodeControl_RightTapped;
-        }
-
-        // 右键或触摸设备长按
-        private void NodeControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
         }
 
         // 鼠标释放
         private void NodeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
+            DescriptionToolTip.IsEnabled = true;
+
             IsSelected = true;
 
-            if (showAnimation)
+            if (ShowAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);
                 (sender as UIElement).StartAnimation(_springAnimation);
@@ -79,7 +75,7 @@ namespace MindCanvas
         // 鼠标退出
         private void NodeControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            if (showAnimation)
+            if (ShowAnimation)
             {
                 if (IsSelected)
                 {
@@ -98,7 +94,9 @@ namespace MindCanvas
         // 鼠标按下
         private void NodeControl_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            if (showAnimation)
+            DescriptionToolTip.IsEnabled = false;
+
+            if (ShowAnimation)
             {
                 // 缩放到1.05倍
                 CreateOrUpdateSpringAnimation(1.05f);
@@ -109,7 +107,7 @@ namespace MindCanvas
         // 鼠标进入
         private void NodeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            if (showAnimation)
+            if (ShowAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);
                 StartAnimation(_springAnimation);
@@ -174,6 +172,26 @@ namespace MindCanvas
             }
         }
 
+        // 描述
+        public string ToolTipContent
+        {
+            get
+            {
+                return toolTipContent;
+            }
+            set
+            {
+                if (value != this.toolTipContent)
+                {
+                    //toolTipContent = value == "" ? "(无)" : value;
+                    toolTipContent = value;
+                    DescriptionToolTip.IsEnabled = value != "";
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         // 文字大小
         public new double FontSize
         {
@@ -205,7 +223,7 @@ namespace MindCanvas
             {
                 isSelected = value;
 
-                if (showAnimation)
+                if (ShowAnimation)
                 {
                     if (isSelected)
                     {
@@ -221,6 +239,7 @@ namespace MindCanvas
             }
         }
 
+        public bool ShowAnimation { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

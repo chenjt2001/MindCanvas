@@ -132,6 +132,7 @@
     <Compile Include="AppTitleBarControl.xaml.cs">
       <DependentUpon>AppTitleBarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContextMenuFlyout.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DefaultSettingsPage.xaml.cs">
       <DependentUpon>DefaultSettingsPage.xaml</DependentUpon>
@@ -186,6 +187,7 @@
     <Compile Include="ExportPage.xaml.cs">
       <DependentUpon>ExportPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsPage.xaml.cs">
