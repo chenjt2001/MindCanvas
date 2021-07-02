@@ -32,7 +32,7 @@ namespace MindCanvas
             if (showAnimation)
             {
                 TransitionCollection tc = new TransitionCollection() { };
-                tc.Add(new EntranceThemeTransition() { IsStaggeringEnabled = true });
+                tc.Add(new EntranceThemeTransition() { IsStaggeringEnabled = false });
                 ChildrenTransitions = tc;
             }
 
