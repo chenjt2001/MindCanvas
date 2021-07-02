@@ -110,7 +110,7 @@ namespace MindCanvas
                 ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
 
                 // 注册推送通知
-                await engagementManager.RegisterNotificationChannelAsync();
+                engagementManager.RegisterNotificationChannelAsync();
 
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();

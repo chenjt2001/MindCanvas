@@ -58,6 +58,22 @@ namespace MindCanvas.EditPage
                 DefaultFontSizeRadioButton.IsChecked = true;
             else
                 CustomFontSizeRadioButton.IsChecked = true;
+
+            // 父节点
+            AsAStandaloneNodeToggleSwitch.IsOn = !node.ParentNodeId.HasValue;
+
+            List<Node> tiedNodes = App.mindMap.GetNodes(node);
+            AsAStandaloneNodeToggleSwitch.IsEnabled = tiedNodes.Count != 0;
+            ParentNodeTipTextBlock.Text = tiedNodes.Count != 0 ? "父节点必须为于此点连接着的点之一。" : "必须作为独立节点，因为没有与此点连接着的点。";
+
+            foreach (Node tiedNode in tiedNodes)
+            {
+                ComboBoxItem item = new ComboBoxItem();
+                item.Tag = tiedNode.Id;
+                item.DataContext = tiedNode.Name;
+                ParentNodeComboBox.Items.Add(item);
+            }
+                
         }
 
         // 删除点
@@ -209,6 +225,18 @@ namespace MindCanvas.EditPage
             if (e.Key == VirtualKey.Enter)
                 if (!Window.Current.CoreWindow.GetKeyState(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down))
                     e.Handled = true;
+        }
+
+        // 切换作为独立点开关
+        private void AsAStandaloneNodeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            ParentNodeComboBox.Visibility = AsAStandaloneNodeToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
+            
+        }
+
+        // 选择了新的父节点
+        private void ParentNodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
         }
     }
 }

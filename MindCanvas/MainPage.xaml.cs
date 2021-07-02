@@ -61,6 +61,7 @@ namespace MindCanvas
 
             // 应用设置
             Settings.Apply();
+            LogHelper.Debug("Settings.Apply");
 
             // 请求评分
             if (Settings.TotalLaunchCount == 5)

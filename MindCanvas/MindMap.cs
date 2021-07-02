@@ -123,6 +123,21 @@ namespace MindCanvas
             return needNodes;
         }
 
+
+        // 获取连接着的点
+        public List<Node> GetNodes(Node node)
+        {
+            List<Node> nodes = new List<Node>();
+            foreach (Tie tie in GetTies(node))
+            {
+                if (tie.Node1Id != node.Id)
+                    nodes.Add(GetNode(tie.Node1Id));
+                else
+                    nodes.Add(GetNode(tie.Node2Id));
+            }
+            return nodes;
+        }
+
         // 获取连着一个点的线有哪些
         public List<Tie> GetTies(Node node)
         {

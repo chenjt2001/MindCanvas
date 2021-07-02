@@ -25,7 +25,9 @@ namespace MindCanvas
         private byte[] borderBrushArgb;// 边框颜色
         [OptionalField]
         private double? nameFontSize;// 名称字体大小
-
+        [OptionalField]
+        private int? parentNodeId;// 父节点
+        
         // 相对于画布中心的位置
         private double x;
         private double y;
@@ -72,8 +74,8 @@ namespace MindCanvas
         public double X { get => x; set => x = value; }
         public double Y { get => y; set => y = value; }
         public double? NameFontSize { get => nameFontSize; set => nameFontSize = value; }
-    };
-
+        public int? ParentNodeId { get => parentNodeId; set => parentNodeId = value; }
+    }
     [Serializable]
     public class Tie
     {

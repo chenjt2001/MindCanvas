@@ -56,6 +56,17 @@
                     </Grid>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
+                    
+                    <TextBlock Text="父节点" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+
+                    <ToggleSwitch x:Name="AsAStandaloneNodeToggleSwitch" Margin="0,20,0,0" Header="作为独立节点" Toggled="AsAStandaloneNodeToggleSwitch_Toggled"/>
+
+                    <TextBlock x:Name="ParentNodeTipTextBlock" TextWrapping="WrapWholeWords" Margin="0,20,0,0"/>
+
+                    <ComboBox x:Name="ParentNodeComboBox" SelectionChanged="ParentNodeComboBox_SelectionChanged" Margin="0,20,0,0" HorizontalAlignment="Center" Header="选择父节点：">
+                    </ComboBox>
+
+                    <MenuFlyoutSeparator Margin="0,20,0,0"/>
 
                     <TextBlock x:Uid="EditNodePage_BorderColor" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
                     
