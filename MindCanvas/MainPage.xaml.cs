@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Windows.ApplicationModel.Resources;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
@@ -51,6 +52,9 @@ namespace MindCanvas
             // 擦除所有墨迹事件
             MindMapInkToolbar.EraseAllClicked += MindMapInkToolbar_EraseAllClicked;
 
+            // 快捷键
+            Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
+
             // 设置缓存
             NavigationCacheMode = NavigationCacheMode.Required;
 
@@ -61,11 +65,10 @@ namespace MindCanvas
 
             // 应用设置
             Settings.Apply();
-            LogHelper.Debug("Settings.Apply");
 
             // 请求评分
             if (Settings.TotalLaunchCount == 5)
-                Toast.RequestRatingsAndReviews();
+                Toast.RequestRatingsAndReviews();            
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -115,7 +118,7 @@ namespace MindCanvas
                 NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
                 nodeControl.PointerPressed += this.Node_Pressed;// 鼠标按下
                 nodeControl.PointerReleased += this.Node_Released;// 鼠标释放
-                nodeControl.RightTapped += NodeControl_RightTapped;// 右键
+                nodeControl.RightTapped += this.NodeControl_RightTapped;// 右键
             }
         }
 
@@ -124,13 +127,25 @@ namespace MindCanvas
         {
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
-            MenuFlyoutItem item = contextMenuFlyout.AddItem("删除",
-                                                            Windows.System.VirtualKey.D,
-                                                            Windows.System.VirtualKeyModifiers.Control,
+            MenuFlyoutItem item1 = contextMenuFlyout.AddItem("整理",
+                                                            VirtualKey.T,
+                                                            VirtualKeyModifiers.Control,
+                                                            "\xE8CB");
+            MenuFlyoutItem item2 = contextMenuFlyout.AddItem("删除",
+                                                            VirtualKey.D,
+                                                            VirtualKeyModifiers.Control,
                                                             "\xE74D");
-            item.Click += DeleteNodeMenuFlyoutItem_Click;
+            item1.Click += TidyNodeMenuFlyoutItem_Click;
+            item2.Click += DeleteNodeMenuFlyoutItem_Click;
 
             contextMenuFlyout.ShowAt(this, e.GetPosition(this));
+        }
+
+        // 点击了右键的整理点按钮
+        private void TidyNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.Tidy(new List<Node> { mindMapCanvas.ConvertBorderToNode(sender as NodeControl) });
+            RefreshUnRedoBtn();
         }
 
         // 点击了右键的删除点按钮
@@ -160,8 +175,8 @@ namespace MindCanvas
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
             MenuFlyoutItem item = contextMenuFlyout.AddItem("删除",
-                                                            Windows.System.VirtualKey.D,
-                                                            Windows.System.VirtualKeyModifiers.Control,
+                                                            VirtualKey.D,
+                                                            VirtualKeyModifiers.Control,
                                                             "\xE74D");
             item.Click += DeleteTieMenuFlyoutItem_Click;
 
@@ -623,21 +638,22 @@ namespace MindCanvas
             if (!MindMapBorder.IsLoaded)
                 return;
 
-            if (zoomFactor == null)
-                zoomFactor = MindMapScrollViewer.ZoomFactor;
+            float _zoomFactor = zoomFactor ?? App.mindMap.zoomFactor;
+            FixZoomFactor(ref _zoomFactor);
+            zoomFactor = _zoomFactor;
 
-            if (x == null)
+            if (!x.HasValue)
                 x = App.mindMap.visualCenterX;
 
-            if (y == null)
+            if (!y.HasValue)
                 y = App.mindMap.visualCenterY;
 
             horizontalOffset = mindMapCanvas.Width * zoomFactor.Value / 2 + x.Value * zoomFactor.Value - MindMapScrollViewer.ActualWidth / 2;
             verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
 
-            MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
+            MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor.Value);
 
-            EventsManager.ModifyViewport(x, y, zoomFactor);
+            EventsManager.ModifyViewport(x, y, zoomFactor.Value);
         }
 
         // 移动可视区域（接受相对于画布中间的x和y的相对移动值和相对缩放倍数）
@@ -651,13 +667,24 @@ namespace MindCanvas
 
             x = relx + App.mindMap.visualCenterX;
             y = rely + App.mindMap.visualCenterY;
+            zoomFactor = App.mindMap.zoomFactor * power;
 
-            zoomFactor = MindMapScrollViewer.ZoomFactor * power;
+            FixZoomFactor(ref zoomFactor);
+
             horizontalOffset = mindMapCanvas.Width * zoomFactor / 2 + x * zoomFactor - MindMapScrollViewer.ActualWidth / 2;
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
             EventsManager.ModifyViewport(x, y, zoomFactor);
+        }
+
+        // 确保ZoomFactor规范化
+        private void FixZoomFactor(ref float zoomFactor)
+        {
+            if (zoomFactor < InitialValues.MinZoomFactor)
+                zoomFactor = InitialValues.MinZoomFactor;
+            else if (zoomFactor > InitialValues.MaxZoomFactor)
+                zoomFactor = InitialValues.MaxZoomFactor;
         }
 
         // 设置RepeatButton的IsHitTestVisible
@@ -672,16 +699,16 @@ namespace MindCanvas
         // 判断某点是否在可视区域
         private bool IsInViewport(double x, double y)
         {
-            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / 2 < x
-                && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / 2
-                && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / 2 < y
-                && y < App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / 2;
+            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2 < x
+                && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2
+                && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2 < y
+                && y < App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2;
         }
 
         // 按下Enter键就输入完成
         private void AddNodeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == Windows.System.VirtualKey.Enter && AddNodeTextBox.Text != "")
+            if (e.Key == VirtualKey.Enter && AddNodeTextBox.Text != "")
             {
                 ConfirmAddingNodeBtn_Click(sender, e);
             }
@@ -705,6 +732,23 @@ namespace MindCanvas
         {
             EventsManager.RemoveAllTies();
             RefreshUnRedoBtn();
+        }
+
+        // 按了快捷键
+        private async void Dispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
+        {
+            if (args.KeyStatus.WasKeyDown)
+            {
+                if (Window.Current.CoreWindow.GetKeyState(VirtualKey.Control).HasFlag(CoreVirtualKeyStates.Down))
+                {
+                    switch (args.VirtualKey)
+                    {
+                        case VirtualKey.S:
+                                await EventsManager.SaveFile();
+                            break;
+                    }
+                }
+            }
         }
     }
 }

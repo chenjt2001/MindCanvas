@@ -27,7 +27,8 @@
             <Image Source="Assets/Square44x44Logo.png" 
                    Grid.Column="1" HorizontalAlignment="Left" 
                    Width="20" Height="20" Margin="12,0"/>
-            <TextBlock Text="{x:Bind GetAppTitleFromSystem()}" 
+            <TextBlock x:Name="TitleBarTextBlock"
+                       Text="{x:Bind local:AppTitleBarControl.AppTitle, Mode=OneWay}" 
                        Grid.Column="1" 
                        Style="{StaticResource CaptionTextBlockStyle}" 
                        Margin="44,8,0,0"/>

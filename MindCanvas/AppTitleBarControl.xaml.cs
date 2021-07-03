@@ -1,4 +1,6 @@
-﻿using Windows.ApplicationModel.Core;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,6 +11,7 @@ namespace MindCanvas
 {
     public sealed partial class AppTitleBarControl : UserControl
     {
+        private static string appTitle = GetAppTitleFromSystem();
 
         // 参考https://docs.microsoft.com/zh-cn/windows/uwp/design/shell/title-bar
         public AppTitleBarControl()
@@ -16,7 +19,6 @@ namespace MindCanvas
             this.InitializeComponent();
 
             Loaded += AppTitleBarControl_Loaded;// 防止页面缓存而没SetTitleBar
-
         }
 
         private void AppTitleBarControl_Loaded(object sender, RoutedEventArgs e)
@@ -72,9 +74,30 @@ namespace MindCanvas
             }
         }
 
-        private string GetAppTitleFromSystem()
+        private static string GetAppTitleFromSystem()
         {
             return Windows.ApplicationModel.Package.Current.DisplayName;
+        }
+
+        public static string AppTitle 
+        { 
+            get => appTitle;
+            set
+            {
+                appTitle = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public static void SetFileName(string name)
+        {
+            AppTitle = name == null ? GetAppTitleFromSystem() : name + " - " + GetAppTitleFromSystem();
+        }
+
+        public static event PropertyChangedEventHandler PropertyChanged;
+        private static void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

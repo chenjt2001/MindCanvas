@@ -68,7 +68,6 @@ namespace MindCanvas
             };
             SetTop(nodeControl, this.Height / 2 + node.Y - visualSize.Height / 2);
             SetLeft(nodeControl, this.Width / 2 + node.X - visualSize.Width / 2);
-
             nodeControl.UpdateLayout();
         }
 

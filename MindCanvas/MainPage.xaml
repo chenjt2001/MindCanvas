@@ -40,6 +40,9 @@
                     <AppBarButton.Icon>
                         <FontIcon Glyph="&#xEDE3;"/>
                     </AppBarButton.Icon>
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="M" Modifiers="Control"/>
+                    </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
             </Border>
 
@@ -49,6 +52,7 @@
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7C8;"/>
                         </AppBarButton.Icon>
+
                         <!-- AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
                     所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
                     详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
@@ -72,8 +76,18 @@
                     </AppBarToggleButton>
                     <AppBarSeparator/>
 
-                    <AppBarButton Icon="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click"/>
-                    <AppBarButton Icon="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click"/>
+                    <AppBarButton Icon="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click">
+                        <AppBarButton.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Z" Modifiers="Control"/>
+                        </AppBarButton.KeyboardAccelerators>
+                    </AppBarButton>
+
+                    <AppBarButton Icon="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click">
+                        <AppBarButton.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Y" Modifiers="Control"/>
+                        </AppBarButton.KeyboardAccelerators>
+                    </AppBarButton>
+
                     <AppBarSeparator/>
 
                     <AppBarButton Icon="ZoomIn" x:Uid="MainPage_ZoomIn" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
@@ -195,7 +209,7 @@
                                         <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" Text="删除所有线" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
-                                
+
                             </Border>
                         </Grid>
                     </ScrollViewer>
@@ -220,7 +234,5 @@
         </muxc:TeachingTip>-->
 
         </Grid>
-
     </Grid>
-    
 </Page>

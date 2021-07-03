@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Input.Inking;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
@@ -75,6 +77,7 @@ namespace MindCanvas
                     {
                         Initialize();
                         ResetMainPageCache();
+                        RefreshAppTitle();
                         return true;
                     }
                     else
@@ -85,6 +88,7 @@ namespace MindCanvas
                 {
                     Initialize();
                     ResetMainPageCache();
+                    RefreshAppTitle();
                     return true;
                 }
             }
@@ -94,6 +98,7 @@ namespace MindCanvas
             {
                 Initialize();
                 ResetMainPageCache();
+                RefreshAppTitle();
                 return true;
             }
         }
@@ -128,6 +133,7 @@ namespace MindCanvas
                         await mindCanvasFile.LoadFile(file);
                         Record();
                         ResetMainPageCache();
+                        RefreshAppTitle();
                         modified = false;
                         return true;
                     }
@@ -142,6 +148,7 @@ namespace MindCanvas
                     await mindCanvasFile.LoadFile(file);
                     Record();
                     ResetMainPageCache();
+                    RefreshAppTitle();
                     modified = false;
                     return true;
                 }
@@ -158,6 +165,7 @@ namespace MindCanvas
                 await mindCanvasFile.LoadFile(file);
                 Record();
                 ResetMainPageCache();
+                RefreshAppTitle();
                 modified = false;
                 return true;
             }
@@ -210,6 +218,7 @@ namespace MindCanvas
             if (mindCanvasFile.File != null)
             {
                 await mindCanvasFile.SaveFile();
+                ResetMainPageCache();
                 modified = false;
                 return true;
             }
@@ -232,6 +241,8 @@ namespace MindCanvas
                 {
                     mindCanvasFile.File = file;
                     await mindCanvasFile.SaveFile();
+                    RefreshAppTitle();
+                    ResetMainPageCache();
                     modified = false;
                     return true;
                 }
@@ -398,8 +409,36 @@ namespace MindCanvas
             if (visualCenterY != null)
                 App.mindMap.visualCenterY = visualCenterY.Value;
             if (zoomFactor != null)
-                App.mindMap.zoomFactor = zoomFactor.Value;
+                App.mindMap.zoomFactor = zoomFactor.Value;                
         }
+
+        // 设置父节点
+        public static void SetParentNode(Node node, Node parentNode)
+        {
+            if (parentNode == null && node.ParentNodeId.HasValue)
+            {
+                node.ParentNodeId = null;
+                Record();
+            }
+
+            else if (parentNode != null && node.ParentNodeId != parentNode.Id)
+            {
+                node.ParentNodeId = parentNode.Id;
+                Record();
+            }
+        }
+
+        // 整理点
+        public static void Tidy(List<Node> nodes)
+        {
+            foreach (Node node in nodes)
+            { 
+                
+            
+            }
+        
+        }
+
         // 撤销
         public static void Undo()
         {
@@ -470,6 +509,59 @@ namespace MindCanvas
                 ms.Close();
             }
             return (T)retval;
+        }
+
+        // 刷新标题
+        private static void RefreshAppTitle()
+        {
+            string fileName = mindCanvasFile.File?.DisplayName ?? "无标题";
+            AppTitleBarControl.SetFileName(fileName);
+        }
+
+        // 显示加载界面
+        public static void ShowLoading(string message)
+        {
+            if (Window.Current.Content is Frame frame)
+            {
+                if (frame.Content is Page page)
+                {
+                    if (page.Content is Grid grid)
+                    {
+                        if (grid.FindName("LoadingControl") is LoadingControl loadingControl)
+                        {
+                            loadingControl.ShowLoading(message);
+                        }
+                        else
+                        {
+                            loadingControl = new LoadingControl();
+                            loadingControl.Name = "LoadingControl";
+                            grid.Children.Add(loadingControl);
+                            Grid.SetColumnSpan(loadingControl, int.MaxValue);
+                            Grid.SetRowSpan(loadingControl, int.MaxValue);
+                            loadingControl.ShowLoading(message);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 隐藏加载界面
+        public static void HideLoading()
+        {
+            if (Window.Current.Content is Frame frame)
+            {
+                if (frame.Content is Page page)
+                {
+                    if (page.Content is Grid grid)
+                    {
+                        if (grid.FindName("LoadingControl") is LoadingControl loadingControl)
+                        {
+                            loadingControl.HideLoading();
+                            grid.Children.Remove(loadingControl);
+                        }
+                    }
+                }
+            }
         }
     }
 }

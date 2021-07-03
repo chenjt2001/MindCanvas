@@ -6,7 +6,7 @@ namespace MindCanvas
     {
         private static readonly StoreServicesCustomEventLogger logger = StoreServicesCustomEventLogger.GetDefault();
 
-        public static void Debug(string message)
+        public static void Debug(object message)
         {
 #if DEBUG
             System.Diagnostics.Debug.WriteLine(message);

@@ -61,8 +61,6 @@ namespace MindCanvas
         // 鼠标释放
         private void NodeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            DescriptionToolTip.IsEnabled = true;
-
             IsSelected = true;
 
             if (ShowAnimation)
@@ -107,6 +105,8 @@ namespace MindCanvas
         // 鼠标进入
         private void NodeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
+            DescriptionToolTip.IsEnabled = true;
+
             if (ShowAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);

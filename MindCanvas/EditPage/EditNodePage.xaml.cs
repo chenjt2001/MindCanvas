@@ -62,18 +62,22 @@ namespace MindCanvas.EditPage
             // 父节点
             AsAStandaloneNodeToggleSwitch.IsOn = !node.ParentNodeId.HasValue;
 
-            List<Node> tiedNodes = App.mindMap.GetNodes(node);
-            AsAStandaloneNodeToggleSwitch.IsEnabled = tiedNodes.Count != 0;
-            ParentNodeTipTextBlock.Text = tiedNodes.Count != 0 ? "父节点必须为于此点连接着的点之一。" : "必须作为独立节点，因为没有与此点连接着的点。";
-
-            foreach (Node tiedNode in tiedNodes)
+            foreach (Node tiedNode in App.mindMap.GetNodes(node))
             {
+                if (tiedNode.ParentNodeId == node.Id)
+                    continue;
+
                 ComboBoxItem item = new ComboBoxItem();
                 item.Tag = tiedNode.Id;
-                item.DataContext = tiedNode.Name;
+                item.Content = tiedNode.Name;
                 ParentNodeComboBox.Items.Add(item);
+
+                if (tiedNode.Id == node.ParentNodeId)
+                    ParentNodeComboBox.SelectedItem = item;
             }
-                
+
+            AsAStandaloneNodeToggleSwitch.IsEnabled = ParentNodeComboBox.Items.Count != 0;
+            ParentNodeTipTextBlock.Text = ParentNodeComboBox.Items.Count != 0 ? "父节点必须为于此点连接着的点之一，且不能互为父节点。" : "必须作为独立节点，因为没有与此点相连的点，或与此点相连的点均以此点为父节点。";
         }
 
         // 删除点
@@ -231,12 +235,18 @@ namespace MindCanvas.EditPage
         private void AsAStandaloneNodeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             ParentNodeComboBox.Visibility = AsAStandaloneNodeToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
-            
+
+            if (ParentNodeComboBox.Visibility == Visibility)
+                ParentNodeComboBox.SelectedIndex = 0;
+            else
+                EventsManager.SetParentNode(node, null);
         }
 
         // 选择了新的父节点
         private void ParentNodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Node parentNode = App.mindMap.GetNode((int)(ParentNodeComboBox.SelectedItem as ComboBoxItem).Tag);
+            EventsManager.SetParentNode(node, parentNode);
         }
     }
 }
