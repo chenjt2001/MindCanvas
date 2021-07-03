@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -188,19 +189,19 @@ namespace MindCanvas
                 {
                     // 要保存好了才能退出
                     if (await SaveFile())
-                        Windows.UI.Xaml.Application.Current.Exit();
+                        Application.Current.Exit();
                     else
                         return;// 用户取消了保存
                 }
 
                 // 用户选择不保存，直接退出
                 else if (result == ContentDialogResult.Secondary)
-                    Windows.UI.Xaml.Application.Current.Exit();
+                    Application.Current.Exit();
             }
 
             // 当前文件未修改，直接退出
             else
-                Windows.UI.Xaml.Application.Current.Exit();
+                Application.Current.Exit();
         }
 
         // 清除主页面缓存
@@ -409,7 +410,7 @@ namespace MindCanvas
             if (visualCenterY != null)
                 App.mindMap.visualCenterY = visualCenterY.Value;
             if (zoomFactor != null)
-                App.mindMap.zoomFactor = zoomFactor.Value;                
+                App.mindMap.zoomFactor = zoomFactor.Value;
         }
 
         // 设置父节点
@@ -429,14 +430,89 @@ namespace MindCanvas
         }
 
         // 整理点
-        public static void Tidy(List<Node> nodes)
+        public static async Task Tidy(List<Node> nodes)
         {
-            foreach (Node node in nodes)
-            { 
-                
-            
-            }
-        
+            ShowLoading("正在整理……");
+            MainPage.mainPage.UpdateLayout();
+
+            await TidyTask(nodes);
+
+            mindMapCanvas.ReDraw();
+            Record();
+
+            HideLoading();
+        }
+
+        // 整理点
+        public static Task TidyTask(List<Node> nodes)
+        {
+            var task = Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+
+                // 计时器
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+                foreach (Node parentNode in nodes)
+                {
+                    List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
+                    List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
+                    List<Node> parentNodes = new List<Node>();// 是父节点的父节点
+
+                    foreach (Node childNode in mindMap.GetChildren(parentNode))
+                    {
+                        if (childNode.X < parentNode.X)
+                            leftNodes.Add(childNode);
+                        else
+                            rightNodes.Add(childNode);
+                    }
+
+                    // 在y轴上排序
+                    leftNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
+                    rightNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
+
+                    // 安排位置
+                    double spacingY = 70;
+                    double spacingX = 200;
+
+                    double minY;
+                    double y;
+
+                    // 左侧
+                    minY = parentNode.Y - leftNodes.Count / 2 * spacingY;
+                    if (leftNodes.Count % 2 == 0)
+                        minY += spacingY / 2;
+
+                    y = minY;
+                    for (int i = 0; i < leftNodes.Count; i++)
+                    {
+                        Node leftNode = leftNodes[i];
+                        leftNode.X = parentNode.X - spacingX;
+                        leftNode.Y = y;
+                        y += spacingY;
+                    }
+
+                    // 右侧
+                    minY = parentNode.Y - rightNodes.Count / 2 * spacingY;
+                    if (rightNodes.Count % 2 == 0)
+                        minY += spacingY / 2;
+
+                    y = minY;
+                    for (int i = 0; i < rightNodes.Count; i++)
+                    {
+                        Node rightNode = rightNodes[i];
+                        rightNode.X = parentNode.X + spacingX;
+                        rightNode.Y = y;
+                        y += spacingY;
+                    }
+                }
+
+                // 获取整理用时
+                sw.Stop();
+                LogHelper.Debug(sw.Elapsed);
+            });
+            return task;
         }
 
         // 撤销
@@ -543,6 +619,12 @@ namespace MindCanvas
                     }
                 }
             }
+        }
+
+        // 延时
+        private static async Task Delay(int ms = 1000)
+        {
+            await Task.Run(() => Thread.Sleep(ms));
         }
 
         // 隐藏加载界面

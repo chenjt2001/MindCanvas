@@ -27,7 +27,7 @@ namespace MindCanvas
         private double? nameFontSize;// 名称字体大小
         [OptionalField]
         private int? parentNodeId;// 父节点
-        
+
         // 相对于画布中心的位置
         private double x;
         private double y;

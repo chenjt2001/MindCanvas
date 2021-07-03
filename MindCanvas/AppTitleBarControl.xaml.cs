@@ -79,8 +79,8 @@ namespace MindCanvas
             return Windows.ApplicationModel.Package.Current.DisplayName;
         }
 
-        public static string AppTitle 
-        { 
+        public static string AppTitle
+        {
             get => appTitle;
             set
             {

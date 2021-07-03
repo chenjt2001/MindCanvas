@@ -9,6 +9,14 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
+    <!--
+        <UserControl.Transitions>
+            <TransitionCollection>
+                <ReorderThemeTransition/>
+            </TransitionCollection>
+        </UserControl.Transitions>
+    -->
+
     <Grid x:Name="LoadingGrid">
         <Grid.Background>
             <SolidColorBrush Color="Black" Opacity="0.5"/>

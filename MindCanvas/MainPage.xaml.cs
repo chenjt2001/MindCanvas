@@ -68,7 +68,7 @@ namespace MindCanvas
 
             // 请求评分
             if (Settings.TotalLaunchCount == 5)
-                Toast.RequestRatingsAndReviews();            
+                Toast.RequestRatingsAndReviews();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -142,17 +142,20 @@ namespace MindCanvas
         }
 
         // 点击了右键的整理点按钮
-        private void TidyNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private async void TidyNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            EventsManager.Tidy(new List<Node> { mindMapCanvas.ConvertBorderToNode(sender as NodeControl) });
+            await EventsManager.Tidy(new List<Node> { nowNode });
             RefreshUnRedoBtn();
+            ConfigNodesBorder();
+            ConfigTiesPath();
         }
 
         // 点击了右键的删除点按钮
         private void DeleteNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            EventsManager.RemoveNode(mindMapCanvas.ConvertBorderToNode(sender as NodeControl));
+            EventsManager.RemoveNode(nowNode);
             RefreshUnRedoBtn();
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 配置线Path
@@ -725,6 +728,7 @@ namespace MindCanvas
         {
             EventsManager.RemoveAllNodes();
             RefreshUnRedoBtn();
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 删除所有线
@@ -732,6 +736,7 @@ namespace MindCanvas
         {
             EventsManager.RemoveAllTies();
             RefreshUnRedoBtn();
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 按了快捷键
@@ -744,7 +749,7 @@ namespace MindCanvas
                     switch (args.VirtualKey)
                     {
                         case VirtualKey.S:
-                                await EventsManager.SaveFile();
+                            await EventsManager.SaveFile();
                             break;
                     }
                 }

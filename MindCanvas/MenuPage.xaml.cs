@@ -171,7 +171,7 @@ namespace MindCanvas
             App.mindCanvasFile.File = null;
             if (await EventsManager.SaveFile())
                 On_BackRequested();
-                
+
             else
             {
                 App.mindCanvasFile.File = originalFile;

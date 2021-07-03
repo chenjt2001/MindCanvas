@@ -110,11 +110,14 @@ namespace MindCanvas
             ties.Add(newTie);
 
             // 配置父节点
-            if (!(node1.ParentNodeId.HasValue && node2.ParentNodeId.HasValue))
+            if (node1.Id > node2.Id)
             {
-                if (node1.Id > node2.Id)
+                if (!node1.ParentNodeId.HasValue)
                     node1.ParentNodeId = node2.Id;
-                else
+            }
+            else
+            {
+                if (!node2.ParentNodeId.HasValue)
                     node2.ParentNodeId = node1.Id;
             }
 
@@ -280,7 +283,7 @@ namespace MindCanvas
             List<Node> nodes = new List<Node>();
 
             foreach (Node tiedNode in GetNodes(node))
-                if (tiedNode.ParentNodeId == node.Id)
+                if (tiedNode.ParentNodeId.HasValue && tiedNode.ParentNodeId == node.Id)
                     nodes.Add(tiedNode);
 
             return nodes;
