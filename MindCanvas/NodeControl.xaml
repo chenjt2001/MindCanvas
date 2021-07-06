@@ -22,7 +22,11 @@
         </TextBlock>
 
         <ToolTipService.ToolTip>
-            <ToolTip x:Name="DescriptionToolTip" Content="{x:Bind ToolTipContent, Mode=OneWay}" VerticalOffset="-80"/>
+            <ToolTip 
+                x:Name="DescriptionToolTip" 
+                Content="{x:Bind ToolTipContent, Mode=OneWay}" 
+                Opened="DescriptionToolTip_Opened" 
+                VerticalOffset="-80" />
         </ToolTipService.ToolTip>
     </Border>
 </UserControl>

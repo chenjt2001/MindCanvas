@@ -135,7 +135,7 @@ namespace MindCanvas
                 {
                     // 因为BitmapDecoder解gif好像无法处理alpha通道
                     // 所以先转png，再用BitmapDecoder解
-                    await App.mindMap.inkStrokeContainer.SaveAsync(ms.AsStreamForWrite().AsOutputStream(), Windows.UI.Input.Inking.InkPersistenceFormat.GifWithEmbeddedIsf);
+                    await App.mindMap.InkStrokeContainer.SaveAsync(ms.AsStreamForWrite().AsOutputStream(), Windows.UI.Input.Inking.InkPersistenceFormat.GifWithEmbeddedIsf);
                     decoder = await BitmapDecoder.CreateAsync(BitmapDecoder.GifDecoderId, ms);
 
                     SoftwareBitmap inkSoftwareBitmap = await decoder.GetSoftwareBitmapAsync();
@@ -441,7 +441,7 @@ namespace MindCanvas
             mindMapCanvas.DrawAll();
 
             mindMapInkCanvas = new MindMapInkCanvas();
-            mindMapInkCanvas.InkPresenter.StrokeContainer = App.mindMap.inkStrokeContainer;
+            mindMapInkCanvas.InkPresenter.StrokeContainer = App.mindMap.InkStrokeContainer;
             canvas.Children.Add(mindMapInkCanvas);
 
             Rect boundingRect1 = mindMapInkCanvas.InkPresenter.StrokeContainer.BoundingRect;

@@ -74,6 +74,11 @@ namespace MindCanvas
                     header = resourceLoader.GetString("Code_Open");// 打开
                     break;
 
+                case "Encrypt":
+                    page = typeof(EncryptPage);
+                    header = resourceLoader.GetString("Code_Encrypt");// 加密
+                    break;
+
                 case "Export":
                     page = typeof(ExportPage);
                     header = resourceLoader.GetString("Code_Export");// 导出
@@ -93,6 +98,10 @@ namespace MindCanvas
 
                 case "New":
                     NewFile();
+                    break;
+
+                case "Print":
+                    Print();
                     break;
             }
 
@@ -126,6 +135,14 @@ namespace MindCanvas
                 NavView.SelectedItem = OpenItem;// 没保存，回到打开文件界面
         }
 
+        // 打印
+        private void Print()
+        {
+            //var printHelper = new PrintHelper();
+            //printHelper
+        }
+
+        // 分享
         private async void Share()
         {
             // 生成当前状态的文件

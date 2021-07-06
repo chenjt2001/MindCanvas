@@ -100,7 +100,7 @@ namespace MindCanvas
                     break;
                 }
 
-            foreach (Node node in mindMap.nodes)
+            foreach (Node node in mindMap.Nodes)
                 if (node.Id == id)
                 {
                     requiredNode = node;
@@ -130,7 +130,7 @@ namespace MindCanvas
                     break;
                 }
 
-            foreach (Tie tie in mindMap.ties)
+            foreach (Tie tie in mindMap.Ties)
                 if (tie.Id == id)
                 {
                     requiredTie = tie;
@@ -150,11 +150,11 @@ namespace MindCanvas
         public void DrawAll()
         {
             // 绘制点
-            foreach (Node node in mindMap.nodes)
+            foreach (Node node in mindMap.Nodes)
                 Draw(node);
             UpdateLayout();//渲染canvas，确保线正确获取点的位置
             // 绘制线
-            foreach (Tie tie in mindMap.ties)
+            foreach (Tie tie in mindMap.Ties)
                 Draw(tie);
         }
 

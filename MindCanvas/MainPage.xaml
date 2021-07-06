@@ -76,13 +76,13 @@
                     </AppBarToggleButton>
                     <AppBarSeparator/>
 
-                    <AppBarButton Icon="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UndoBtn_Click">
+                    <AppBarButton Icon="Undo" Tag="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UnRedoBtn_Click">
                         <AppBarButton.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Z" Modifiers="Control"/>
                         </AppBarButton.KeyboardAccelerators>
                     </AppBarButton>
 
-                    <AppBarButton Icon="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="RedoBtn_Click">
+                    <AppBarButton Icon="Redo" Tag="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="UnRedoBtn_Click">
                         <AppBarButton.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Y" Modifiers="Control"/>
                         </AppBarButton.KeyboardAccelerators>
@@ -216,16 +216,36 @@
                 </Grid>
             </Grid>
 
-            <Border x:Name="EditBorder" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Shadow="{StaticResource SharedShadow}">
-                <Frame x:Name="EditFrame" Loaded="EditFrame_Loaded">
-                    <Frame.ContentTransitions>
-                        <TransitionCollection>
-                            <NavigationThemeTransition/>
-                        </TransitionCollection>
-                    </Frame.ContentTransitions>
-                </Frame>
-            </Border>
+            <Grid Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="9*"/>
+                </Grid.RowDefinitions>
 
+                <Border Grid.Row="0" >
+                    <AutoSuggestBox 
+                        x:Name="SearchAutoSuggestBox"
+                        Margin="20,0,20,0" 
+                        PlaceholderText="搜索思维导图"
+                        Background="{ThemeResource SystemControlAcrylicWindowBrush}" 
+                        QueryIcon="Find" 
+                        VerticalAlignment="Center"
+                        TextChanged="SearchAutoSuggestBox_TextChanged"
+                        SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
+                        QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"/>
+                </Border>
+
+                <Border x:Name="EditBorder" Grid.Row="1" Shadow="{StaticResource SharedShadow}">
+                    <Frame x:Name="EditFrame" Loaded="EditFrame_Loaded">
+                        <Frame.ContentTransitions>
+                            <TransitionCollection>
+                                <NavigationThemeTransition />
+                            </TransitionCollection>
+                        </Frame.ContentTransitions>
+                    </Frame>
+                </Border>
+            </Grid>
+                
             <!--<muxc:TeachingTip
             x:Name="NewFunctionTip"
             Title="无限画布"

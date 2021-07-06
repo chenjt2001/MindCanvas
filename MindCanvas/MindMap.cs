@@ -9,17 +9,26 @@ namespace MindCanvas
     // 思维导图
     public class MindMap
     {
-        public List<Node> nodes;
-        public List<Tie> ties;
-        public SolidColorBrush defaultNodeBorderBrush;// 默认边框颜色
-        public double defaultNodeNameFontSize;// 默认点名称文字大小
-        public InkStrokeContainer inkStrokeContainer;// 墨迹
-        public double visualCenterX;// 可视中心点X
-        public double visualCenterY;// 可视中心点Y
-        public float zoomFactor;// 可视区放大倍数
+        private List<Node> nodes;
+        private List<Tie> ties;
+        private SolidColorBrush defaultNodeBorderBrush;// 默认边框颜色
+        private double defaultNodeNameFontSize;// 默认点名称文字大小
+        private InkStrokeContainer inkStrokeContainer;// 墨迹
+        private double visualCenterX;// 可视中心点X
+        private double visualCenterY;// 可视中心点Y
+        private float zoomFactor;// 可视区放大倍数
 
         // 资源加载器，用于翻译
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
+        public float ZoomFactor { get => zoomFactor; set => zoomFactor = value; }
+        public double VisualCenterY { get => visualCenterY; set => visualCenterY = value; }
+        public double VisualCenterX { get => visualCenterX; set => visualCenterX = value; }
+        public InkStrokeContainer InkStrokeContainer { get => inkStrokeContainer; set => inkStrokeContainer = value; }
+        public double DefaultNodeNameFontSize { get => defaultNodeNameFontSize; set => defaultNodeNameFontSize = value; }
+        public SolidColorBrush DefaultNodeBorderBrush { get => defaultNodeBorderBrush; set => defaultNodeBorderBrush = value; }
+        public List<Tie> Ties { get => ties; set => ties = value; }
+        public List<Node> Nodes { get => nodes; set => nodes = value; }
 
         public MindMap()
         {
@@ -139,7 +148,6 @@ namespace MindCanvas
             return needNodes;
         }
 
-
         // 获取连接着的点
         public List<Node> GetNodes(Node node)
         {
@@ -174,7 +182,7 @@ namespace MindCanvas
         }
 
         // 按Id获取线
-        private Tie GetTie(int id)
+        public Tie GetTie(int id)
         {
             foreach (Tie tie in ties)
                 if (tie.Id == id)
@@ -216,7 +224,7 @@ namespace MindCanvas
         }
 
         // 加载数据并清空当前的数据
-        public void Load(MindCanvasFileData mindCanvasFileData)
+        public void LoadData(MindCanvasFileData mindCanvasFileData, string password = null)
         {
             this.nodes = mindCanvasFileData.Nodes;
             this.ties = mindCanvasFileData.Ties;

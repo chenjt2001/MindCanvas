@@ -14,8 +14,8 @@ namespace MindCanvas
         public DefaultSettingsPage()
         {
             this.InitializeComponent();
-            BorderBrushColorPicker.Color = App.mindMap.defaultNodeBorderBrush.Color;
-            FontSizeNumberBox.Value = App.mindMap.defaultNodeNameFontSize;
+            BorderBrushColorPicker.Color = App.mindMap.DefaultNodeBorderBrush.Color;
+            FontSizeNumberBox.Value = App.mindMap.DefaultNodeNameFontSize;
         }
 
         // 取消
@@ -49,8 +49,8 @@ namespace MindCanvas
         {
 
             // 默认设置已修改
-            if (BorderBrushColorPicker.Color != App.mindMap.defaultNodeBorderBrush.Color ||
-                FontSizeNumberBox.Value != App.mindMap.defaultNodeNameFontSize)
+            if (BorderBrushColorPicker.Color != App.mindMap.DefaultNodeBorderBrush.Color ||
+                FontSizeNumberBox.Value != App.mindMap.DefaultNodeNameFontSize)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSaveSettings();
                 //用户选择取消
@@ -80,7 +80,7 @@ namespace MindCanvas
         {
             if (double.IsNaN(FontSizeNumberBox.Value))
             {
-                FontSizeNumberBox.Value = App.mindMap.defaultNodeNameFontSize;
+                FontSizeNumberBox.Value = App.mindMap.DefaultNodeNameFontSize;
             }
         }
     }

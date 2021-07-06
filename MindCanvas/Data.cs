@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
+using Windows.ApplicationModel.Resources;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media;
@@ -31,6 +35,9 @@ namespace MindCanvas
         // 相对于画布中心的位置
         private double x;
         private double y;
+
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         // 边框颜色
         public Brush BorderBrush
@@ -65,6 +72,10 @@ namespace MindCanvas
             // V1.3 -> V1.4
             if (node.nameFontSize == 0.0d)
                 node.nameFontSize = null;
+
+            // V1.5 -> V1.6
+            if (node.description == resourceLoader.GetString("Code_NoDescription"))// 暂无描述
+                node.description = "";
         }
 
         public int Id { get => id; set => id = value; }
@@ -84,9 +95,15 @@ namespace MindCanvas
         private int node1id;
         private int node2id;
 
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
         // 版本兼容
         public static void VersionHelper(Tie tie)
         {
+            // V1.5 -> V1.6
+            if (tie.description == resourceLoader.GetString("Code_NoDescription"))// 暂无描述
+                tie.description = "";
         }
 
         public int Id { get => id; set => id = value; }
@@ -112,6 +129,8 @@ namespace MindCanvas
         private double? visualCenterY;// 可视中心点Y
         [OptionalField]
         private float? zoomFactor;// 可视区放大倍数
+        [OptionalField]
+        private byte[] encryptedData;// 加密数据
 
         public Brush DefaultNodeBorderBrush
         {
@@ -203,5 +222,90 @@ namespace MindCanvas
         public float ZoomFactor { get => zoomFactor.Value; set => zoomFactor = value; }
         public double VisualCenterX { get => visualCenterX.Value; set => visualCenterX = value; }
         public double VisualCenterY { get => visualCenterY.Value; set => visualCenterY = value; }
+        public byte[] EncryptedData { get => encryptedData; set => encryptedData = value; }
+    }
+
+    // 加密的数据
+    [Serializable]
+    public struct EncryptedData
+    {
+        public string Tag => "MindCanvasFile";
+        public byte[] Data { get; set; }
+
+        // 加密
+        public static EncryptedData Encrypt(MindCanvasFileData data, string password)
+        {
+            // password转md5
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] passwordMd5 = md5.ComputeHash(Encoding.UTF8.GetBytes(password));// 作为aes的key
+
+            // 序列化
+            byte[] original;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(ms, data);
+                original = ms.ToArray();
+            }
+
+            // AES加密
+            RijndaelManaged rDel = new RijndaelManaged();
+            rDel.Key = passwordMd5;
+            rDel.Mode = CipherMode.ECB;
+            rDel.Padding = PaddingMode.PKCS7;
+
+            ICryptoTransform cTransform = rDel.CreateEncryptor();
+
+            byte[] result = cTransform.TransformFinalBlock(original, 0, original.Length);
+
+            // 创建EncryptedData
+            EncryptedData encryptedData = new EncryptedData();
+            encryptedData.Data = result;
+
+            return encryptedData;
+        }
+
+        // 解密
+        public static MindCanvasFileData Decrypt(EncryptedData encryptedData, string password)
+        {
+            // password转md5
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] passwordMd5 = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            // AES解密
+            RijndaelManaged rDel = new RijndaelManaged();
+            rDel.Key = passwordMd5;
+            rDel.Mode = CipherMode.ECB;
+            rDel.Padding = PaddingMode.PKCS7;
+
+            ICryptoTransform cTransform = rDel.CreateDecryptor();
+
+            byte[] result = cTransform.TransformFinalBlock(encryptedData.Data, 0, encryptedData.Data.Length);
+
+            // 反序列化
+            object resultObject;
+            using (MemoryStream ms = new MemoryStream(result))
+            {
+                // 反序列化
+                IFormatter formatter = new BinaryFormatter();
+                resultObject = formatter.Deserialize(ms);
+            }
+
+            return (MindCanvasFileData)resultObject;
+        }
+    }
+
+    public class Item
+    {
+        public Item(string text, object tag = null)
+        {
+            this.Text = text;
+            this.Tag = tag;
+        }
+
+        public override string ToString() => Text;
+
+        public object Tag { get; set; }
+        public string Text { get; set; }
     }
 }

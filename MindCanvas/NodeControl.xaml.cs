@@ -37,17 +37,17 @@ namespace MindCanvas
             this.ShowAnimation = showAnimation;
 
             text = node.Name;
-            toolTipContent = node.Description;
+            ToolTipContent = node.Description;
 
             // 边框颜色
             if (node.BorderBrush == null)// 默认
-                borderBrush = mindMap.defaultNodeBorderBrush;
+                borderBrush = mindMap.DefaultNodeBorderBrush;
             else// 已设置
                 borderBrush = node.BorderBrush;
 
             // 文字大小
             if (node.NameFontSize == null)// 默认
-                fontSize = mindMap.defaultNodeNameFontSize;
+                fontSize = mindMap.DefaultNodeNameFontSize;
             else// 已设置
                 fontSize = node.NameFontSize.Value;
 
@@ -114,6 +114,11 @@ namespace MindCanvas
             }
         }
 
+        private void DescriptionToolTip_Opened(object sender, RoutedEventArgs e)
+        {
+            DescriptionToolTip.IsOpen = toolTipContent != "";
+        }
+
         // 动画配置
         private void CreateOrUpdateSpringAnimation(float finalValue)
         {
@@ -126,7 +131,6 @@ namespace MindCanvas
         }
 
         // 背景颜色
-        //public new Brush Background => new SolidColorBrush(Colors.Transparent);
         public new Brush Background => new SolidColorBrush(Colors.White);
 
         // 边框颜色
@@ -177,16 +181,14 @@ namespace MindCanvas
         {
             get
             {
+
                 return toolTipContent;
             }
             set
             {
                 if (value != this.toolTipContent)
                 {
-                    //toolTipContent = value == "" ? "(无)" : value;
                     toolTipContent = value;
-                    DescriptionToolTip.IsEnabled = value != "";
-
                     NotifyPropertyChanged();
                 }
             }

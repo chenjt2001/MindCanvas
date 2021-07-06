@@ -30,7 +30,7 @@
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Uid="EditTiePage_Description" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" LosingFocus="DescriptionTextBox_LosingFocus"/>
+                        <TextBox x:Uid="EditTiePage_NoDescription" x:Name="DescriptionTextBox" Grid.Row="0" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" LosingFocus="DescriptionTextBox_LosingFocus"/>
                     </Grid>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>

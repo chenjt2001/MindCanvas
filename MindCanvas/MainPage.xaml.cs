@@ -52,9 +52,6 @@ namespace MindCanvas
             // 擦除所有墨迹事件
             MindMapInkToolbar.EraseAllClicked += MindMapInkToolbar_EraseAllClicked;
 
-            // 快捷键
-            Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += Dispatcher_AcceleratorKeyActivated;
-
             // 设置缓存
             NavigationCacheMode = NavigationCacheMode.Required;
 
@@ -111,7 +108,7 @@ namespace MindCanvas
         private void ConfigNodesBorder(List<Node> needConfig = null)
         {
             if (needConfig == null)
-                needConfig = App.mindMap.nodes;
+                needConfig = App.mindMap.Nodes;
 
             foreach (Node node in needConfig)
             {
@@ -162,7 +159,7 @@ namespace MindCanvas
         private void ConfigTiesPath(List<Tie> needConfig = null)
         {
             if (needConfig == null)
-                needConfig = App.mindMap.ties;
+                needConfig = App.mindMap.Ties;
 
             foreach (Tie tie in needConfig)
             {
@@ -415,24 +412,23 @@ namespace MindCanvas
             }
         }
 
-        // 撤销
-        private void UndoBtn_Click(object sender, RoutedEventArgs e)
+        // 撤销重做
+        private void UnRedoBtn_Click(object sender, RoutedEventArgs e)
         {
-            EventsManager.Undo();
+            switch ((sender as Button).Tag)
+            {
+                case "Undo":// 撤销
+                    EventsManager.Undo();
+                    break;
+                case "Redo":// 重做
+                    EventsManager.Redo();
+                    break;
+            }
+
             RefreshUnRedoBtn();
             ConfigNodesBorder();
             ConfigTiesPath();
-
-            ShowFrame(typeof(EditPage.InfoPage));
-        }
-
-        // 重做
-        private void RedoBtn_Click(object sender, RoutedEventArgs e)
-        {
-            EventsManager.Redo();
-            RefreshUnRedoBtn();
-            ConfigNodesBorder();
-            ConfigTiesPath();
+            //MoveView();
 
             ShowFrame(typeof(EditPage.InfoPage));
         }
@@ -454,7 +450,7 @@ namespace MindCanvas
             ConfigNodesBorder();
             ConfigTiesPath();
 
-            ChangeView(App.mindMap.visualCenterX, App.mindMap.visualCenterY, App.mindMap.zoomFactor);
+            ChangeView(App.mindMap.VisualCenterX, App.mindMap.VisualCenterY, App.mindMap.ZoomFactor);
         }
 
         // MindMapInkBorder加载完成
@@ -590,11 +586,11 @@ namespace MindCanvas
                 case "ZoomOut": MoveView(power: 1 / 1.2f); break;// 缩小
                 case "ZoomIn": MoveView(power: 1.2f); break;// 放大
                 case "Fit":// 查看全览
-                    if (App.mindMap.nodes.Count() == 0)
+                    if (App.mindMap.Nodes.Count() == 0)
                         ChangeView(0, 0, InitialValues.MinZoomFactor);
 
                     else
-                        ChangeView(App.mindMap.nodes[0].X, App.mindMap.nodes[0].Y, InitialValues.MinZoomFactor);
+                        ChangeView(App.mindMap.Nodes[0].X, App.mindMap.Nodes[0].Y, InitialValues.MinZoomFactor);
 
                     break;
             }
@@ -634,22 +630,22 @@ namespace MindCanvas
         }
 
         // 改变可视区域（接受相对于画布中间的x和y）
-        private void ChangeView(double? x, double? y, float? zoomFactor)
+        public void ChangeView(double? x, double? y, float? zoomFactor)
         {
             double horizontalOffset, verticalOffset;
 
             if (!MindMapBorder.IsLoaded)
                 return;
 
-            float _zoomFactor = zoomFactor ?? App.mindMap.zoomFactor;
+            float _zoomFactor = zoomFactor ?? App.mindMap.ZoomFactor;
             FixZoomFactor(ref _zoomFactor);
             zoomFactor = _zoomFactor;
 
             if (!x.HasValue)
-                x = App.mindMap.visualCenterX;
+                x = App.mindMap.VisualCenterX;
 
             if (!y.HasValue)
-                y = App.mindMap.visualCenterY;
+                y = App.mindMap.VisualCenterY;
 
             horizontalOffset = mindMapCanvas.Width * zoomFactor.Value / 2 + x.Value * zoomFactor.Value - MindMapScrollViewer.ActualWidth / 2;
             verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
@@ -668,9 +664,9 @@ namespace MindCanvas
             if (!MindMapBorder.IsLoaded)
                 return;
 
-            x = relx + App.mindMap.visualCenterX;
-            y = rely + App.mindMap.visualCenterY;
-            zoomFactor = App.mindMap.zoomFactor * power;
+            x = relx + App.mindMap.VisualCenterX;
+            y = rely + App.mindMap.VisualCenterY;
+            zoomFactor = App.mindMap.ZoomFactor * power;
 
             FixZoomFactor(ref zoomFactor);
 
@@ -702,10 +698,10 @@ namespace MindCanvas
         // 判断某点是否在可视区域
         private bool IsInViewport(double x, double y)
         {
-            return App.mindMap.visualCenterX - MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2 < x
-                && x < App.mindMap.visualCenterX + MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2
-                && App.mindMap.visualCenterY - MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2 < y
-                && y < App.mindMap.visualCenterY + MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2;
+            return App.mindMap.VisualCenterX - MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2 < x
+                && x < App.mindMap.VisualCenterX + MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2
+                && App.mindMap.VisualCenterY - MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2 < y
+                && y < App.mindMap.VisualCenterY + MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2;
         }
 
         // 按下Enter键就输入完成
@@ -739,20 +735,58 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 按了快捷键
-        private async void Dispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
+        // 用户输入文本
+        private void SearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            if (args.KeyStatus.WasKeyDown)
+
+            // Only get results when it was a user typing,
+            // otherwise assume the value got filled in by TextMemberPath
+            // or the handler for SuggestionChosen.
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                if (Window.Current.CoreWindow.GetKeyState(VirtualKey.Control).HasFlag(CoreVirtualKeyStates.Down))
+                List<Item> result = EventsManager.SearchMindMap(sender.Text);
+                if (result.Count > 0)
+                    sender.ItemsSource = result;
+                else
+                    sender.ItemsSource = new List<Item> { new Item("没有结果") };// No results found
+            }
+        }
+
+        // 用户在建议列表中选择某个建议
+        private void SearchAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            // Set sender.Text. You can use args.SelectedItem to build your text string.
+            Item selectedItem = args.SelectedItem as Item;
+            if (selectedItem.Text != "没有结果")
+            {
+                string[] words = selectedItem.Text.Split(new Char[] { ' ', ':' });
+
+                switch (words[0])
                 {
-                    switch (args.VirtualKey)
-                    {
-                        case VirtualKey.S:
-                            await EventsManager.SaveFile();
-                            break;
-                    }
+                    case "Node":
+                        Node node = App.mindMap.GetNode((int)selectedItem.Tag);
+                        ChangeView(node.X, node.Y, null);
+                        break;
+                    case "Tie":
+                        Tie tie = App.mindMap.GetTie((int)selectedItem.Tag);
+                        List<Node> nodes = App.mindMap.GetNodes(tie);
+                        ChangeView((nodes[0].X + nodes[1].X) / 2, (nodes[0].Y + nodes[1].Y) / 2, null);
+                        break;
                 }
+            }
+        }
+
+        // 用户提交某个查询
+        private void SearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (args.ChosenSuggestion == null)
+            {
+                // Use args.QueryText to determine what to do.
+                Dictionary<string, object> data = new Dictionary<string, object>
+                {
+                    { "QueryText", args.QueryText },
+                };
+                ShowFrame(typeof(EditPage.SearchResultPage), data);
             }
         }
     }

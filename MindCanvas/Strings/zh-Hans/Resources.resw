@@ -448,4 +448,49 @@ A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写�
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>新功能</value>
   </data>
+  <data name="Code_Encrypt" xml:space="preserve">
+    <value>加密</value>
+  </data>
+  <data name="Code_PleaseEnterTheNewPassword" xml:space="preserve">
+    <value>请输入新密码：</value>
+  </data>
+  <data name="Code_PleaseEnterTheNewPasswordAgain" xml:space="preserve">
+    <value>请再次输入新密码：</value>
+  </data>
+  <data name="Code_PleaseEnterTheOldPassword" xml:space="preserve">
+    <value>请输入旧密码：</value>
+  </data>
+  <data name="Code_PleaseEnterThePassword" xml:space="preserve">
+    <value>请输入密码：</value>
+  </data>
+  <data name="Code_PleaseEnterThePasswordAgain" xml:space="preserve">
+    <value>请再次输入密码：</value>
+  </data>
+  <data name="EncryptPage_PasswordProtection.Text" xml:space="preserve">
+    <value>密码保护</value>
+  </data>
+  <data name="EnterPassword.PrimaryButtonText" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="EnterPassword.SecondaryButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="EnterPassword.Title" xml:space="preserve">
+    <value>输入密码</value>
+  </data>
+  <data name="EditNodePage_NoDescription.PlaceholderText" xml:space="preserve">
+    <value>暂无描述</value>
+  </data>
+  <data name="EditTiePage_NoDescription.PlaceholderText" xml:space="preserve">
+    <value>暂无描述</value>
+  </data>
+  <data name="EncryptPage_ChangePassword.Content" xml:space="preserve">
+    <value>修改密码</value>
+  </data>
+  <data name="EncryptPage_Paragraph.Text" xml:space="preserve">
+    <value>设置密码后，只有拥有密码的人才能打开此 MindCanvas 文件。一旦忘记密码，此文件数据将无法访问。</value>
+  </data>
+  <data name="EncryptPage_UseAPasswordToEncryptTheCurrentlyOpenedFile.Header" xml:space="preserve">
+    <value>使用密码加密当前打开的文件</value>
+  </data>
 </root>

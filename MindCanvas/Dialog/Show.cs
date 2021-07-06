@@ -78,5 +78,20 @@ namespace MindCanvas.Dialog
                 dialog = null;
             }
         }
+
+        // 输入密码
+        public async static Task<string[]> EnterPassword(EnterPassword.Mode mode)
+        {
+            if (dialog == null)
+            {
+                string[] result;
+                dialog = new ContentDialog();// 占用住dialog
+                EnterPassword trueDialog = new EnterPassword(mode);
+                result = await trueDialog.GetResult();
+                dialog = null;
+                return result;
+            }
+            return null;
+        }
     }
 }

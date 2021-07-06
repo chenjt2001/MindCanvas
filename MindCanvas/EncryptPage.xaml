@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="MindCanvas.EncryptPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MindCanvas"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+
+    <Grid>
+        <ScrollViewer
+            Padding="20,0,0,0"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <StackPanel HorizontalAlignment="Left">
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,4,0,0"
+                    FontWeight="Normal"
+                    x:Uid="EncryptPage_PasswordProtection"/>
+
+                <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True" Foreground="DarkRed">
+                    <Paragraph>
+                        <Run x:Uid="EncryptPage_Paragraph"></Run>
+                        <!--设置密码后，只有拥有密码的人才能打开此 MindCanvas 文件。一旦忘记密码，此文件数据将无法访问。-->
+                    </Paragraph>
+                </RichTextBlock>
+
+                <ToggleSwitch x:Uid="EncryptPage_UseAPasswordToEncryptTheCurrentlyOpenedFile" x:Name="EnableEncryptionToggleSwitch" Margin="0,10,0,0" Toggled="EnableEncryptionToggleSwitch_Toggled"/>
+
+                <Button x:Uid="EncryptPage_ChangePassword" x:Name="ChangePasswordButton" Margin="0,10,0,0" Click="ChangePasswordButton_Click" Visibility="{x:Bind EnableEncryptionToggleSwitch.IsOn, Mode=OneWay}"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

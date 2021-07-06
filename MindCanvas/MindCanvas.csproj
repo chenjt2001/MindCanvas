@@ -146,6 +146,9 @@
     <Compile Include="Dialog\ChangeLanguageTip.xaml.cs">
       <DependentUpon>ChangeLanguageTip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\EnterPassword.xaml.cs">
+      <DependentUpon>EnterPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\OpenFileError.xaml.cs">
       <DependentUpon>OpenFileError.xaml</DependentUpon>
     </Compile>
@@ -162,14 +165,22 @@
     <Compile Include="EditPage\InfoPage.xaml.cs">
       <DependentUpon>InfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditPage\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EncryptPage.xaml.cs">
+      <DependentUpon>EncryptPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventsManager.cs" />
     <Compile Include="HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InfoHelper.cs" />
     <Compile Include="InitialValues.cs" />
     <Compile Include="LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LoadingHelper.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -290,6 +301,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialog\EnterPassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialog\OpenFileError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -307,6 +322,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditPage\InfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditPage\SearchResultPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EncryptPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

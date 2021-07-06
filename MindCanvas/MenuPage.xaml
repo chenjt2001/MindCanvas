@@ -41,6 +41,15 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE792;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItemSeparator/>
+                
+                <NavigationViewItem Tag="Encrypt" Content="加密">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72E;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
                 <NavigationViewItemSeparator/>
 
                 <NavigationViewItem Tag="Export" x:Uid="MenuPage_Export" >
@@ -49,13 +58,14 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <!--<NavigationViewItem Tag="Print" Content="打印">
+                <NavigationViewItem Tag="Print" Content="打印">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE749;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>-->
+                </NavigationViewItem>
 
                 <NavigationViewItem Icon="Share" Tag="Share" x:Uid="MenuPage_Share"/>
+                
                 <NavigationViewItemSeparator/>
 
                 <NavigationViewItem Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>

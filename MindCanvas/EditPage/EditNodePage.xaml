@@ -47,6 +47,7 @@
                         <TextBlock x:Uid="EditNodePage_Description" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBox 
                             x:Name="DescriptionTextBox" 
+                            x:Uid="EditNodePage_NoDescription"
                             Grid.Row="0" 
                             Grid.Column="1" 
                             AcceptsReturn="True" 

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -44,7 +44,7 @@ namespace MindCanvas
         public static void SetMindMapInkCanvas(MindMapInkCanvas newMindMapInkCanvas)
         {
             mindMapInkCanvas = newMindMapInkCanvas;
-            newMindMapInkCanvas.InkPresenter.StrokeContainer = mindMap.inkStrokeContainer;
+            newMindMapInkCanvas.InkPresenter.StrokeContainer = mindMap.InkStrokeContainer;
         }
 
         public static void Initialize()
@@ -131,7 +131,8 @@ namespace MindCanvas
                     if (await SaveFile())
                     {
                         ClearRecords();
-                        await mindCanvasFile.LoadFile(file);
+                        if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                            return false;
                         Record();
                         ResetMainPageCache();
                         RefreshAppTitle();
@@ -146,7 +147,8 @@ namespace MindCanvas
                 else if (result == ContentDialogResult.Secondary)
                 {
                     ClearRecords();
-                    await mindCanvasFile.LoadFile(file);
+                    if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                        return false;
                     Record();
                     ResetMainPageCache();
                     RefreshAppTitle();
@@ -163,7 +165,8 @@ namespace MindCanvas
             else
             {
                 ClearRecords();
-                await mindCanvasFile.LoadFile(file);
+                if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                    return false;
                 Record();
                 ResetMainPageCache();
                 RefreshAppTitle();
@@ -289,7 +292,7 @@ namespace MindCanvas
             else
             {
                 node.BorderBrush = null;
-                border.BorderBrush = mindMap.defaultNodeBorderBrush;
+                border.BorderBrush = mindMap.DefaultNodeBorderBrush;
             }
 
             Record();
@@ -305,7 +308,7 @@ namespace MindCanvas
             if (nameFontSize != null)
                 border.FontSize = nameFontSize.Value;
             else
-                border.FontSize = mindMap.defaultNodeNameFontSize;
+                border.FontSize = mindMap.DefaultNodeNameFontSize;
 
             Record();
         }
@@ -318,12 +321,9 @@ namespace MindCanvas
         }
 
         // 新建点
-        public static Node AddNode(string name, string description = null)
+        public static Node AddNode(string name, string description = "")
         {
             LogHelper.Info("AddNode");
-
-            if (description == null)
-                description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
 
             Node newNode = mindMap.AddNode(name, description);
             mindMapCanvas.Draw(newNode);
@@ -332,12 +332,9 @@ namespace MindCanvas
         }
 
         // 新建线
-        public static Tie AddTie(Node node1, Node node2, string description = null)
+        public static Tie AddTie(Node node1, Node node2, string description = "")
         {
             LogHelper.Info("AddTie");
-
-            if (description == null)
-                description = resourceLoader.GetString("Code_NoDescription");// 暂无描述
 
             Tie newTie = mindMap.AddTie(node1.Id, node2.Id, description);
             mindMapCanvas.Draw(newTie);
@@ -359,11 +356,11 @@ namespace MindCanvas
         // 删除所有点
         public static void RemoveAllNodes()
         {
-            if (mindMap.nodes.Count() == 0)
+            if (mindMap.Nodes.Count() == 0)
                 return;
 
-            mindMap.ties.Clear();
-            mindMap.nodes.Clear();
+            mindMap.Ties.Clear();
+            mindMap.Nodes.Clear();
             mindMapCanvas.ReDraw();
             Record();
         }
@@ -379,10 +376,10 @@ namespace MindCanvas
         // 删除所有线
         public static void RemoveAllTies()
         {
-            if (mindMap.ties.Count() == 0)
+            if (mindMap.Ties.Count() == 0)
                 return;
 
-            mindMap.ties.Clear();
+            mindMap.Ties.Clear();
             mindMapCanvas.ReDraw();
             Record();
         }
@@ -390,15 +387,15 @@ namespace MindCanvas
         // 修改墨迹
         public static void ModifyInkCanvas(InkStrokeContainer newInkStrokeContainer)
         {
-            mindMap.inkStrokeContainer = newInkStrokeContainer;
+            mindMap.InkStrokeContainer = newInkStrokeContainer;
             Record();
         }
 
         // 修改默认值
         public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor, double defaultNodeNameFontSize)
         {
-            App.mindMap.defaultNodeBorderBrush = new SolidColorBrush(defaultNodeBorderBrushColor);
-            App.mindMap.defaultNodeNameFontSize = defaultNodeNameFontSize;
+            App.mindMap.DefaultNodeBorderBrush = new SolidColorBrush(defaultNodeBorderBrushColor);
+            App.mindMap.DefaultNodeNameFontSize = defaultNodeNameFontSize;
             Record();
         }
 
@@ -406,11 +403,11 @@ namespace MindCanvas
         public static void ModifyViewport(double? visualCenterX, double? visualCenterY, float? zoomFactor)
         {
             if (visualCenterX != null)
-                App.mindMap.visualCenterX = visualCenterX.Value;
+                App.mindMap.VisualCenterX = visualCenterX.Value;
             if (visualCenterY != null)
-                App.mindMap.visualCenterY = visualCenterY.Value;
+                App.mindMap.VisualCenterY = visualCenterY.Value;
             if (zoomFactor != null)
-                App.mindMap.zoomFactor = zoomFactor.Value;
+                App.mindMap.ZoomFactor = zoomFactor.Value;
         }
 
         // 设置父节点
@@ -432,85 +429,92 @@ namespace MindCanvas
         // 整理点
         public static async Task Tidy(List<Node> nodes)
         {
-            ShowLoading("正在整理……");
-            MainPage.mainPage.UpdateLayout();
+            await LoadingHelper.ShowLoading("正在整理……");
 
-            await TidyTask(nodes);
+            // 计时器
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            foreach (Node node in nodes)
+                await TidyTask(node);
+
+            // 获取用时
+            sw.Stop();
+            LogHelper.Debug(sw.Elapsed);
 
             mindMapCanvas.ReDraw();
             Record();
 
-            HideLoading();
+            LoadingHelper.HideLoading();
+
+            InfoHelper.ShowInfoBar("整理完成", InfoBarSeverity.Success);
         }
 
         // 整理点
-        public static Task TidyTask(List<Node> nodes)
+        public static Task<bool> TidyTask(Node parentNode)
         {
             var task = Task.Run(() =>
             {
-                Thread.Sleep(1000);
+                List<Node> childrenNode = new List<Node>();// 子节点
+                List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
+                List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
+                List<Node> parentNodes = new List<Node>();// 是父节点的子节点
 
-                // 计时器
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
+                childrenNode = mindMap.GetChildren(parentNode);
+                if (childrenNode.Count == 0)
+                    return false;
 
-                foreach (Node parentNode in nodes)
+                foreach (Node childNode in childrenNode)
                 {
-                    List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
-                    List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
-                    List<Node> parentNodes = new List<Node>();// 是父节点的父节点
+                    if (childNode.X < parentNode.X)
+                        leftNodes.Add(childNode);
+                    else
+                        rightNodes.Add(childNode);
 
-                    foreach (Node childNode in mindMap.GetChildren(parentNode))
-                    {
-                        if (childNode.X < parentNode.X)
-                            leftNodes.Add(childNode);
-                        else
-                            rightNodes.Add(childNode);
-                    }
-
-                    // 在y轴上排序
-                    leftNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
-                    rightNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
-
-                    // 安排位置
-                    double spacingY = 70;
-                    double spacingX = 200;
-
-                    double minY;
-                    double y;
-
-                    // 左侧
-                    minY = parentNode.Y - leftNodes.Count / 2 * spacingY;
-                    if (leftNodes.Count % 2 == 0)
-                        minY += spacingY / 2;
-
-                    y = minY;
-                    for (int i = 0; i < leftNodes.Count; i++)
-                    {
-                        Node leftNode = leftNodes[i];
-                        leftNode.X = parentNode.X - spacingX;
-                        leftNode.Y = y;
-                        y += spacingY;
-                    }
-
-                    // 右侧
-                    minY = parentNode.Y - rightNodes.Count / 2 * spacingY;
-                    if (rightNodes.Count % 2 == 0)
-                        minY += spacingY / 2;
-
-                    y = minY;
-                    for (int i = 0; i < rightNodes.Count; i++)
-                    {
-                        Node rightNode = rightNodes[i];
-                        rightNode.X = parentNode.X + spacingX;
-                        rightNode.Y = y;
-                        y += spacingY;
-                    }
+                    if (mindMap.GetChildren(childNode).Count > 0)
+                        parentNodes.Add(childNode);
                 }
 
-                // 获取整理用时
-                sw.Stop();
-                LogHelper.Debug(sw.Elapsed);
+                // 在y轴上排序
+                leftNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
+                rightNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
+
+                // 安排位置
+                double spacingY = 70;
+                double spacingX = 200;
+
+                double minY;
+                double y;
+
+                // 左侧
+                minY = parentNode.Y - leftNodes.Count / 2 * spacingY;
+                if (leftNodes.Count % 2 == 0)
+                    minY += spacingY / 2;
+
+                y = minY;
+                for (int i = 0; i < leftNodes.Count; i++)
+                {
+                    Node leftNode = leftNodes[i];
+                    leftNode.X = parentNode.X - spacingX;
+                    leftNode.Y = y;
+                    y += spacingY;
+                }
+
+                // 右侧
+                minY = parentNode.Y - rightNodes.Count / 2 * spacingY;
+                if (rightNodes.Count % 2 == 0)
+                    minY += spacingY / 2;
+
+                y = minY;
+                for (int i = 0; i < rightNodes.Count; i++)
+                {
+                    Node rightNode = rightNodes[i];
+                    rightNode.X = parentNode.X + spacingX;
+                    rightNode.Y = y;
+                    y += spacingY;
+                }
+
+                return true;
             });
             return task;
         }
@@ -519,7 +523,13 @@ namespace MindCanvas
         public static void Undo()
         {
             MindCanvasFileData lastData = DeepCopy(records[--nowIndex]);
-            mindMap.Load(lastData);
+
+            // 视觉数据不变
+            lastData.VisualCenterX = mindMap.VisualCenterX;
+            lastData.VisualCenterY = mindMap.VisualCenterY;
+            lastData.ZoomFactor = mindMap.ZoomFactor;
+
+            mindMap.LoadData(lastData);
             mindMapCanvas.ShowAnimation = false;
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             mindMapInkCanvas.InkPresenter.StrokeContainer = lastData.InkStrokeContainer;// 墨迹
@@ -540,7 +550,13 @@ namespace MindCanvas
         public static void Redo()
         {
             MindCanvasFileData nextData = DeepCopy(records[++nowIndex]);
-            mindMap.Load(nextData);
+
+            // 视觉数据不变
+            nextData.VisualCenterX = mindMap.VisualCenterX;
+            nextData.VisualCenterY = mindMap.VisualCenterY;
+            nextData.ZoomFactor = mindMap.ZoomFactor;
+
+            mindMap.LoadData(nextData);
             mindMapCanvas.ShowAnimation = false;
             mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
             mindMapInkCanvas.InkPresenter.StrokeContainer = nextData.InkStrokeContainer;// 墨迹
@@ -594,56 +610,40 @@ namespace MindCanvas
             AppTitleBarControl.SetFileName(fileName);
         }
 
-        // 显示加载界面
-        public static void ShowLoading(string message)
+        // 搜索思维导图
+        public static List<Item> SearchMindMap(string queryText)
         {
-            if (Window.Current.Content is Frame frame)
-            {
-                if (frame.Content is Page page)
-                {
-                    if (page.Content is Grid grid)
-                    {
-                        if (grid.FindName("LoadingControl") is LoadingControl loadingControl)
-                        {
-                            loadingControl.ShowLoading(message);
-                        }
-                        else
-                        {
-                            loadingControl = new LoadingControl();
-                            loadingControl.Name = "LoadingControl";
-                            grid.Children.Add(loadingControl);
-                            Grid.SetColumnSpan(loadingControl, int.MaxValue);
-                            Grid.SetRowSpan(loadingControl, int.MaxValue);
-                            loadingControl.ShowLoading(message);
-                        }
-                    }
-                }
-            }
-        }
+            List<Item> result = new List<Item>();
+            string[] keywords = queryText.ToLower().Split(" ");
 
-        // 延时
-        private static async Task Delay(int ms = 1000)
-        {
-            await Task.Run(() => Thread.Sleep(ms));
-        }
-
-        // 隐藏加载界面
-        public static void HideLoading()
-        {
-            if (Window.Current.Content is Frame frame)
+            // 在点中查找
+            foreach (Node node in App.mindMap.Nodes)
             {
-                if (frame.Content is Page page)
-                {
-                    if (page.Content is Grid grid)
-                    {
-                        if (grid.FindName("LoadingControl") is LoadingControl loadingControl)
-                        {
-                            loadingControl.HideLoading();
-                            grid.Children.Remove(loadingControl);
-                        }
-                    }
-                }
+                bool flag = true;
+                string itemText = $"Node: {node.Name}";
+                foreach (string word in keywords)
+                    if (!itemText.ToLower().Contains(word.ToLower()) && !node.Description.ToLower().Contains(word.ToLower()))
+                        flag = false;
+
+                if (flag)
+                    result.Add(new Item(itemText, tag: node.Id));
             }
+
+            // 在线中查找
+            foreach (Tie tie in App.mindMap.Ties)
+            {
+                bool flag = true;
+                List<Node> nodes = App.mindMap.GetNodes(tie);
+                string itemText = $"Tie: {nodes[0].Name} <-> {nodes[1].Name}";
+                foreach (string word in keywords)
+                    if (!tie.Description.ToLower().Contains(word.ToLower()) && !itemText.ToLower().Contains(word.ToLower()))
+                        flag = false;
+
+                if (flag)
+                    result.Add(new Item(itemText, tag: tie.Id));
+            }
+
+            return result;
         }
     }
 }
