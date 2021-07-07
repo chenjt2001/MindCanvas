@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Windows.UI;
@@ -22,6 +24,9 @@ namespace MindCanvas
         private Brush borderBrush;
         private double fontSize;
         private string toolTipContent;
+        private string style;
+        private Thickness borderThickness;
+        private CornerRadius cornerRadius;
 
         // 关于动画
         private Compositor _compositor = Window.Current.Compositor;
@@ -50,6 +55,12 @@ namespace MindCanvas
                 fontSize = mindMap.DefaultNodeNameFontSize;
             else// 已设置
                 fontSize = node.NameFontSize.Value;
+
+            // 样式
+            if (node.Style == null)
+                Style = mindMap.DefaultNodeStyle;
+            else
+                Style = node.Style;
 
             // 事件
             PointerEntered += NodeControl_PointerEntered;// 鼠标进入
@@ -136,10 +147,7 @@ namespace MindCanvas
         // 边框颜色
         public new Brush BorderBrush
         {
-            get
-            {
-                return borderBrush;
-            }
+            get => borderBrush;
             set
             {
                 if (value != this.borderBrush)
@@ -151,21 +159,40 @@ namespace MindCanvas
         }
 
         // 边框粗细
-        public new Thickness BorderThickness => new Thickness(2);
+        public new Thickness BorderThickness
+        {
+            get => borderThickness;
+            set
+            {
+                if (value != borderThickness)
+                {
+                    borderThickness = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         // 边框与子对象间的距离
         public new Thickness Padding => new Thickness(10);
 
         // 圆角半径
-        public new CornerRadius CornerRadius => new CornerRadius(5);
+        public new CornerRadius CornerRadius
+        {
+            get => cornerRadius;
+            set
+            {
+                if (value != cornerRadius)
+                {
+                    cornerRadius = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         // 文字内容
         public string Text
         {
-            get
-            {
-                return text;
-            }
+            get => text;
             set
             {
                 if (value != this.text)
@@ -179,11 +206,7 @@ namespace MindCanvas
         // 描述
         public string ToolTipContent
         {
-            get
-            {
-
-                return toolTipContent;
-            }
+            get => toolTipContent;
             set
             {
                 if (value != this.toolTipContent)
@@ -197,10 +220,7 @@ namespace MindCanvas
         // 文字大小
         public new double FontSize
         {
-            get
-            {
-                return fontSize;
-            }
+            get => fontSize;
             set
             {
                 if (value != this.fontSize)
@@ -211,16 +231,40 @@ namespace MindCanvas
             }
         }
 
+        // 样式
+        public new string Style
+        {
+            get => style;
+            set
+            {
+                if (value != this.style)
+                {
+                    style = value;
+                    NotifyPropertyChanged();
+
+                    switch (this.style)
+                    {
+                        case "Style 1":
+                            BorderThickness = new Thickness(2);
+                            CornerRadius = new CornerRadius(5);
+                            break;
+
+                        case "Style 2":
+                            BorderThickness = new Thickness(0, 0, 0, 2);
+                            CornerRadius = new CornerRadius(0);
+                            break;
+                    }
+                }
+            }
+        }
+
         // 文字颜色
         public new Brush Foreground => new SolidColorBrush(Colors.Black);
 
         // 选择
         public bool IsSelected
         {
-            get
-            {
-                return isSelected;
-            }
+            get => isSelected;
             set
             {
                 isSelected = value;
@@ -241,7 +285,32 @@ namespace MindCanvas
             }
         }
 
+        // 锚点（线连着的地方）
+        public List<PointF> Anchor
+        {
+            get
+            {
+                List<PointF> anchor = new List<PointF>();
+                switch (Style)
+                {
+                    case "Style 1":
+                        anchor.Add(new PointF((float)node.X, (float)node.Y));
+                        break;
+
+                    case "Style 2":
+                        anchor.Add(new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2)));
+                        anchor.Add(new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2)));
+                        anchor.Add(new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2)));
+                        anchor.Add(new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2)));
+                        break;
+                }
+
+                return anchor;
+            }
+        }
+
         public bool ShowAnimation { get; set; }
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 

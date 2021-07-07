@@ -21,9 +21,9 @@
                     </TransitionCollection>
                 </StackPanel.ChildrenTransitions>
 
-                <TextBlock Text="搜索结果" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock x:Uid="SearchResultPage_SearchResults" Style="{StaticResource TitleTextBlockStyle}"/>
 
-                <TextBlock x:Name="NoResultsFoundTextBlock" Text="No results found" Visibility="Collapsed" Margin="0,20,0,0"/>
+                <TextBlock x:Name="NoResultsFoundTextBlock" x:Uid="SearchResultPage_NoResultsFound" Visibility="Collapsed" Margin="0,20,0,0"/>
                 <ListView x:Name="SearchResultListView" IsItemClickEnabled="True" ItemClick="SearchResultListView_ItemClick" Visibility="Collapsed" Margin="0,20,0,0"/>
 
             </StackPanel>

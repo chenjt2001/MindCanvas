@@ -222,12 +222,6 @@
   <data name="EditNodePage_BorderColor.Text" xml:space="preserve">
     <value>Border Color</value>
   </data>
-  <data name="EditNodePage_Custom.Content" xml:space="preserve">
-    <value>Custom</value>
-  </data>
-  <data name="EditNodePage_Default.Content" xml:space="preserve">
-    <value>Default</value>
-  </data>
   <data name="EditNodePage_Delete.Content" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -492,5 +486,32 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   </data>
   <data name="EncryptPage_UseAPasswordToEncryptTheCurrentlyOpenedFile.Header" xml:space="preserve">
     <value>Use a password to encrypt the currently opened file</value>
+  </data>
+  <data name="Code_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Code_NoResultsFound" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="MainPage_DeleteAllNodes.Text" xml:space="preserve">
+    <value>Delete all nodes</value>
+  </data>
+  <data name="MainPage_DeleteAllTies.Text" xml:space="preserve">
+    <value>Delete all ties</value>
+  </data>
+  <data name="MainPage_SearchMindMap.PlaceholderText" xml:space="preserve">
+    <value>Search mind map</value>
+  </data>
+  <data name="MenuPage_Encrypt.Content" xml:space="preserve">
+    <value>Encrypt</value>
+  </data>
+  <data name="SearchResultPage_NoResultsFound.Text" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="SearchResultPage_SearchResults.Text" xml:space="preserve">
+    <value>Search Results</value>
+  </data>
+  <data name="EditNodePage_UseDefaultValue.Header" xml:space="preserve">
+    <value>Use default value</value>
   </data>
 </root>

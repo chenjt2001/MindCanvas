@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -48,16 +51,13 @@ namespace MindCanvas.EditPage
             DescriptionTextBox.Text = node.Description;
 
             // 边框颜色
-            if (node.BorderBrushArgb == null)
-                DefaultBorderBrushRadioButton.IsChecked = true;
-            else
-                CustomBorderBrushRadioButton.IsChecked = true;
+            UseDefaultBorderBrushToggleSwitch.IsOn = node.BorderBrushArgb == null;
 
             // 字体大小
-            if (node.NameFontSize == null)
-                DefaultFontSizeRadioButton.IsChecked = true;
-            else
-                CustomFontSizeRadioButton.IsChecked = true;
+            UseDefaultFontSizeToggleSwitch.IsOn = !node.NameFontSize.HasValue;
+
+            // 样式
+            UseDefaultStyleToggleSwitch.IsOn = node.Style == null;
 
             // 父节点
             AsAStandaloneNodeToggleSwitch.IsOn = !node.ParentNodeId.HasValue;
@@ -86,28 +86,6 @@ namespace MindCanvas.EditPage
             EventsManager.RemoveNode(node);
             mainPage.RefreshUnRedoBtn();
             mainPage.ShowFrame(typeof(EditPage.InfoPage));
-        }
-
-        // 选择默认边框颜色
-        private void DefaultBorderBrushRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (node.BorderBrushArgb != null)
-            {
-                EventsManager.ModifyNodeBorderBrushColor(node, null);
-                mainPage.RefreshUnRedoBtn();
-            }
-        }
-
-        // 选择自定义边框颜色
-        private void CustomBorderBrushRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            BorderBrushColorPicker.Color = (border.BorderBrush as SolidColorBrush).Color;
-
-            if (node.BorderBrushArgb == null)
-            {
-                EventsManager.ModifyNodeBorderBrushColor(node, BorderBrushColorPicker.Color);
-                mainPage.RefreshUnRedoBtn();
-            }
         }
 
         // 名称文本框失去焦点
@@ -173,29 +151,6 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 选择默认字体大小
-        private void DefaultFontSizeRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (node.NameFontSize != null)
-            {
-                EventsManager.ModifyNodeNameFontSize(node, null);
-                RefreshNodePosition();
-                mainPage.RefreshUnRedoBtn();
-            }
-        }
-
-        // 选择自定义字体大小
-        private void CustomFontSizeRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            FontSizeNumberBox.Value = border.FontSize;
-
-            if (node.NameFontSize == null)
-            {
-                EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
-                mainPage.RefreshUnRedoBtn();
-            }
-        }
-
         // 自定义字体大小输入完成
         private void FontSizeNumberBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
         {
@@ -203,7 +158,7 @@ namespace MindCanvas.EditPage
             // 用户输入为空则设置为默认
             if (double.IsNaN(FontSizeNumberBox.Value))
             {
-                DefaultFontSizeRadioButton.IsChecked = true;
+                UseDefaultFontSizeToggleSwitch.IsOn = true;
                 return;
             }
 
@@ -247,6 +202,90 @@ namespace MindCanvas.EditPage
         {
             Node parentNode = App.mindMap.GetNode((int)(ParentNodeComboBox.SelectedItem as ComboBoxItem).Tag);
             EventsManager.SetParentNode(node, parentNode);
+        }
+
+        private void UseDefaultBorderBrushToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            ColorPickerViewbox.Visibility = UseDefaultBorderBrushToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
+
+            // 默认边框颜色
+            if (UseDefaultBorderBrushToggleSwitch.IsOn)
+            {
+                if (node.BorderBrushArgb != null)
+                {
+                    EventsManager.ModifyNodeBorderBrushColor(node, null);
+                    mainPage.RefreshUnRedoBtn();
+                }
+            }
+
+            // 自定义边框颜色
+            else
+            {
+                BorderBrushColorPicker.Color = (border.BorderBrush as SolidColorBrush).Color;
+
+                if (node.BorderBrushArgb == null)
+                {
+                    EventsManager.ModifyNodeBorderBrushColor(node, BorderBrushColorPicker.Color);
+                    mainPage.RefreshUnRedoBtn();
+                }
+            }
+        }
+
+        private void UseDefaultFontSizeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            FontSizeNumberBox.Visibility = UseDefaultFontSizeToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
+
+            // 默认字体大小
+            if (UseDefaultFontSizeToggleSwitch.IsOn)
+            {
+                if (node.NameFontSize.HasValue)
+                {
+                    EventsManager.ModifyNodeNameFontSize(node, null);
+                    RefreshNodePosition();
+                    mainPage.RefreshUnRedoBtn();
+                }
+            }
+
+            // 自定义字体大小
+            else
+            {
+                FontSizeNumberBox.Value = border.FontSize;
+
+                if (!node.NameFontSize.HasValue)
+                {
+                    EventsManager.ModifyNodeNameFontSize(node, FontSizeNumberBox.Value);
+                    mainPage.RefreshUnRedoBtn();
+                }
+            }
+        }
+
+        private void UseDefaultStyleToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            StyleRadioButtons.Visibility = UseDefaultStyleToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
+            
+            // 默认样式
+            if (UseDefaultStyleToggleSwitch.IsOn)
+            {
+                if (node.Style != null)
+                {
+                    EventsManager.ModifyNodeStyle(node, null);
+                    mainPage.RefreshUnRedoBtn();
+                }
+            }
+
+            // 自定义样式
+            else
+            {
+                foreach (RadioButton radioButton in StyleRadioButtons.Items)
+                    if (radioButton.Tag.ToString() == border.Style)
+                        radioButton.IsChecked = true;
+            }
+        }
+
+        private void StyleRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            EventsManager.ModifyNodeStyle(node, (sender as RadioButton).Tag.ToString());
+            mainPage.RefreshUnRedoBtn();
         }
     }
 }

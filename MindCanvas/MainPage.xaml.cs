@@ -126,11 +126,11 @@ namespace MindCanvas
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
             MenuFlyoutItem item1 = contextMenuFlyout.AddItem("整理",
                                                             VirtualKey.T,
-                                                            VirtualKeyModifiers.Control,
+                                                            VirtualKeyModifiers.None,
                                                             "\xE8CB");
-            MenuFlyoutItem item2 = contextMenuFlyout.AddItem("删除",
+            MenuFlyoutItem item2 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Delete"),// 删除
                                                             VirtualKey.D,
-                                                            VirtualKeyModifiers.Control,
+                                                            VirtualKeyModifiers.None,
                                                             "\xE74D");
             item1.Click += TidyNodeMenuFlyoutItem_Click;
             item2.Click += DeleteNodeMenuFlyoutItem_Click;
@@ -174,9 +174,9 @@ namespace MindCanvas
         {
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
-            MenuFlyoutItem item = contextMenuFlyout.AddItem("删除",
+            MenuFlyoutItem item = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Delete"),// 删除
                                                             VirtualKey.D,
-                                                            VirtualKeyModifiers.Control,
+                                                            VirtualKeyModifiers.None,
                                                             "\xE74D");
             item.Click += DeleteTieMenuFlyoutItem_Click;
 
@@ -188,6 +188,7 @@ namespace MindCanvas
         {
             EventsManager.RemoveTie(mindMapCanvas.ConvertPathToTie(sender as Windows.UI.Xaml.Shapes.Path));
             RefreshUnRedoBtn();
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         // 鼠标在线内释放，算按了一下线
@@ -554,6 +555,7 @@ namespace MindCanvas
                 EditFrame.Navigate(sourcePageType, data, info);
             else
                 EditFrame.Navigate(sourcePageType, parameter, info);
+            EditFrame.BackStack.Clear();
         }
 
         // 默认值设置
@@ -748,7 +750,7 @@ namespace MindCanvas
                 if (result.Count > 0)
                     sender.ItemsSource = result;
                 else
-                    sender.ItemsSource = new List<Item> { new Item("没有结果") };// No results found
+                    sender.ItemsSource = new List<Item> { new Item(resourceLoader.GetString("Code_NoResultsFound")) };// No results found
             }
         }
 
@@ -757,7 +759,7 @@ namespace MindCanvas
         {
             // Set sender.Text. You can use args.SelectedItem to build your text string.
             Item selectedItem = args.SelectedItem as Item;
-            if (selectedItem.Text != "没有结果")
+            if (selectedItem.Text != resourceLoader.GetString("Code_NoResultsFound"))
             {
                 string[] words = selectedItem.Text.Split(new Char[] { ' ', ':' });
 

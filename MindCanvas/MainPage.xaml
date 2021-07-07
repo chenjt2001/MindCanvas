@@ -205,8 +205,8 @@
 
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout x:Name="ContextMenuFlyout">
-                                        <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" Text="删除所有点" Click="DeleteAllNodesMenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" Text="删除所有线" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" x:Uid="MainPage_DeleteAllNodes" Click="DeleteAllNodesMenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" x:Uid="MainPage_DeleteAllTies" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
 
@@ -225,8 +225,8 @@
                 <Border Grid.Row="0" >
                     <AutoSuggestBox 
                         x:Name="SearchAutoSuggestBox"
+                        x:Uid="MainPage_SearchMindMap"
                         Margin="20,0,20,0" 
-                        PlaceholderText="搜索思维导图"
                         Background="{ThemeResource SystemControlAcrylicWindowBrush}" 
                         QueryIcon="Find" 
                         VerticalAlignment="Center"

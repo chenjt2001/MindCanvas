@@ -222,14 +222,8 @@
   <data name="EditNodePage_BorderColor.Text" xml:space="preserve">
     <value>邊框顏色</value>
   </data>
-  <data name="EditNodePage_Custom.Content" xml:space="preserve">
-    <value>自定義</value>
-  </data>
-  <data name="EditNodePage_Default.Content" xml:space="preserve">
-    <value>默認</value>
-  </data>
   <data name="EditNodePage_Delete.Content" xml:space="preserve">
-    <value>删除</value>
+    <value>刪除</value>
   </data>
   <data name="EditNodePage_Description.Text" xml:space="preserve">
     <value>描述</value>
@@ -250,7 +244,7 @@
     <value>基本資訊</value>
   </data>
   <data name="EditTiePage_Delete.Content" xml:space="preserve">
-    <value>删除</value>
+    <value>刪除</value>
   </data>
   <data name="EditTiePage_Description.Text" xml:space="preserve">
     <value>描述</value>
@@ -492,5 +486,32 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   </data>
   <data name="EncryptPage_UseAPasswordToEncryptTheCurrentlyOpenedFile.Header" xml:space="preserve">
     <value>使用密碼加密當前打開的文件</value>
+  </data>
+  <data name="Code_Delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="Code_NoResultsFound" xml:space="preserve">
+    <value>沒有結果</value>
+  </data>
+  <data name="MainPage_DeleteAllNodes.Text" xml:space="preserve">
+    <value>刪除所有點</value>
+  </data>
+  <data name="MainPage_DeleteAllTies.Text" xml:space="preserve">
+    <value>刪除所有線</value>
+  </data>
+  <data name="MainPage_SearchMindMap.PlaceholderText" xml:space="preserve">
+    <value>搜索心智圖</value>
+  </data>
+  <data name="MenuPage_Encrypt.Content" xml:space="preserve">
+    <value>加密</value>
+  </data>
+  <data name="SearchResultPage_NoResultsFound.Text" xml:space="preserve">
+    <value>沒有結果</value>
+  </data>
+  <data name="SearchResultPage_SearchResults.Text" xml:space="preserve">
+    <value>搜索結果</value>
+  </data>
+  <data name="EditNodePage_UseDefaultValue.Header" xml:space="preserve">
+    <value>使用默認值</value>
   </data>
 </root>

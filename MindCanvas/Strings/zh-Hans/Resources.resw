@@ -222,12 +222,6 @@
   <data name="EditNodePage_BorderColor.Text" xml:space="preserve">
     <value>边框颜色</value>
   </data>
-  <data name="EditNodePage_Custom.Content" xml:space="preserve">
-    <value>自定义</value>
-  </data>
-  <data name="EditNodePage_Default.Content" xml:space="preserve">
-    <value>默认</value>
-  </data>
   <data name="EditNodePage_Delete.Content" xml:space="preserve">
     <value>删除</value>
   </data>
@@ -492,5 +486,32 @@ A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写�
   </data>
   <data name="EncryptPage_UseAPasswordToEncryptTheCurrentlyOpenedFile.Header" xml:space="preserve">
     <value>使用密码加密当前打开的文件</value>
+  </data>
+  <data name="Code_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Code_NoResultsFound" xml:space="preserve">
+    <value>没有结果</value>
+  </data>
+  <data name="MainPage_DeleteAllNodes.Text" xml:space="preserve">
+    <value>删除所有点</value>
+  </data>
+  <data name="MainPage_DeleteAllTies.Text" xml:space="preserve">
+    <value>删除所有线</value>
+  </data>
+  <data name="MainPage_SearchMindMap.PlaceholderText" xml:space="preserve">
+    <value>搜索思维导图</value>
+  </data>
+  <data name="MenuPage_Encrypt.Content" xml:space="preserve">
+    <value>加密</value>
+  </data>
+  <data name="SearchResultPage_NoResultsFound.Text" xml:space="preserve">
+    <value>没有结果</value>
+  </data>
+  <data name="SearchResultPage_SearchResults.Text" xml:space="preserve">
+    <value>搜索结果</value>
+  </data>
+  <data name="EditNodePage_UseDefaultValue.Header" xml:space="preserve">
+    <value>使用默认值</value>
   </data>
 </root>

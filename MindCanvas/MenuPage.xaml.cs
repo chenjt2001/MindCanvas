@@ -99,10 +99,6 @@ namespace MindCanvas
                 case "New":
                     NewFile();
                     break;
-
-                case "Print":
-                    Print();
-                    break;
             }
 
             // Get the page type before navigation so you can prevent duplicate
@@ -133,13 +129,6 @@ namespace MindCanvas
                 On_BackRequested();// 保存成功则返回
             else
                 NavView.SelectedItem = OpenItem;// 没保存，回到打开文件界面
-        }
-
-        // 打印
-        private void Print()
-        {
-            //var printHelper = new PrintHelper();
-            //printHelper
         }
 
         // 分享

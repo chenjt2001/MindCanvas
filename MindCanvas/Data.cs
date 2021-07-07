@@ -31,6 +31,8 @@ namespace MindCanvas
         private double? nameFontSize;// 名称字体大小
         [OptionalField]
         private int? parentNodeId;// 父节点
+        [OptionalField]
+        private string style;// 样式
 
         // 相对于画布中心的位置
         private double x;
@@ -86,7 +88,9 @@ namespace MindCanvas
         public double Y { get => y; set => y = value; }
         public double? NameFontSize { get => nameFontSize; set => nameFontSize = value; }
         public int? ParentNodeId { get => parentNodeId; set => parentNodeId = value; }
+        public string Style { get => style; set => style = value; }
     }
+
     [Serializable]
     public class Tie
     {
@@ -130,7 +134,7 @@ namespace MindCanvas
         [OptionalField]
         private float? zoomFactor;// 可视区放大倍数
         [OptionalField]
-        private byte[] encryptedData;// 加密数据
+        private string defaultNodeStyle;// 默认点样式
 
         public Brush DefaultNodeBorderBrush
         {
@@ -214,6 +218,10 @@ namespace MindCanvas
 
             if (data.zoomFactor == null)
                 data.zoomFactor = 1;
+
+            // V1.5 -> V1.6
+            if (data.defaultNodeStyle == null)
+                data.defaultNodeStyle = InitialValues.NodeStyle;
         }
 
         public List<Node> Nodes { get => nodes; set => nodes = value; }
@@ -222,7 +230,7 @@ namespace MindCanvas
         public float ZoomFactor { get => zoomFactor.Value; set => zoomFactor = value; }
         public double VisualCenterX { get => visualCenterX.Value; set => visualCenterX = value; }
         public double VisualCenterY { get => visualCenterY.Value; set => visualCenterY = value; }
-        public byte[] EncryptedData { get => encryptedData; set => encryptedData = value; }
+        public string DefaultNodeStyle { get => defaultNodeStyle; set => defaultNodeStyle = value; }
     }
 
     // 加密的数据

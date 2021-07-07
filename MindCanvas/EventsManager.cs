@@ -301,14 +301,27 @@ namespace MindCanvas
         // 修改点的字体大小
         public static void ModifyNodeNameFontSize(Node node, double? nameFontSize)
         {
-            NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
+            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
 
             node.NameFontSize = nameFontSize;
 
             if (nameFontSize != null)
-                border.FontSize = nameFontSize.Value;
+                nodeControl.FontSize = nameFontSize.Value;
             else
-                border.FontSize = mindMap.DefaultNodeNameFontSize;
+                nodeControl.FontSize = mindMap.DefaultNodeNameFontSize;
+
+            Record();
+        }
+
+        // 修改点的样式
+        public static void ModifyNodeStyle(Node node, string style)
+        {
+            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
+
+            node.Style = style;
+            nodeControl.Style = style;
+            
+
 
             Record();
         }

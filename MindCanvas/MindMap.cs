@@ -17,6 +17,7 @@ namespace MindCanvas
         private double visualCenterX;// 可视中心点X
         private double visualCenterY;// 可视中心点Y
         private float zoomFactor;// 可视区放大倍数
+        private string defaultNodeStyle;// 默认点样式
 
         // 资源加载器，用于翻译
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
@@ -29,6 +30,7 @@ namespace MindCanvas
         public SolidColorBrush DefaultNodeBorderBrush { get => defaultNodeBorderBrush; set => defaultNodeBorderBrush = value; }
         public List<Tie> Ties { get => ties; set => ties = value; }
         public List<Node> Nodes { get => nodes; set => nodes = value; }
+        public string DefaultNodeStyle { get => defaultNodeStyle; set => defaultNodeStyle = value; }
 
         public MindMap()
         {
@@ -62,6 +64,7 @@ namespace MindCanvas
             visualCenterX = 0;
             visualCenterY = 0;
             zoomFactor = 1;
+            defaultNodeStyle = InitialValues.NodeStyle;
         }
 
         // 添加点
@@ -235,6 +238,7 @@ namespace MindCanvas
             this.zoomFactor = mindCanvasFileData.ZoomFactor;
             this.visualCenterX = mindCanvasFileData.VisualCenterX;
             this.visualCenterY = mindCanvasFileData.VisualCenterY;
+            this.defaultNodeStyle = mindCanvasFileData.DefaultNodeStyle;
         }
 
         // 获取可序列化的数据
@@ -249,7 +253,8 @@ namespace MindCanvas
                 InkStrokeContainer = inkStrokeContainer,
                 ZoomFactor = zoomFactor,
                 VisualCenterX = visualCenterX,
-                VisualCenterY = visualCenterY
+                VisualCenterY = visualCenterY,
+                DefaultNodeStyle = defaultNodeStyle
             };
 
             return mindCanvasFileData;
