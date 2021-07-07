@@ -102,9 +102,6 @@ namespace MindCanvas
         // 添加连接
         public Tie AddTie(int node1id, int node2id, string description)
         {
-            Node node1 = GetNode(node1id);
-            Node node2 = GetNode(node2id);
-
             int id;
             if (ties.Count() == 0)
                 id = 0;
@@ -115,23 +112,11 @@ namespace MindCanvas
             {
                 Id = id,
                 Description = description,
-                Node1Id = node1.Id,
-                Node2Id = node2.Id,
+                Node1Id = node1id,
+                Node2Id = node2id,
             };
 
             ties.Add(newTie);
-
-            // 配置父节点
-            if (node1.Id > node2.Id)
-            {
-                if (!node1.ParentNodeId.HasValue)
-                    node1.ParentNodeId = node2.Id;
-            }
-            else
-            {
-                if (!node2.ParentNodeId.HasValue)
-                    node2.ParentNodeId = node1.Id;
-            }
 
             return newTie;
         }
@@ -288,18 +273,6 @@ namespace MindCanvas
             tie.Description = description;
 
             return tie;
-        }
-
-        // 获得子节点
-        public List<Node> GetChildren(Node node)
-        {
-            List<Node> nodes = new List<Node>();
-
-            foreach (Node tiedNode in GetNodes(node))
-                if (tiedNode.ParentNodeId.HasValue && tiedNode.ParentNodeId == node.Id)
-                    nodes.Add(tiedNode);
-
-            return nodes;
         }
     }
 }

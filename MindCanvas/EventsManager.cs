@@ -423,22 +423,6 @@ namespace MindCanvas
                 App.mindMap.ZoomFactor = zoomFactor.Value;
         }
 
-        // 设置父节点
-        public static void SetParentNode(Node node, Node parentNode)
-        {
-            if (parentNode == null && node.ParentNodeId.HasValue)
-            {
-                node.ParentNodeId = null;
-                Record();
-            }
-
-            else if (parentNode != null && node.ParentNodeId != parentNode.Id)
-            {
-                node.ParentNodeId = parentNode.Id;
-                Record();
-            }
-        }
-
         // 整理点
         public static async Task Tidy(List<Node> nodes)
         {
@@ -471,9 +455,8 @@ namespace MindCanvas
                 List<Node> childrenNode = new List<Node>();// 子节点
                 List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
                 List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
-                List<Node> parentNodes = new List<Node>();// 是父节点的子节点
 
-                childrenNode = mindMap.GetChildren(parentNode);
+                childrenNode = mindMap.GetNodes(parentNode);
                 if (childrenNode.Count == 0)
                     return false;
 
@@ -483,9 +466,6 @@ namespace MindCanvas
                         leftNodes.Add(childNode);
                     else
                         rightNodes.Add(childNode);
-
-                    if (mindMap.GetChildren(childNode).Count > 0)
-                        parentNodes.Add(childNode);
                 }
 
                 // 在y轴上排序

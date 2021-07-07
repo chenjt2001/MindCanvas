@@ -30,8 +30,6 @@ namespace MindCanvas
         [OptionalField]
         private double? nameFontSize;// 名称字体大小
         [OptionalField]
-        private int? parentNodeId;// 父节点
-        [OptionalField]
         private string style;// 样式
 
         // 相对于画布中心的位置
@@ -87,7 +85,6 @@ namespace MindCanvas
         public double X { get => x; set => x = value; }
         public double Y { get => y; set => y = value; }
         public double? NameFontSize { get => nameFontSize; set => nameFontSize = value; }
-        public int? ParentNodeId { get => parentNodeId; set => parentNodeId = value; }
         public string Style { get => style; set => style = value; }
     }
 

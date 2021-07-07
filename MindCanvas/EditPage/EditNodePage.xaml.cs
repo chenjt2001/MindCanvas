@@ -58,26 +58,6 @@ namespace MindCanvas.EditPage
 
             // 样式
             UseDefaultStyleToggleSwitch.IsOn = node.Style == null;
-
-            // 父节点
-            AsAStandaloneNodeToggleSwitch.IsOn = !node.ParentNodeId.HasValue;
-
-            foreach (Node tiedNode in App.mindMap.GetNodes(node))
-            {
-                if (tiedNode.ParentNodeId == node.Id)
-                    continue;
-
-                ComboBoxItem item = new ComboBoxItem();
-                item.Tag = tiedNode.Id;
-                item.Content = tiedNode.Name;
-                ParentNodeComboBox.Items.Add(item);
-
-                if (tiedNode.Id == node.ParentNodeId)
-                    ParentNodeComboBox.SelectedItem = item;
-            }
-
-            AsAStandaloneNodeToggleSwitch.IsEnabled = ParentNodeComboBox.Items.Count != 0;
-            ParentNodeTipTextBlock.Text = ParentNodeComboBox.Items.Count != 0 ? "父节点必须为于此点连接着的点之一，且不能互为父节点。" : "必须作为独立节点，因为没有与此点相连的点，或与此点相连的点均以此点为父节点。";
         }
 
         // 删除点
@@ -184,24 +164,6 @@ namespace MindCanvas.EditPage
             if (e.Key == VirtualKey.Enter)
                 if (!Window.Current.CoreWindow.GetKeyState(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down))
                     e.Handled = true;
-        }
-
-        // 切换作为独立点开关
-        private void AsAStandaloneNodeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            ParentNodeComboBox.Visibility = AsAStandaloneNodeToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
-
-            if (ParentNodeComboBox.Visibility == Visibility)
-                ParentNodeComboBox.SelectedIndex = 0;
-            else
-                EventsManager.SetParentNode(node, null);
-        }
-
-        // 选择了新的父节点
-        private void ParentNodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Node parentNode = App.mindMap.GetNode((int)(ParentNodeComboBox.SelectedItem as ComboBoxItem).Tag);
-            EventsManager.SetParentNode(node, parentNode);
         }
 
         private void UseDefaultBorderBrushToggleSwitch_Toggled(object sender, RoutedEventArgs e)

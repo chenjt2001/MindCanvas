@@ -286,26 +286,24 @@ namespace MindCanvas
         }
 
         // 锚点（线连着的地方）
-        public List<PointF> Anchor
+        public PointF GetAnchor(double x, double y)
         {
-            get
+            List<PointF> anchor = new List<PointF>();
+            switch (Style)
             {
-                List<PointF> anchor = new List<PointF>();
-                switch (Style)
-                {
-                    case "Style 1":
-                        anchor.Add(new PointF((float)node.X, (float)node.Y));
-                        break;
+                case "Style 1":
+                default:
+                    return new PointF((float)node.X, (float)node.Y);
 
-                    case "Style 2":
-                        anchor.Add(new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2)));
-                        anchor.Add(new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2)));
-                        anchor.Add(new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2)));
-                        anchor.Add(new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2)));
-                        break;
-                }
-
-                return anchor;
+                case "Style 2":
+                    if (x > node.X && y > node.Y)
+                        return new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2));
+                    else if (x > node.X && y < node.Y)
+                        return new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2));
+                    else if (x < node.X && y > node.Y)
+                        return new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2));
+                    else
+                        return new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2));
             }
         }
 
