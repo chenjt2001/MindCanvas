@@ -27,6 +27,7 @@ namespace MindCanvas
         private string style;
         private Thickness borderThickness;
         private CornerRadius cornerRadius;
+        private Brush background;
 
         // 关于动画
         private Compositor _compositor = Window.Current.Compositor;
@@ -77,7 +78,7 @@ namespace MindCanvas
             if (ShowAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);
-                (sender as UIElement).StartAnimation(_springAnimation);
+                StartAnimation();
             }
         }
 
@@ -89,13 +90,13 @@ namespace MindCanvas
                 if (IsSelected)
                 {
                     CreateOrUpdateSpringAnimation(1.05f);
-                    (sender as UIElement).StartAnimation(_springAnimation);
+                    StartAnimation();
                 }
                 else
                 {
                     // Scale back down to 1.0
                     CreateOrUpdateSpringAnimation(1.0f);
-                    (sender as UIElement).StartAnimation(_springAnimation);
+                    StartAnimation();
                 }
             }
         }
@@ -109,7 +110,7 @@ namespace MindCanvas
             {
                 // 缩放到1.05倍
                 CreateOrUpdateSpringAnimation(1.05f);
-                StartAnimation(_springAnimation);
+                StartAnimation();
             }
         }
 
@@ -121,7 +122,7 @@ namespace MindCanvas
             if (ShowAnimation)
             {
                 CreateOrUpdateSpringAnimation(1.1f);
-                StartAnimation(_springAnimation);
+                StartAnimation();
             }
         }
 
@@ -142,7 +143,18 @@ namespace MindCanvas
         }
 
         // 背景颜色
-        public new Brush Background => new SolidColorBrush(Colors.White);
+        public new Brush Background
+        {
+            get => background;
+            set
+            {
+                if (value != this.background)
+                {
+                    background = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         // 边框颜色
         public new Brush BorderBrush
@@ -239,19 +251,25 @@ namespace MindCanvas
             {
                 if (value != this.style)
                 {
+                    IsSelected = !IsSelected;
+
                     style = value;
                     NotifyPropertyChanged();
+
+                    IsSelected = !IsSelected;
 
                     switch (this.style)
                     {
                         case "Style 1":
                             BorderThickness = new Thickness(2);
                             CornerRadius = new CornerRadius(5);
+                            Background = new SolidColorBrush(Colors.White);
                             break;
 
                         case "Style 2":
-                            BorderThickness = new Thickness(0, 0, 0, 2);
+                            BorderThickness = new Thickness(0, 0, 0, 3);
                             CornerRadius = new CornerRadius(0);
+                            Background = new SolidColorBrush(Colors.Transparent);
                             break;
                     }
                 }
@@ -274,12 +292,12 @@ namespace MindCanvas
                     if (isSelected)
                     {
                         CreateOrUpdateSpringAnimation(1.05f);
-                        StartAnimation(_springAnimation);
+                        StartAnimation();
                     }
                     else
                     {
                         CreateOrUpdateSpringAnimation(1.0f);
-                        StartAnimation(_springAnimation);
+                        StartAnimation();
                     }
                 }
             }
@@ -296,19 +314,37 @@ namespace MindCanvas
                     return new PointF((float)node.X, (float)node.Y);
 
                 case "Style 2":
-                    if (x > node.X && y > node.Y)
-                        return new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2));
-                    else if (x > node.X && y < node.Y)
-                        return new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2));
-                    else if (x < node.X && y > node.Y)
-                        return new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2));
-                    else
-                        return new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y - this.ActualHeight / 2));
+                    return x > node.X
+                        ? new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2 - 1.5f))
+                        : new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2 - 1.5f));
             }
         }
 
         public bool ShowAnimation { get; set; }
-        
+
+        private void StartAnimation()
+        {
+            switch (this.Style)
+            {
+                case "Style 1":
+                default:
+                    this.StartAnimation(_springAnimation);
+                    break;
+                case "Style 2":
+                    NodeTextBlock.StartAnimation(_springAnimation);
+                    break;
+            }
+        }
+
+        public new Vector3 CenterPoint
+        {
+            get => base.CenterPoint;
+            set
+            {
+                base.CenterPoint = value;
+                NodeTextBlock.CenterPoint = value;
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

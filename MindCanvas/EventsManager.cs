@@ -23,10 +23,6 @@ namespace MindCanvas
     public static class EventsManager
     {
         private static List<MindCanvasFileData> records = new List<MindCanvasFileData>();// 记录每次操作后的数据
-        private static MindMap mindMap;
-        private static MindCanvasFile mindCanvasFile;
-        private static MindMapCanvas mindMapCanvas;
-        private static MindMapInkCanvas mindMapInkCanvas;
         private static bool modified = false;
         private static int nowIndex;
 
@@ -35,25 +31,22 @@ namespace MindCanvas
 
         public static void SetMindMapCanvas(MindMapCanvas newMindMapCanvas)
         {
-            mindMapCanvas = newMindMapCanvas;
-
-            mindMapCanvas.MindMap = mindMap;
-            mindMapCanvas.DrawAll();
+            newMindMapCanvas.MindMap = App.mindMap;
+            newMindMapCanvas.DrawAll();
         }
 
         public static void SetMindMapInkCanvas(MindMapInkCanvas newMindMapInkCanvas)
         {
-            mindMapInkCanvas = newMindMapInkCanvas;
-            newMindMapInkCanvas.InkPresenter.StrokeContainer = mindMap.InkStrokeContainer;
+            newMindMapInkCanvas.InkPresenter.StrokeContainer = App.mindMap.InkStrokeContainer;
         }
 
         public static void Initialize()
         {
-            App.mindMap = mindMap = new MindMap();
-            App.mindCanvasFile = mindCanvasFile = new MindCanvasFile();
+            App.mindMap = new MindMap();
+            App.mindCanvasFile = new MindCanvasFile();
 
-            mindMap.Initialize();
-            mindCanvasFile.MindMap = mindMap;
+            App.mindMap.Initialize();
+            App.mindCanvasFile.MindMap = App.mindMap;
             ClearRecords();
             Record();
             modified = false;
@@ -68,29 +61,25 @@ namespace MindCanvas
             {
                 ContentDialogResult result = await Dialog.Show.AskForSave();
                 // 用户选择取消
-                if (result == ContentDialogResult.None)
-                    return false;
-
-                // 用户选择保存
-                else if (result == ContentDialogResult.Primary)
+                switch (result)
                 {
-                    if (await SaveFile())
-                    {
+                    case ContentDialogResult.None:
+                        return false;
+                    case ContentDialogResult.Primary:
+                        if (await SaveFile())
+                        {
+                            Initialize();
+                            ResetMainPageCache();
+                            RefreshAppTitle();
+                            return true;
+                        }
+                        else
+                            return false;// 用户取消了保存
+                    default:
                         Initialize();
                         ResetMainPageCache();
                         RefreshAppTitle();
                         return true;
-                    }
-                    else
-                        return false;// 用户取消了保存
-                }
-                // 用户选择不保存
-                else
-                {
-                    Initialize();
-                    ResetMainPageCache();
-                    RefreshAppTitle();
-                    return true;
                 }
             }
 
@@ -121,51 +110,44 @@ namespace MindCanvas
                 ContentDialogResult result = await Dialog.Show.AskForSave();
 
                 //用户选择取消
-                if (result == ContentDialogResult.None)
-                    return false;
-
-                // 用户选择保存
-                else if (result == ContentDialogResult.Primary)
+                switch (result)
                 {
-                    // 要保存好了才能加载
-                    if (await SaveFile())
-                    {
+                    case ContentDialogResult.None:
+                        return false;
+                    case ContentDialogResult.Primary:
+                        // 要保存好了才能加载
+                        if (await SaveFile())
+                        {
+                            ClearRecords();
+                            if (await App.mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                                return false;
+                            Record();
+                            ResetMainPageCache();
+                            RefreshAppTitle();
+                            modified = false;
+                            return true;
+                        }
+                        else
+                            return false;// 用户取消了保存
+                    case ContentDialogResult.Secondary:
                         ClearRecords();
-                        if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                        if (await App.mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
                             return false;
                         Record();
                         ResetMainPageCache();
                         RefreshAppTitle();
                         modified = false;
                         return true;
-                    }
-                    else
-                        return false;// 用户取消了保存
-                }
-
-                // 用户选择不保存，直接加载
-                else if (result == ContentDialogResult.Secondary)
-                {
-                    ClearRecords();
-                    if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                    default:
                         return false;
-                    Record();
-                    ResetMainPageCache();
-                    RefreshAppTitle();
-                    modified = false;
-                    return true;
                 }
-
-                // 额应该不存在其他情况，但必须确保一定有返回值
-                else
-                    return false;
             }
 
             // 当前文件未修改，直接打开
             else
             {
                 ClearRecords();
-                if (await mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
+                if (await App.mindCanvasFile.LoadFile(file) != MindCanvasFile.LoadFileResult.Success)
                     return false;
                 Record();
                 ResetMainPageCache();
@@ -184,22 +166,21 @@ namespace MindCanvas
                 ContentDialogResult result = await Dialog.Show.AskForSave();
 
                 //用户选择取消
-                if (result == ContentDialogResult.None)
-                    return;
-
-                // 用户选择保存
-                else if (result == ContentDialogResult.Primary)
+                switch (result)
                 {
-                    // 要保存好了才能退出
-                    if (await SaveFile())
+                    case ContentDialogResult.None:
+                        return;
+                    case ContentDialogResult.Primary:
+                        // 要保存好了才能退出
+                        if (await SaveFile())
+                            Application.Current.Exit();
+                        else
+                            return;// 用户取消了保存
+                        break;
+                    case ContentDialogResult.Secondary:
                         Application.Current.Exit();
-                    else
-                        return;// 用户取消了保存
+                        break;
                 }
-
-                // 用户选择不保存，直接退出
-                else if (result == ContentDialogResult.Secondary)
-                    Application.Current.Exit();
             }
 
             // 当前文件未修改，直接退出
@@ -219,9 +200,9 @@ namespace MindCanvas
         {
             LogHelper.Info("SaveFile");
 
-            if (mindCanvasFile.File != null)
+            if (App.mindCanvasFile.File != null)
             {
-                await mindCanvasFile.SaveFile();
+                await App.mindCanvasFile.SaveFile();
                 ResetMainPageCache();
                 modified = false;
                 return true;
@@ -243,8 +224,8 @@ namespace MindCanvas
 
                 if (file != null)
                 {
-                    mindCanvasFile.File = file;
-                    await mindCanvasFile.SaveFile();
+                    App.mindCanvasFile.File = file;
+                    await App.mindCanvasFile.SaveFile();
                     RefreshAppTitle();
                     ResetMainPageCache();
                     modified = false;
@@ -258,23 +239,23 @@ namespace MindCanvas
         // 修改点的名称和描述
         public static void ModifyNode(Node node, string newName, string newDescription)
         {
-            NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
+            NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
 
             border.Text = newName;
 
-            mindMap.ModifyNode(node.Id, newName, newDescription);
+            App.mindMap.ModifyNode(node.Id, newName, newDescription);
             Record();
         }
 
         // 修改点的坐标
         public static void ModifyNode(Node node, double x, double y)
         {
-            mindMap.ModifyNode(node.Id, x, y);
+            App.mindMap.ModifyNode(node.Id, x, y);
 
-            NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
-            Canvas.SetTop(border, mindMapCanvas.Height / 2 + y - border.ActualHeight / 2);
-            Canvas.SetLeft(border, mindMapCanvas.Width / 2 + x - border.ActualWidth / 2);
-            mindMapCanvas.ReDrawTies(node);
+            NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
+            Canvas.SetTop(border, MainPage.mindMapCanvas.Height / 2 + y - border.ActualHeight / 2);
+            Canvas.SetLeft(border, MainPage.mindMapCanvas.Width / 2 + x - border.ActualWidth / 2);
+            MainPage.mindMapCanvas.ReDrawTies(node);
 
             Record();
         }
@@ -282,7 +263,7 @@ namespace MindCanvas
         // 修改点的边框颜色
         public static void ModifyNodeBorderBrushColor(Node node, Color? borderBrushColor)
         {
-            NodeControl border = mindMapCanvas.ConvertNodeToBorder(node);
+            NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
             if (borderBrushColor != null)
             {
                 SolidColorBrush borderBrush = new SolidColorBrush(borderBrushColor.Value);
@@ -292,7 +273,7 @@ namespace MindCanvas
             else
             {
                 node.BorderBrush = null;
-                border.BorderBrush = mindMap.DefaultNodeBorderBrush;
+                border.BorderBrush = App.mindMap.DefaultNodeBorderBrush;
             }
 
             Record();
@@ -301,14 +282,14 @@ namespace MindCanvas
         // 修改点的字体大小
         public static void ModifyNodeNameFontSize(Node node, double? nameFontSize)
         {
-            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
+            NodeControl nodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
 
             node.NameFontSize = nameFontSize;
 
             if (nameFontSize != null)
                 nodeControl.FontSize = nameFontSize.Value;
             else
-                nodeControl.FontSize = mindMap.DefaultNodeNameFontSize;
+                nodeControl.FontSize = App.mindMap.DefaultNodeNameFontSize;
 
             Record();
         }
@@ -316,11 +297,16 @@ namespace MindCanvas
         // 修改点的样式
         public static void ModifyNodeStyle(Node node, string style)
         {
-            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
+            NodeControl nodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
 
             node.Style = style;
             nodeControl.Style = style;
-            
+
+            foreach (Tie tie in App.mindMap.GetTies(node))
+            {
+                MainPage.mindMapCanvas.ReDraw(tie);
+                MainPage.mainPage.ConfigTiesPath(new List<Tie> { tie });
+            }
 
 
             Record();
@@ -329,7 +315,7 @@ namespace MindCanvas
         // 修改线的描述
         public static void ModifyTie(Tie tie, string newDescription)
         {
-            mindMap.ModifyTie(tie.Id, newDescription);
+            App.mindMap.ModifyTie(tie.Id, newDescription);
             Record();
         }
 
@@ -338,8 +324,8 @@ namespace MindCanvas
         {
             LogHelper.Info("AddNode");
 
-            Node newNode = mindMap.AddNode(name, description);
-            mindMapCanvas.Draw(newNode);
+            Node newNode = App.mindMap.AddNode(name, description);
+            MainPage.mindMapCanvas.Draw(newNode);
             Record();
             return newNode;
         }
@@ -349,8 +335,8 @@ namespace MindCanvas
         {
             LogHelper.Info("AddTie");
 
-            Tie newTie = mindMap.AddTie(node1.Id, node2.Id, description);
-            mindMapCanvas.Draw(newTie);
+            Tie newTie = App.mindMap.AddTie(node1.Id, node2.Id, description);
+            MainPage.mindMapCanvas.Draw(newTie);
             Record();
             return newTie;
         }
@@ -358,57 +344,58 @@ namespace MindCanvas
         // 删除点
         public static void RemoveNode(Node node)
         {
-            foreach (Tie tie in mindMap.GetTies(node))
-                mindMapCanvas.Clear(tie);
+            foreach (Tie tie in App.mindMap.GetTies(node))
+                MainPage.mindMapCanvas.Clear(tie);
 
-            mindMap.RemoveNode(node);
-            mindMapCanvas.Clear(node);
+            App.mindMap.RemoveNode(node);
+            MainPage.mindMapCanvas.Clear(node);
             Record();
         }
 
         // 删除所有点
         public static void RemoveAllNodes()
         {
-            if (mindMap.Nodes.Count() == 0)
+            if (App.mindMap.Nodes.Count() == 0)
                 return;
 
-            mindMap.Ties.Clear();
-            mindMap.Nodes.Clear();
-            mindMapCanvas.ReDraw();
+            App.mindMap.Ties.Clear();
+            App.mindMap.Nodes.Clear();
+            MainPage.mindMapCanvas.ReDraw();
             Record();
         }
 
         // 删除线
         public static void RemoveTie(Tie tie)
         {
-            mindMap.RemoveTie(tie);
-            mindMapCanvas.Clear(tie);
+            App.mindMap.RemoveTie(tie);
+            MainPage.mindMapCanvas.Clear(tie);
             Record();
         }
 
         // 删除所有线
         public static void RemoveAllTies()
         {
-            if (mindMap.Ties.Count() == 0)
+            if (App.mindMap.Ties.Count() == 0)
                 return;
 
-            mindMap.Ties.Clear();
-            mindMapCanvas.ReDraw();
+            App.mindMap.Ties.Clear();
+            MainPage.mindMapCanvas.ReDraw();
             Record();
         }
 
         // 修改墨迹
         public static void ModifyInkCanvas(InkStrokeContainer newInkStrokeContainer)
         {
-            mindMap.InkStrokeContainer = newInkStrokeContainer;
+            App.mindMap.InkStrokeContainer = newInkStrokeContainer;
             Record();
         }
 
         // 修改默认值
-        public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor, double defaultNodeNameFontSize)
+        public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor, double defaultNodeNameFontSize, string defaultNodeStyle)
         {
             App.mindMap.DefaultNodeBorderBrush = new SolidColorBrush(defaultNodeBorderBrushColor);
             App.mindMap.DefaultNodeNameFontSize = defaultNodeNameFontSize;
+            App.mindMap.DefaultNodeStyle = defaultNodeStyle;
             Record();
         }
 
@@ -439,7 +426,7 @@ namespace MindCanvas
             sw.Stop();
             LogHelper.Debug(sw.Elapsed);
 
-            mindMapCanvas.ReDraw();
+            MainPage.mindMapCanvas.ReDraw();
             Record();
 
             LoadingHelper.HideLoading();
@@ -456,7 +443,7 @@ namespace MindCanvas
                 List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
                 List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
 
-                childrenNode = mindMap.GetNodes(parentNode);
+                childrenNode = App.mindMap.GetNodes(parentNode);
                 if (childrenNode.Count == 0)
                     return false;
 
@@ -518,26 +505,20 @@ namespace MindCanvas
             MindCanvasFileData lastData = DeepCopy(records[--nowIndex]);
 
             // 视觉数据不变
-            lastData.VisualCenterX = mindMap.VisualCenterX;
-            lastData.VisualCenterY = mindMap.VisualCenterY;
-            lastData.ZoomFactor = mindMap.ZoomFactor;
+            lastData.VisualCenterX = App.mindMap.VisualCenterX;
+            lastData.VisualCenterY = App.mindMap.VisualCenterY;
+            lastData.ZoomFactor = App.mindMap.ZoomFactor;
 
-            mindMap.LoadData(lastData);
-            mindMapCanvas.ShowAnimation = false;
-            mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
-            mindMapInkCanvas.InkPresenter.StrokeContainer = lastData.InkStrokeContainer;// 墨迹
-            mindMapCanvas.ShowAnimation = true;
+            App.mindMap.LoadData(lastData);
+            MainPage.mindMapCanvas.ShowAnimation = false;
+            MainPage.mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
+            MainPage.mindMapInkCanvas.InkPresenter.StrokeContainer = lastData.InkStrokeContainer;// 墨迹
+            MainPage.mindMapCanvas.ShowAnimation = true;
             modified = true;
         }
 
         // 判断能否撤销
-        public static bool CanUndo
-        {
-            get
-            {
-                return nowIndex > 0;
-            }
-        }
+        public static bool CanUndo => nowIndex > 0;
 
         // 重做
         public static void Redo()
@@ -545,26 +526,20 @@ namespace MindCanvas
             MindCanvasFileData nextData = DeepCopy(records[++nowIndex]);
 
             // 视觉数据不变
-            nextData.VisualCenterX = mindMap.VisualCenterX;
-            nextData.VisualCenterY = mindMap.VisualCenterY;
-            nextData.ZoomFactor = mindMap.ZoomFactor;
+            nextData.VisualCenterX = App.mindMap.VisualCenterX;
+            nextData.VisualCenterY = App.mindMap.VisualCenterY;
+            nextData.ZoomFactor = App.mindMap.ZoomFactor;
 
-            mindMap.LoadData(nextData);
-            mindMapCanvas.ShowAnimation = false;
-            mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
-            mindMapInkCanvas.InkPresenter.StrokeContainer = nextData.InkStrokeContainer;// 墨迹
-            mindMapCanvas.ShowAnimation = true;
+            App.mindMap.LoadData(nextData);
+            MainPage.mindMapCanvas.ShowAnimation = false;
+            MainPage.mindMapCanvas.ReDraw();// 因为mindMapCanvas已与mindMap绑定，所以只需ReDraw刷新即可
+            MainPage.mindMapInkCanvas.InkPresenter.StrokeContainer = nextData.InkStrokeContainer;// 墨迹
+            MainPage.mindMapCanvas.ShowAnimation = true;
             modified = true;
         }
 
         // 判断能否重做
-        public static bool CanRedo
-        {
-            get
-            {
-                return records.Count() > nowIndex + 1;
-            }
-        }
+        public static bool CanRedo => records.Count() > nowIndex + 1;
 
         // 记录一下
         private static void Record()
@@ -574,7 +549,7 @@ namespace MindCanvas
             // 如果能撤消，说明没在最后一项操作
             if (CanRedo)
                 records.RemoveRange(nowIndex + 1, records.Count() - (nowIndex + 1));
-            records.Add(DeepCopy(mindMap.GetData()));
+            records.Add(DeepCopy(App.mindMap.GetData()));
             nowIndex++;
             modified = true;
         }
@@ -599,7 +574,7 @@ namespace MindCanvas
         // 刷新标题
         private static void RefreshAppTitle()
         {
-            string fileName = mindCanvasFile.File?.DisplayName ?? "无标题";
+            string fileName = App.mindCanvasFile.File?.DisplayName ?? "无标题";
             AppTitleBarControl.SetFileName(fileName);
         }
 

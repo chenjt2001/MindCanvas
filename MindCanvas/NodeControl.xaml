@@ -16,6 +16,7 @@
         Padding="{x:Bind Padding, Mode=OneWay}"
         CornerRadius="{x:Bind CornerRadius, Mode=OneWay}">
         <TextBlock
+            x:Name="NodeTextBlock"
             Text="{x:Bind Text, Mode=OneWay}"
             FontSize="{x:Bind FontSize, Mode=OneWay}"
             Foreground="{x:Bind Foreground, Mode=OneWay}">

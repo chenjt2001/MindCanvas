@@ -79,7 +79,14 @@ namespace MindCanvas
             Node node1 = nodes[0];
             Node node2 = nodes[1];
 
-            Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + node1.X, Height / 2 + node1.Y, Width / 2 + node2.X, Height / 2 + node2.Y);
+            NodeControl NodeControl1 = ConvertNodeToBorder(node1);
+            NodeControl NodeControl2 = ConvertNodeToBorder(node2);
+
+            System.Drawing.PointF point1 = NodeControl1.GetAnchor(node2.X, node2.Y);
+            System.Drawing.PointF point2 = NodeControl2.GetAnchor(node1.X, node1.Y);
+
+            //Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + node1.X, Height / 2 + node1.Y, Width / 2 + node2.X, Height / 2 + node2.Y);
+            Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + point1.X, Height / 2 + point1.Y, Width / 2 + point2.X, Height / 2 + point2.Y);
 
             SetZIndex(path, -10000);// 确保线在点下面
             Children.Add(path);

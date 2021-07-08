@@ -514,4 +514,10 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   <data name="EditNodePage_UseDefaultValue.Header" xml:space="preserve">
     <value>使用默認值</value>
   </data>
+  <data name="DefaultSettingsPage_TheDefaultStyleOfTheNode.Text" xml:space="preserve">
+    <value>點的默認樣式</value>
+  </data>
+  <data name="DefaultSettingsPage_Back.ToolTipService.ToolTip" xml:space="preserve">
+    <value>後退</value>
+  </data>
 </root>

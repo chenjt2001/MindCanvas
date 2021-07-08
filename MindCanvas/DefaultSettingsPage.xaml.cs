@@ -14,8 +14,12 @@ namespace MindCanvas
         public DefaultSettingsPage()
         {
             this.InitializeComponent();
-            BorderBrushColorPicker.Color = App.mindMap.DefaultNodeBorderBrush.Color;
-            FontSizeNumberBox.Value = App.mindMap.DefaultNodeNameFontSize;
+            BorderBrushColorPicker.Color = App.mindMap.DefaultNodeBorderBrush.Color;// 点的默认颜色
+            FontSizeNumberBox.Value = App.mindMap.DefaultNodeNameFontSize;// 点的默认大小
+            // 点的默认样式
+            foreach (RadioButton radioButton in StyleRadioButtons.Items)
+                if (radioButton.Tag.ToString() == App.mindMap.DefaultNodeStyle)
+                    StyleRadioButtons.SelectedItem = radioButton;
         }
 
         // 取消
@@ -27,7 +31,7 @@ namespace MindCanvas
         // 保存
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color, FontSizeNumberBox.Value);
+            Save();
             On_BackRequested();
         }
 
@@ -42,32 +46,35 @@ namespace MindCanvas
         {
             BorderBrushColorPicker.Color = InitialValues.NodeBorderBrushColor;
             FontSizeNumberBox.Value = InitialValues.NodeNameFontSize;
+            // 点的默认样式
+            foreach (RadioButton radioButton in StyleRadioButtons.Items)
+                if (radioButton.Tag.ToString() == App.mindMap.DefaultNodeStyle)
+                    StyleRadioButtons.SelectedItem = radioButton;
+
+            LogHelper.Debug(StyleRadioButtons.SelectedItem);
         }
 
         // 返回
         private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
             // 默认设置已修改
-            if (BorderBrushColorPicker.Color != App.mindMap.DefaultNodeBorderBrush.Color ||
-                FontSizeNumberBox.Value != App.mindMap.DefaultNodeNameFontSize)
+            if (BorderBrushColorPicker.Color != App.mindMap.DefaultNodeBorderBrush.Color
+                || FontSizeNumberBox.Value != App.mindMap.DefaultNodeNameFontSize
+                || (StyleRadioButtons.SelectedItem as RadioButton).Tag.ToString() != App.mindMap.DefaultNodeStyle)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSaveSettings();
                 //用户选择取消
-                if (result == ContentDialogResult.None)
-                    return;
-
-                // 用户选择保存
-                if (result == ContentDialogResult.Primary)
+                switch (result)
                 {
-                    EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color, FontSizeNumberBox.Value);
-                    On_BackRequested();
-                }
-
-                // 用户选择不保存，直接返回
-                else if (result == ContentDialogResult.Secondary)
-                {
-                    On_BackRequested();
+                    case ContentDialogResult.None:
+                        return;
+                    case ContentDialogResult.Primary:
+                        Save();
+                        On_BackRequested();
+                        break;
+                    case ContentDialogResult.Secondary:
+                        On_BackRequested();
+                        break;
                 }
             }
 
@@ -76,12 +83,18 @@ namespace MindCanvas
                 On_BackRequested();
         }
 
+        // 保存
+        private void Save()
+        {
+            EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color,
+                                                FontSizeNumberBox.Value,
+                                                (StyleRadioButtons.SelectedItem as RadioButton).Tag.ToString());
+        }
+
         private void FontSizeNumberBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
         {
             if (double.IsNaN(FontSizeNumberBox.Value))
-            {
                 FontSizeNumberBox.Value = App.mindMap.DefaultNodeNameFontSize;
-            }
         }
     }
 }

@@ -514,4 +514,10 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   <data name="EditNodePage_UseDefaultValue.Header" xml:space="preserve">
     <value>Use default value</value>
   </data>
+  <data name="DefaultSettingsPage_TheDefaultStyleOfTheNode.Text" xml:space="preserve">
+    <value>The default style of the node</value>
+  </data>
+  <data name="DefaultSettingsPage_Back.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Back</value>
+  </data>
 </root>

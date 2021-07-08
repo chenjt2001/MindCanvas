@@ -29,8 +29,8 @@
             </Grid.RowDefinitions>
             <Button x:Name="BackButton"
                 Style="{StaticResource NavigationBackButtonNormalStyle}"
-                IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}" 
-                ToolTipService.ToolTip="后退"
+                IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}"
+                x:Uid="DefaultSettingsPage_Back"
                 Click="BackButton_Click"/>
             
             
@@ -60,6 +60,12 @@
                         Maximum="100"
                         SpinButtonPlacementMode="Inline" 
                         ValueChanged="FontSizeNumberBox_ValueChanged"/>
+
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" x:Uid="DefaultSettingsPage_TheDefaultStyleOfTheNode" />
+                    <muxc:RadioButtons Margin="0,10,0,0" x:Name="StyleRadioButtons">
+                        <RadioButton Tag="Style 1" Content="样式 1"/>
+                        <RadioButton Tag="Style 2" Content="样式 2"/>
+                    </muxc:RadioButtons>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
                     <Button x:Name="InitializeBtn" Margin="0,20,0,0" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_RestoreInitialValue" FontSize="15" Width="150" Click="InitializeBtn_Click"/>

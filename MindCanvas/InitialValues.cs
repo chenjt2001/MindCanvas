@@ -1,5 +1,4 @@
 ﻿using Windows.UI;
-using Windows.UI.Xaml;
 
 namespace MindCanvas
 {

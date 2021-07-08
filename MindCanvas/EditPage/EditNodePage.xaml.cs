@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -58,6 +55,10 @@ namespace MindCanvas.EditPage
 
             // 样式
             UseDefaultStyleToggleSwitch.IsOn = node.Style == null;
+
+            UseDefaultBorderBrushToggleSwitch_Toggled(UseDefaultBorderBrushToggleSwitch, null);
+            UseDefaultFontSizeToggleSwitch_Toggled(UseDefaultFontSizeToggleSwitch, null);
+            UseDefaultStyleToggleSwitch_Toggled(UseDefaultStyleToggleSwitch, null);
         }
 
         // 删除点
@@ -224,7 +225,7 @@ namespace MindCanvas.EditPage
         private void UseDefaultStyleToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             StyleRadioButtons.Visibility = UseDefaultStyleToggleSwitch.IsOn ? Visibility.Collapsed : Visibility.Visible;
-            
+
             // 默认样式
             if (UseDefaultStyleToggleSwitch.IsOn)
             {
@@ -240,14 +241,18 @@ namespace MindCanvas.EditPage
             {
                 foreach (RadioButton radioButton in StyleRadioButtons.Items)
                     if (radioButton.Tag.ToString() == border.Style)
-                        radioButton.IsChecked = true;
+                        StyleRadioButtons.SelectedItem = radioButton;
             }
         }
 
         private void StyleRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            EventsManager.ModifyNodeStyle(node, (sender as RadioButton).Tag.ToString());
-            mainPage.RefreshUnRedoBtn();
+            string tag = (sender as RadioButton).Tag.ToString();
+            if (node.Style != tag)
+            {
+                EventsManager.ModifyNodeStyle(node, (sender as RadioButton).Tag.ToString());
+                mainPage.RefreshUnRedoBtn();
+            }
         }
     }
 }
