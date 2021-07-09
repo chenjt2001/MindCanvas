@@ -56,16 +56,8 @@ namespace MindCanvas
             nodeIdBorder[node.Id] = nodeControl;
             Children.Add(nodeControl);
 
-            // 在UpdateLayout前获取大小
-            nodeControl.Measure(new Size(Double.MaxValue, Double.MaxValue));
-            Size visualSize = nodeControl.DesiredSize;
-            nodeControl.Arrange(new Rect(new Point(0, 0), visualSize));
+            Size visualSize = nodeControl.GetVisualSize();
 
-            nodeControl.CenterPoint = new System.Numerics.Vector3
-            {
-                X = (float)(visualSize.Width / 2),
-                Y = (float)(visualSize.Height / 2),
-            };
             SetTop(nodeControl, this.Height / 2 + node.Y - visualSize.Height / 2);
             SetLeft(nodeControl, this.Width / 2 + node.X - visualSize.Width / 2);
             nodeControl.UpdateLayout();
@@ -79,14 +71,10 @@ namespace MindCanvas
             Node node1 = nodes[0];
             Node node2 = nodes[1];
 
-            NodeControl NodeControl1 = ConvertNodeToBorder(node1);
-            NodeControl NodeControl2 = ConvertNodeToBorder(node2);
+            NodeControl nodeControl1 = ConvertNodeToBorder(node1);
+            NodeControl nodeControl2 = ConvertNodeToBorder(node2);
 
-            System.Drawing.PointF point1 = NodeControl1.GetAnchor(node2.X, node2.Y);
-            System.Drawing.PointF point2 = NodeControl2.GetAnchor(node1.X, node1.Y);
-
-            //Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + node1.X, Height / 2 + node1.Y, Width / 2 + node2.X, Height / 2 + node2.Y);
-            Windows.UI.Xaml.Shapes.Path path = PathHelper.NewPath(Width / 2 + point1.X, Height / 2 + point1.Y, Width / 2 + point2.X, Height / 2 + point2.Y);
+            Windows.UI.Xaml.Shapes.Path path = NodeControl.GetPathInCanvas(nodeControl1, nodeControl2);
 
             SetZIndex(path, -10000);// 确保线在点下面
             Children.Add(path);

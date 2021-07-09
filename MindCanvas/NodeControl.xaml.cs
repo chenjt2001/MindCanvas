@@ -68,6 +68,18 @@ namespace MindCanvas
             PointerPressed += NodeControl_PointerPressed;// 鼠标按下
             PointerReleased += NodeControl_PointerReleased;// 鼠标释放
             PointerExited += NodeControl_PointerExited;// 鼠标退出
+            Loaded += NodeControl_Loaded;
+        }
+
+        private void NodeControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // 初始化CenterPoint
+            Windows.Foundation.Size visualSize = GetVisualSize();
+            CenterPoint = new Vector3
+            {
+                X = (float)(visualSize.Width / 2),
+                Y = (float)(visualSize.Height / 2),
+            };
         }
 
         // 鼠标释放
@@ -251,12 +263,18 @@ namespace MindCanvas
             {
                 if (value != this.style)
                 {
-                    IsSelected = !IsSelected;
-
+                    bool needBeSelected = false;
+                    if (IsSelected)
+                    {
+                        IsSelected = false;
+                        needBeSelected = true;
+                    }
+                                              
                     style = value;
                     NotifyPropertyChanged();
 
-                    IsSelected = !IsSelected;
+                    if (needBeSelected)
+                        IsSelected = true;
 
                     switch (this.style)
                     {
@@ -303,23 +321,6 @@ namespace MindCanvas
             }
         }
 
-        // 锚点（线连着的地方）
-        public PointF GetAnchor(double x, double y)
-        {
-            List<PointF> anchor = new List<PointF>();
-            switch (Style)
-            {
-                case "Style 1":
-                default:
-                    return new PointF((float)node.X, (float)node.Y);
-
-                case "Style 2":
-                    return x > node.X
-                        ? new PointF((float)(node.X + this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2 - 1.5f))
-                        : new PointF((float)(node.X - this.ActualWidth / 2), (float)(node.Y + this.ActualHeight / 2 - 1.5f));
-            }
-        }
-
         public bool ShowAnimation { get; set; }
 
         private void StartAnimation()
@@ -344,6 +345,63 @@ namespace MindCanvas
                 base.CenterPoint = value;
                 NodeTextBlock.CenterPoint = value;
             }
+        }
+
+        public Windows.Foundation.Size GetVisualSize()
+        {
+            // 在UpdateLayout前获取大小
+            this.Measure(new Windows.Foundation.Size(double.MaxValue, double.MaxValue));
+            Windows.Foundation.Size visualSize = this.DesiredSize;
+            this.Arrange(new Windows.Foundation.Rect(new Windows.Foundation.Point(0, 0), visualSize));
+            return visualSize;
+        }
+
+        // 锚点（线连着的地方）
+        public static Windows.Foundation.Point GetAnchorInCanvas(NodeControl nodeControl, double anotherX, double anotherY)
+        {
+            Windows.Foundation.Size visualSize = nodeControl.GetVisualSize();
+            
+            double x, y;
+            double left = Canvas.GetLeft(nodeControl);
+            double top = Canvas.GetTop(nodeControl);
+
+            switch (nodeControl.Style)
+            {
+                case "Style 1":
+                default:
+                    x = left + visualSize.Width / 2;
+                    y = top + visualSize.Height / 2;
+                    break;
+
+                case "Style 2":
+                    x = anotherX > left + visualSize.Width / 2 ? left + visualSize.Width : left;
+                    y = top + visualSize.Height - 1.5;
+                    break;
+            }
+            return new Windows.Foundation.Point(x, y);
+        }
+
+        public static Windows.UI.Xaml.Shapes.Path GetPathInCanvas(NodeControl nodeControl1, NodeControl nodeControl2)
+        {
+            Canvas canvas = nodeControl1.Parent as Canvas;
+
+            Windows.Foundation.Point anchor1 = GetAnchorInCanvas(nodeControl1, canvas.Width / 2 + nodeControl2.node.X, canvas.Height / 2 + nodeControl2.node.Y);
+            Windows.Foundation.Point anchor2 = GetAnchorInCanvas(nodeControl2, canvas.Width / 2 + nodeControl1.node.X, canvas.Height / 2 + nodeControl1.node.Y);
+
+            return PathHelper.NewPath(anchor1.X, anchor1.Y, anchor2.X, anchor2.Y);
+        }
+
+        public static void ModifyPathInCanvas(Windows.UI.Xaml.Shapes.Path path, NodeControl nodeControl1, NodeControl nodeControl2)
+        {
+            double left1 = Canvas.GetLeft(nodeControl1);
+            double left2 = Canvas.GetLeft(nodeControl2);
+            double top1 = Canvas.GetTop(nodeControl1);
+            double top2 = Canvas.GetTop(nodeControl2);
+
+            Windows.Foundation.Point anchor1 = GetAnchorInCanvas(nodeControl1, left2 + nodeControl2.ActualWidth / 2, top2 + nodeControl2.ActualHeight / 2);
+            Windows.Foundation.Point anchor2 = GetAnchorInCanvas(nodeControl2, left1 + nodeControl1.ActualWidth / 2, top1 + nodeControl1.ActualHeight / 2);
+
+            PathHelper.ModifyPath(path, anchor1.X, anchor1.Y, anchor2.X, anchor2.Y);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

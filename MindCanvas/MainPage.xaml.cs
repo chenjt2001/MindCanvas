@@ -333,16 +333,9 @@ namespace MindCanvas
                 Canvas.SetLeft(border, newLeft);
                 Canvas.SetTop(border, newTop);
 
-                var newX = newLeft + border.ActualWidth / 2 - mindMapCanvas.Width / 2;
-                var newY = newTop + border.ActualHeight / 2 - mindMapCanvas.Height / 2;
-
                 // 保持线连着点
-                double _newX, _newY;
                 foreach (Tie tie in App.mindMap.GetTies(nowPressedNode))
                 {
-                    _newX = newX;
-                    _newY = newY;
-
                     List<Node> nodes = App.mindMap.GetNodes(tie);
                     Node anotherNode;
                     if (nodes[0] != nowPressedNode)
@@ -350,27 +343,9 @@ namespace MindCanvas
                     else
                         anotherNode = nodes[1];
 
-                    System.Drawing.PointF anotherPoint = mindMapCanvas.ConvertNodeToBorder(anotherNode).GetAnchor(_newX, _newY);
-
-                    switch (border.Style)
-                    {
-                        case "Style 1":
-                            break;
-                        case "Style 2":
-                            if (anotherNode.X > newX)
-                                _newX += border.ActualWidth / 2;
-                            else
-                                _newX -= border.ActualWidth / 2;
-
-                            _newY += border.ActualHeight / 2 - 1.5;
-                            break;
-                    }
-
-                    PathHelper.ModifyPath(mindMapCanvas.ConvertTieToPath(tie),
-                                          _newX + mindMapCanvas.Width / 2,
-                                          _newY + mindMapCanvas.Height / 2,
-                                          mindMapCanvas.Width / 2 + anotherPoint.X,
-                                          mindMapCanvas.Height / 2 + anotherPoint.Y);
+                    NodeControl.ModifyPathInCanvas(mindMapCanvas.ConvertTieToPath(tie),
+                                                   border,
+                                                   mindMapCanvas.ConvertNodeToBorder(anotherNode));
                 }
 
                 isMovingNode = true;
