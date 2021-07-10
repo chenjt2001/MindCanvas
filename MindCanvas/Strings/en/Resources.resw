@@ -520,4 +520,64 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   <data name="DefaultSettingsPage_Back.ToolTipService.ToolTip" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="Code_EncryptPage1" xml:space="preserve">
+    <value>Failed to modify the password, the two passwords are not consistent!</value>
+  </data>
+  <data name="Code_EncryptPage2" xml:space="preserve">
+    <value>Password has been changed</value>
+  </data>
+  <data name="Code_EncryptPage3" xml:space="preserve">
+    <value>Failed to modify the password, the old password is wrong!</value>
+  </data>
+  <data name="Code_EncryptPage4" xml:space="preserve">
+    <value>Failed to set the password, the two passwords are inconsistent!</value>
+  </data>
+  <data name="Code_EncryptPage5" xml:space="preserve">
+    <value>Password has been set</value>
+  </data>
+  <data name="Code_EncryptPage6" xml:space="preserve">
+    <value>Passwordhas been closed</value>
+  </data>
+  <data name="Code_EncryptPage7" xml:space="preserve">
+    <value>Failed to close the password, the password is wrong!</value>
+  </data>
+  <data name="Code_FileOpeningFailedPasswordError" xml:space="preserve">
+    <value>File opening failed, password error!</value>
+  </data>
+  <data name="Code_FinishTidying" xml:space="preserve">
+    <value>Finish tidying</value>
+  </data>
+  <data name="Code_Tidy" xml:space="preserve">
+    <value>Tidy</value>
+  </data>
+  <data name="Code_Tidying" xml:space="preserve">
+    <value>Tidying...</value>
+  </data>
+  <data name="DefaultSettingsPage_Style1.Content" xml:space="preserve">
+    <value>Style 1</value>
+  </data>
+  <data name="DefaultSettingsPage_Style2.Content" xml:space="preserve">
+    <value>Style 2</value>
+  </data>
+  <data name="EditNodePage_Style.Text" xml:space="preserve">
+    <value>Style</value>
+  </data>
+  <data name="EditNodePage_Style1.Content" xml:space="preserve">
+    <value>Style 1</value>
+  </data>
+  <data name="EditNodePage_Style2.Content" xml:space="preserve">
+    <value>Style 2</value>
+  </data>
+  <data name="Code_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Code_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Code_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Code_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
 </root>

@@ -72,6 +72,7 @@ namespace MindCanvas
         {
             RefreshUnRedoBtn();
             RefreshTheme();
+            EventsManager.RefreshAppTitle();
 
             InkToolToggleSwitch.IsOn = false;
             MindMapInkToolbar.IsStencilButtonChecked = false;
@@ -124,7 +125,7 @@ namespace MindCanvas
         {
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
-            MenuFlyoutItem item1 = contextMenuFlyout.AddItem("整理",
+            MenuFlyoutItem item1 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Tidy"),// 整理
                                                             VirtualKey.T,
                                                             VirtualKeyModifiers.None,
                                                             "\xE8CB");

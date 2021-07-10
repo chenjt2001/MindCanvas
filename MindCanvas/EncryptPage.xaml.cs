@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -11,6 +12,9 @@ namespace MindCanvas
     /// </summary>
     public sealed partial class EncryptPage : Page
     {
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
         public EncryptPage()
         {
             this.InitializeComponent();
@@ -27,13 +31,13 @@ namespace MindCanvas
                 return;
 
             if (result[1] != result[2])
-                InfoHelper.ShowInfoBar("修改密码失败，两次密码不一致！", InfoBarSeverity.Error);
+                InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage1"), InfoBarSeverity.Error);// 修改密码失败，两次密码不一致！
             else
             {
-                if (App.mindCanvasFile.SetPassword(result[0], result[1]))
-                    InfoHelper.ShowInfoBar("密码已修改", InfoBarSeverity.Success);
+                if (await App.mindCanvasFile.SetPassword(result[0], result[1]))
+                    InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage2"), InfoBarSeverity.Success);// 密码已修改
                 else
-                    InfoHelper.ShowInfoBar("修改密码失败，旧密码错误！", InfoBarSeverity.Error);
+                    InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage3"), InfoBarSeverity.Error);// 修改密码失败，旧密码错误！
             }
         }
 
@@ -51,13 +55,13 @@ namespace MindCanvas
 
                 if (result[0] != result[1])
                 {
-                    InfoHelper.ShowInfoBar("设置密码失败，两次密码不一致！", InfoBarSeverity.Error);
+                    InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage4"), InfoBarSeverity.Error);// 设置密码失败，两次密码不一致！
                     ToggleEnableEncryptionToggleSwitch(false);
                 }
                 else
                 {
-                    if (App.mindCanvasFile.SetPassword(null, result[0]))
-                        InfoHelper.ShowInfoBar("密码已设置", InfoBarSeverity.Success);
+                    if (await App.mindCanvasFile.SetPassword(null, result[0]))
+                        InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage5"), InfoBarSeverity.Success);// 密码已设置
                 }
             }
 
@@ -71,11 +75,11 @@ namespace MindCanvas
                     return;
                 }
 
-                if (App.mindCanvasFile.SetPassword(result[0], null))
-                    InfoHelper.ShowInfoBar("密码已关闭", InfoBarSeverity.Success);
+                if (await App.mindCanvasFile.SetPassword(result[0], null))
+                    InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage6"), InfoBarSeverity.Success);// 密码已关闭
                 else
                 {
-                    InfoHelper.ShowInfoBar("关闭密码失败，密码错误！", InfoBarSeverity.Error);
+                    InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_EncryptPage7"), InfoBarSeverity.Error);// 关闭密码失败，密码错误！
                     ToggleEnableEncryptionToggleSwitch(true);
                 }
             }

@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Streams;
@@ -14,6 +15,9 @@ namespace MindCanvas
     public class MindCanvasFile
     {
         public enum LoadFileResult { Success, VerificationFailed, UnknownError, UserInterrupt };
+
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         private MindMap mindMap;
         private StorageFile file;
@@ -76,7 +80,8 @@ namespace MindCanvas
                             }
                             catch (CryptographicException)
                             {
-                                InfoHelper.ShowInfoBar("文件打开失败，密码错误！", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Error);
+                                string s = resourceLoader.GetString("Code_FileOpeningFailedPasswordError");// 文件打开失败，密码错误！
+                                InfoHelper.ShowInfoBar(s, Microsoft.UI.Xaml.Controls.InfoBarSeverity.Error);
                                 return LoadFileResult.VerificationFailed;
                             }
 
@@ -110,7 +115,7 @@ namespace MindCanvas
         }
 
         // 设置密码
-        public bool SetPassword(string oldPassword, string newPassword)
+        public async Task<bool> SetPassword(string oldPassword, string newPassword)
         {
             if (oldPassword == this.password)
             {
@@ -119,6 +124,10 @@ namespace MindCanvas
                     isEncrypted = true;
                 else
                     isEncrypted = false;
+
+                if (file != null)
+                    await SaveFile();
+
                 return true;
             }
 

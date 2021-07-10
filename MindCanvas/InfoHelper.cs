@@ -1,29 +1,33 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace MindCanvas
 {
-    static class InfoHelper
+    public static class InfoHelper
     {
+        // 资源加载器，用于翻译
+        private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
         public static InfoBar GetInfoBar(string message, InfoBarSeverity severity = InfoBarSeverity.Informational)
         {
             string title;
             switch (severity)
             {
                 case InfoBarSeverity.Error:
-                    title = "错误";
+                    title = resourceLoader.GetString("Code_Error");// 错误
                     break;
                 case InfoBarSeverity.Success:
-                    title = "成功";
+                    title = resourceLoader.GetString("Code_Success");// 成功
                     break;
                 case InfoBarSeverity.Warning:
-                    title = "警告";
+                    title = resourceLoader.GetString("Code_Warning");// 警告
                     break;
                 case InfoBarSeverity.Informational:
                 default:
-                    title = "提示";
+                    title = resourceLoader.GetString("Code_Info");// 提示
                     break;
             }
 
@@ -34,7 +38,7 @@ namespace MindCanvas
                 Message = message
             };
 
-            //infoBar.Margin = new Thickness(100);
+            infoBar.Margin = new Thickness(100);
             //infoBar.Height = 100;
             //infoBar.Background = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
 

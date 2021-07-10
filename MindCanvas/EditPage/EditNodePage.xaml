@@ -94,13 +94,13 @@
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>
 
-                    <TextBlock Text="样式" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock x:Uid="EditNodePage_Style" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
 
-                    <ToggleSwitch x:Name="UseDefaultStyleToggleSwitch" Margin="0,20,0,0" Header="使用默认值" Toggled="UseDefaultStyleToggleSwitch_Toggled"/>
+                    <ToggleSwitch x:Name="UseDefaultStyleToggleSwitch" Margin="0,20,0,0" x:Uid="EditNodePage_UseDefaultValue" Toggled="UseDefaultStyleToggleSwitch_Toggled"/>
 
                     <muxc:RadioButtons x:Name="StyleRadioButtons">
-                        <RadioButton Tag="Style 1" Content="样式 1" Checked="StyleRadioButton_Checked"/>
-                        <RadioButton Tag="Style 2" Content="样式 2" Checked="StyleRadioButton_Checked"/>
+                        <RadioButton Tag="Style 1" x:Uid="EditNodePage_Style1" Checked="StyleRadioButton_Checked"/>
+                        <RadioButton Tag="Style 2" x:Uid="EditNodePage_Style2" Checked="StyleRadioButton_Checked"/>
                     </muxc:RadioButtons>
 
                     <MenuFlyoutSeparator Margin="0,20,0,0"/>

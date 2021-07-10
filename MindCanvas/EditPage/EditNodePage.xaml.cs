@@ -96,7 +96,16 @@ namespace MindCanvas.EditPage
         {
             border.Text = NameTextBox.Text;
             border.UpdateLayout();
+            
             RefreshNodePosition();
+
+            // 使线跟随输入框改变
+            foreach (Node anotherNode in App.mindMap.GetNodes(node))
+            {
+                NodeControl anotherNodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(anotherNode);
+                Windows.UI.Xaml.Shapes.Path path = MainPage.mindMapCanvas.ConvertTieToPath(App.mindMap.GetTie(node, anotherNode));
+                NodeControl.ModifyPathInCanvas(path, border, anotherNodeControl);
+            }
         }
 
         // 使点描述提示跟随输入框改变

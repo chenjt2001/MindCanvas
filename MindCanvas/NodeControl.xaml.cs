@@ -69,6 +69,7 @@ namespace MindCanvas
             PointerReleased += NodeControl_PointerReleased;// 鼠标释放
             PointerExited += NodeControl_PointerExited;// 鼠标退出
             Loaded += NodeControl_Loaded;
+            
         }
 
         private void NodeControl_Loaded(object sender, RoutedEventArgs e)
@@ -357,7 +358,7 @@ namespace MindCanvas
         }
 
         // 锚点（线连着的地方）
-        public static Windows.Foundation.Point GetAnchorInCanvas(NodeControl nodeControl, double anotherX, double anotherY)
+        private static Windows.Foundation.Point GetAnchorInCanvas(NodeControl nodeControl, double anotherX, double anotherY)
         {
             Windows.Foundation.Size visualSize = nodeControl.GetVisualSize();
             

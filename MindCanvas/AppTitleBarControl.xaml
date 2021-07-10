@@ -28,7 +28,7 @@
                    Grid.Column="1" HorizontalAlignment="Left" 
                    Width="20" Height="20" Margin="12,0"/>
             <TextBlock x:Name="TitleBarTextBlock"
-                       Text="{x:Bind local:AppTitleBarControl.AppTitle, Mode=OneWay}" 
+                       Text="{x:Bind local:AppTitleBarControl.AppTitle}" 
                        Grid.Column="1" 
                        Style="{StaticResource CaptionTextBlockStyle}" 
                        Margin="44,8,0,0"/>

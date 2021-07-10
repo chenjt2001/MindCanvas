@@ -60,9 +60,10 @@ namespace MindCanvas
             if (modified)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSave();
-                // 用户选择取消
+                
                 switch (result)
                 {
+                    // 用户选择取消
                     case ContentDialogResult.None:
                         return false;
                     case ContentDialogResult.Primary:
@@ -203,7 +204,6 @@ namespace MindCanvas
             if (App.mindCanvasFile.File != null)
             {
                 await App.mindCanvasFile.SaveFile();
-                ResetMainPageCache();
                 modified = false;
                 return true;
             }
@@ -227,7 +227,6 @@ namespace MindCanvas
                     App.mindCanvasFile.File = file;
                     await App.mindCanvasFile.SaveFile();
                     RefreshAppTitle();
-                    ResetMainPageCache();
                     modified = false;
                     return true;
                 }
@@ -286,10 +285,7 @@ namespace MindCanvas
 
             node.NameFontSize = nameFontSize;
 
-            if (nameFontSize != null)
-                nodeControl.FontSize = nameFontSize.Value;
-            else
-                nodeControl.FontSize = App.mindMap.DefaultNodeNameFontSize;
+            nodeControl.FontSize = nameFontSize != null ? nameFontSize.Value : App.mindMap.DefaultNodeNameFontSize;
 
             Record();
         }
@@ -300,7 +296,8 @@ namespace MindCanvas
             NodeControl nodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
 
             node.Style = style;
-            nodeControl.Style = style;
+
+            nodeControl.Style = style ?? App.mindMap.DefaultNodeStyle;
 
             foreach (Tie tie in App.mindMap.GetTies(node))
             {
@@ -413,7 +410,8 @@ namespace MindCanvas
         // 整理点
         public static async Task Tidy(List<Node> nodes)
         {
-            await LoadingHelper.ShowLoading("正在整理……");
+            
+            await LoadingHelper.ShowLoading(resourceLoader.GetString("Code_Tidying"));// 正在整理……
 
             // 计时器
             Stopwatch sw = new Stopwatch();
@@ -431,7 +429,7 @@ namespace MindCanvas
 
             LoadingHelper.HideLoading();
 
-            InfoHelper.ShowInfoBar("整理完成", InfoBarSeverity.Success);
+            InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_FinishTidying"), InfoBarSeverity.Success);// 整理完成
         }
 
         // 整理点
@@ -572,7 +570,7 @@ namespace MindCanvas
         }
 
         // 刷新标题
-        private static void RefreshAppTitle()
+        public static void RefreshAppTitle()
         {
             string fileName = App.mindCanvasFile.File?.DisplayName ?? "无标题";
             AppTitleBarControl.SetFileName(fileName);

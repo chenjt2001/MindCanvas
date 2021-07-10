@@ -85,19 +85,24 @@ namespace MindCanvas
             set
             {
                 appTitle = value;
-                NotifyPropertyChanged();
             }
         }
 
         public static void SetFileName(string name)
         {
             AppTitle = name == null ? GetAppTitleFromSystem() : name + " - " + GetAppTitleFromSystem();
-        }
 
-        public static event PropertyChangedEventHandler PropertyChanged;
-        private static void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+            if (Window.Current.Content is Frame frame && frame.Content is Page page && page.Content is Grid grid)
+            {
+                foreach (UIElement uIElement in grid.Children)
+                {
+                    if (uIElement is AppTitleBarControl control)
+                    {
+                        control.TitleBarTextBlock.Text = AppTitle;
+                        break;
+                    }
+                }
+            }
         }
     }
 }

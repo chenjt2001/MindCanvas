@@ -520,4 +520,64 @@ A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写�
   <data name="DefaultSettingsPage_Back.ToolTipService.ToolTip" xml:space="preserve">
     <value>后退</value>
   </data>
+  <data name="Code_EncryptPage1" xml:space="preserve">
+    <value>修改密码失败，两次密码不一致！</value>
+  </data>
+  <data name="Code_EncryptPage2" xml:space="preserve">
+    <value>密码已修改</value>
+  </data>
+  <data name="Code_EncryptPage3" xml:space="preserve">
+    <value>修改密码失败，旧密码错误！</value>
+  </data>
+  <data name="Code_EncryptPage4" xml:space="preserve">
+    <value>设置密码失败，两次密码不一致！</value>
+  </data>
+  <data name="Code_EncryptPage5" xml:space="preserve">
+    <value>密码已设置</value>
+  </data>
+  <data name="Code_EncryptPage6" xml:space="preserve">
+    <value>密码已关闭</value>
+  </data>
+  <data name="Code_EncryptPage7" xml:space="preserve">
+    <value>关闭密码失败，密码错误！</value>
+  </data>
+  <data name="Code_FileOpeningFailedPasswordError" xml:space="preserve">
+    <value>文件打开失败，密码错误！</value>
+  </data>
+  <data name="Code_FinishTidying" xml:space="preserve">
+    <value>整理完成</value>
+  </data>
+  <data name="Code_Tidy" xml:space="preserve">
+    <value>整理</value>
+  </data>
+  <data name="Code_Tidying" xml:space="preserve">
+    <value>正在整理……</value>
+  </data>
+  <data name="DefaultSettingsPage_Style1.Content" xml:space="preserve">
+    <value>样式 1</value>
+  </data>
+  <data name="DefaultSettingsPage_Style2.Content" xml:space="preserve">
+    <value>样式 2</value>
+  </data>
+  <data name="EditNodePage_Style.Text" xml:space="preserve">
+    <value>样式</value>
+  </data>
+  <data name="EditNodePage_Style1.Content" xml:space="preserve">
+    <value>样式 1</value>
+  </data>
+  <data name="EditNodePage_Style2.Content" xml:space="preserve">
+    <value>样式 2</value>
+  </data>
+  <data name="Code_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Code_Info" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="Code_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="Code_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
 </root>
