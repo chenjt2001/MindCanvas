@@ -60,7 +60,7 @@ namespace MindCanvas
             if (modified)
             {
                 ContentDialogResult result = await Dialog.Show.AskForSave();
-                
+
                 switch (result)
                 {
                     // 用户选择取消
@@ -263,7 +263,7 @@ namespace MindCanvas
         public static void ModifyNodeBorderBrushColor(Node node, Color? borderBrushColor)
         {
             NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
-            if (borderBrushColor != null)
+            if (borderBrushColor.HasValue)
             {
                 SolidColorBrush borderBrush = new SolidColorBrush(borderBrushColor.Value);
                 border.BorderBrush = borderBrush;
@@ -313,6 +313,27 @@ namespace MindCanvas
         public static void ModifyTie(Tie tie, string newDescription)
         {
             App.mindMap.ModifyTie(tie.Id, newDescription);
+            Record();
+        }
+
+        // 修改线的颜色
+        // 修改点的边框颜色
+        public static void ModifyTieStrokeColor(Tie tie, Color? strokeColor)
+        {
+            Windows.UI.Xaml.Shapes.Path path = MainPage.mindMapCanvas.ConvertTieToPath(tie);
+            if (strokeColor.HasValue)
+            {
+                SolidColorBrush stroke = new SolidColorBrush(strokeColor.Value);
+                path.Stroke = stroke;
+                tie.Stroke = stroke;
+            }
+
+            else
+            {
+                tie.Stroke = null;
+                path.Stroke = App.mindMap.DefaultTieStroke;
+            }
+
             Record();
         }
 
@@ -388,11 +409,16 @@ namespace MindCanvas
         }
 
         // 修改默认值
-        public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor, double defaultNodeNameFontSize, string defaultNodeStyle)
+        public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor,
+                                                 double defaultNodeNameFontSize,
+                                                 string defaultNodeStyle,
+                                                 Color defaultTieStrokeColor)
         {
             App.mindMap.DefaultNodeBorderBrush = new SolidColorBrush(defaultNodeBorderBrushColor);
             App.mindMap.DefaultNodeNameFontSize = defaultNodeNameFontSize;
             App.mindMap.DefaultNodeStyle = defaultNodeStyle;
+            App.mindMap.DefaultTieStroke = new SolidColorBrush(defaultTieStrokeColor);
+
             Record();
         }
 
@@ -410,7 +436,7 @@ namespace MindCanvas
         // 整理点
         public static async Task Tidy(List<Node> nodes)
         {
-            
+
             await LoadingHelper.ShowLoading(resourceLoader.GetString("Code_Tidying"));// 正在整理……
 
             // 计时器
@@ -572,7 +598,7 @@ namespace MindCanvas
         // 刷新标题
         public static void RefreshAppTitle()
         {
-            string fileName = App.mindCanvasFile.File?.DisplayName ?? "无标题";
+            string fileName = App.mindCanvasFile.File?.DisplayName ?? resourceLoader.GetString("Code_Untitled");// 无标题
             AppTitleBarControl.SetFileName(fileName);
         }
 

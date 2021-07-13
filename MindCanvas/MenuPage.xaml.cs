@@ -194,7 +194,12 @@ namespace MindCanvas
         // Handles system-level BackRequested events and page-level back button Click events
         private bool On_BackRequested()
         {
-            Frame.GoBack();
+            try// 防止用户已经返回了
+            {
+                Frame.GoBack();
+            }
+            catch { }
+
             return true;
         }
     }

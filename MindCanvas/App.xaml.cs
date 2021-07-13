@@ -2,9 +2,7 @@
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -192,8 +190,12 @@ namespace MindCanvas
                 if (mindMap == null)
                     EventsManager.Initialize();
 
+                rootFrame.Navigate(typeof(MainPage));
+                Window.Current.Activate();// 确保能显示出对话框
                 await EventsManager.OpenFile(file);
                 rootFrame.Navigate(typeof(MainPage));
+                rootFrame.BackStack.Clear();
+                //rootFrame.Navigate(typeof(MainPage));
             }
 
             else

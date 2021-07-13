@@ -1,5 +1,4 @@
-﻿using Windows.UI;
-using Windows.UI.Xaml.Markup;
+﻿using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
@@ -9,7 +8,7 @@ namespace MindCanvas
         public static Windows.UI.Xaml.Shapes.Path NewPath(double x1, double y1, double x2, double y2)
         {
             // 绘制Path
-            SolidColorBrush stroke = new SolidColorBrush(Colors.Gray);
+            SolidColorBrush stroke = App.mindMap.DefaultTieStroke;
             Windows.UI.Xaml.Shapes.Path path = new Windows.UI.Xaml.Shapes.Path()
             {
                 Stroke = stroke,// 线条颜色

@@ -95,9 +95,9 @@ namespace MindCanvas
                             isEncrypted = false;
                         }
 
-                        mindMap.LoadData(data);
-
                         MindCanvasFileData.VersionHelper(ref data);
+
+                        mindMap.LoadData(data);
 
                         if (addToMru)
                             mru.Add(storageFile);
@@ -117,6 +117,8 @@ namespace MindCanvas
         // 设置密码
         public async Task<bool> SetPassword(string oldPassword, string newPassword)
         {
+            LogHelper.Info("SetPassword");
+
             if (oldPassword == this.password)
             {
                 this.password = newPassword;

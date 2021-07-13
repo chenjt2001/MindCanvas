@@ -296,7 +296,7 @@
   </data>
   <data name="HelpPage_Paragraph7.Text" xml:space="preserve">
     <value>Q: 點的名稱可以有多行嗎？
-A: 在輸入點的名稱時，按Shift+Enter鍵即可換行。
+A: 在編輯點的名稱時，按Shift+Enter鍵即可換行。
 
 Q: 爲什麽即使在墨迹書寫模式下，除了使用筆設備，我無法用其他的方式進行墨迹書寫？
 A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫入”功能。</value>
@@ -434,10 +434,13 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
     <value>好的</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.支持手動選擇多國語言（使用系統設置、簡體中文、繁體中文、英文）。
-2.如果文件未保存，退出 MindCanvas 時將詢問是否保存。
-3.修複了一些BUG。
-4.優化了一些細節。</value>
+    <value>1.增加了右鍵菜單。
+2.增加了文件加密功能。
+3.增加了搜索功能。
+4.支持修改點的樣式。
+5.支持修改線的顏色。
+6.修復了一些BUG。
+7.優化了一些細節。</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>新功能</value>
@@ -545,7 +548,7 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
     <value>文件打開失敗，密碼錯誤！</value>
   </data>
   <data name="Code_FinishTidying" xml:space="preserve">
-    <value>整理完成</value>
+    <value>整理完成（實驗性功能，如不滿意可點“撤銷”恢復）</value>
   </data>
   <data name="Code_Tidy" xml:space="preserve">
     <value>整理</value>
@@ -579,5 +582,14 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   </data>
   <data name="Code_Warning" xml:space="preserve">
     <value>警告</value>
+  </data>
+  <data name="DefaultSettingsPage_TheDefaultColorOfTheTie.Text" xml:space="preserve">
+    <value>線的默認顏色</value>
+  </data>
+  <data name="EditTiePage_Color.Text" xml:space="preserve">
+    <value>顏色</value>
+  </data>
+  <data name="EditTiePage_UseDefaultValue.Header" xml:space="preserve">
+    <value>使用默認值</value>
   </data>
 </root>

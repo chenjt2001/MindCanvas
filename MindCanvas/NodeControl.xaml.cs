@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Windows.UI;
@@ -69,7 +67,7 @@ namespace MindCanvas
             PointerReleased += NodeControl_PointerReleased;// 鼠标释放
             PointerExited += NodeControl_PointerExited;// 鼠标退出
             Loaded += NodeControl_Loaded;
-            
+
         }
 
         private void NodeControl_Loaded(object sender, RoutedEventArgs e)
@@ -270,7 +268,7 @@ namespace MindCanvas
                         IsSelected = false;
                         needBeSelected = true;
                     }
-                                              
+
                     style = value;
                     NotifyPropertyChanged();
 
@@ -361,7 +359,7 @@ namespace MindCanvas
         private static Windows.Foundation.Point GetAnchorInCanvas(NodeControl nodeControl, double anotherX, double anotherY)
         {
             Windows.Foundation.Size visualSize = nodeControl.GetVisualSize();
-            
+
             double x, y;
             double left = Canvas.GetLeft(nodeControl);
             double top = Canvas.GetTop(nodeControl);

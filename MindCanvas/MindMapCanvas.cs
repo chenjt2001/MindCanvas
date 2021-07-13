@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -75,6 +74,8 @@ namespace MindCanvas
             NodeControl nodeControl2 = ConvertNodeToBorder(node2);
 
             Windows.UI.Xaml.Shapes.Path path = NodeControl.GetPathInCanvas(nodeControl1, nodeControl2);
+
+            path.Stroke = tie.Stroke ?? App.mindMap.DefaultTieStroke;
 
             SetZIndex(path, -10000);// 确保线在点下面
             Children.Add(path);

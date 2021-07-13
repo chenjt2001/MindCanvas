@@ -96,7 +96,7 @@ namespace MindCanvas.EditPage
         {
             border.Text = NameTextBox.Text;
             border.UpdateLayout();
-            
+
             RefreshNodePosition();
 
             // 使线跟随输入框改变

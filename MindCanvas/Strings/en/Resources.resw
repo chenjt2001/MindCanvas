@@ -296,7 +296,7 @@
   </data>
   <data name="HelpPage_Paragraph7.Text" xml:space="preserve">
     <value>Q: Can the name of node have multiple lines?
-A: When inputting the name of node, press Shift+Enter to wrap the line.
+A: When editing the name of node, press Shift+Enter to wrap the line.
 
 Q: Why can't I write ink in any other way except using a pen device even in the Inking Mode?
 A: If you want to use touch or mouse for inking writing, make sure to enable the "Touch Writing" function.</value>
@@ -434,10 +434,13 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>OK</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.Support manual selection of multiple languages (Use system setting, Simplified Chinese, Traditional Chinese, English).
-2.If the file is not saved, it will ask whether to save it when exiting MindCanvas.
-3.Fixed some bugs.
-4.Optimized some details.</value>
+    <value>1.Added the right-click menu.
+2.Added file encryption function.
+3.Added search function.
+4.Support to modify the style of nodes.
+5.Support to modify the color of ties. 
+6.Fixed some bugs.
+7.Optimized some details.</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>New Function</value>
@@ -545,7 +548,7 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>File opening failed, password error!</value>
   </data>
   <data name="Code_FinishTidying" xml:space="preserve">
-    <value>Finish tidying</value>
+    <value>Finish tidying (Experimental function, if you are not satisfied, click "Undo" to restore )</value>
   </data>
   <data name="Code_Tidy" xml:space="preserve">
     <value>Tidy</value>
@@ -579,5 +582,14 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   </data>
   <data name="Code_Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="DefaultSettingsPage_TheDefaultColorOfTheTie.Text" xml:space="preserve">
+    <value>The default color of the tie</value>
+  </data>
+  <data name="EditTiePage_Color.Text" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="EditTiePage_UseDefaultValue.Header" xml:space="preserve">
+    <value>Use default value</value>
   </data>
 </root>

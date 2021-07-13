@@ -95,9 +95,34 @@ namespace MindCanvas
         private string description;
         private int node1id;
         private int node2id;
+        [OptionalField]
+        private byte[] strokeArgb;// 颜色
 
         // 资源加载器，用于翻译
         private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+
+        // 边框颜色
+        public Brush Stroke
+        {
+            get
+            {
+                if (strokeArgb == null)// 默认
+                    return null;
+                else// 已设置
+                    return new SolidColorBrush(Color.FromArgb(strokeArgb[0], strokeArgb[1], strokeArgb[2], strokeArgb[3]));
+            }
+
+            set
+            {
+                if (value == null)
+                    strokeArgb = null;
+                else
+                {
+                    Color color = (value as SolidColorBrush).Color;
+                    strokeArgb = new byte[4] { color.A, color.R, color.G, color.B };
+                }
+            }
+        }
 
         // 版本兼容
         public static void VersionHelper(Tie tie)
@@ -111,6 +136,7 @@ namespace MindCanvas
         public string Description { get => description; set => description = value; }
         public int Node1Id { get => node1id; set => node1id = value; }
         public int Node2Id { get => node2id; set => node2id = value; }
+        public byte[] StrokeArgb { get => strokeArgb; set => strokeArgb = value; }
     }
 
     [Serializable]
@@ -132,6 +158,8 @@ namespace MindCanvas
         private float? zoomFactor;// 可视区放大倍数
         [OptionalField]
         private string defaultNodeStyle;// 默认点样式
+        [OptionalField]
+        private byte[] defaultTieStrokeArgb;// 默认线颜色
 
         public Brush DefaultNodeBorderBrush
         {
@@ -147,6 +175,23 @@ namespace MindCanvas
             {
                 Color color = (value as SolidColorBrush).Color;
                 defaultNodeBorderBrushArgb = new byte[4] { color.A, color.R, color.G, color.B };
+            }
+        }
+
+        public Brush DefaultTieStroke
+        {
+            get
+            {
+                return new SolidColorBrush(Color.FromArgb(
+                    defaultTieStrokeArgb[0],
+                    defaultTieStrokeArgb[1],
+                    defaultTieStrokeArgb[2],
+                    defaultTieStrokeArgb[3]));
+            }
+            set
+            {
+                Color color = (value as SolidColorBrush).Color;
+                defaultTieStrokeArgb = new byte[4] { color.A, color.R, color.G, color.B };
             }
         }
 
@@ -219,6 +264,8 @@ namespace MindCanvas
             // V1.5 -> V1.6
             if (data.defaultNodeStyle == null)
                 data.defaultNodeStyle = InitialValues.NodeStyle;
+            if (data.defaultTieStrokeArgb == null)
+                data.defaultTieStrokeArgb = new byte[4] { InitialValues.TieStrokeColor.A, InitialValues.TieStrokeColor.R, InitialValues.TieStrokeColor.G, InitialValues.TieStrokeColor.B };
         }
 
         public List<Node> Nodes { get => nodes; set => nodes = value; }
