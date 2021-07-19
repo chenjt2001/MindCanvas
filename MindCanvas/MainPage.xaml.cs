@@ -199,12 +199,7 @@ namespace MindCanvas
             Tie tie = mindMapCanvas.ConvertPathToTie(path);
 
             // 显示信息
-            Dictionary<string, object> data = new Dictionary<string, object>
-                {
-                    { "tie", tie },
-                    { "path", path },
-                };
-            ShowFrame(typeof(EditPage.EditTiePage), data);
+            ShowFrame(typeof(EditPage.EditTiePage), tie);
         }
 
         // 鼠标在点内释放，算按了一下点
@@ -272,12 +267,7 @@ namespace MindCanvas
                 selectedBorderList = new List<NodeControl> { nowNodeBorder };
 
                 // 显示信息
-                Dictionary<string, object> data = new Dictionary<string, object>
-                {
-                    { "node", nowNode },
-                    { "border", nowNodeBorder },
-                };
-                ShowFrame(typeof(EditPage.EditNodePage), data);
+                ShowFrame(typeof(EditPage.EditNodePage), nowNode);
             }
         }
 
@@ -547,10 +537,7 @@ namespace MindCanvas
             else
                 info = new DrillInNavigationTransitionInfo();
 
-            if (parameter is Dictionary<string, object> data)
-                EditFrame.Navigate(sourcePageType, data, info);
-            else
-                EditFrame.Navigate(sourcePageType, parameter, info);
+            EditFrame.Navigate(sourcePageType, parameter, info);
             EditFrame.BackStack.Clear();
         }
 
@@ -589,7 +576,6 @@ namespace MindCanvas
 
                     else
                         ChangeView(App.mindMap.Nodes[0].X, App.mindMap.Nodes[0].Y, InitialValues.MinZoomFactor);
-
                     break;
             }
         }
@@ -757,18 +743,20 @@ namespace MindCanvas
             Item selectedItem = args.SelectedItem as Item;
             if (selectedItem.Text != resourceLoader.GetString("Code_NoResultsFound"))
             {
-                string[] words = selectedItem.Text.Split(new Char[] { ' ', ':' });
+                string[] words = selectedItem.Text.Split(new char[] { ' ', ':' });
 
                 switch (words[0])
                 {
                     case "Node":
                         Node node = App.mindMap.GetNode((int)selectedItem.Tag);
                         ChangeView(node.X, node.Y, null);
+                        ShowFrame(typeof(EditPage.EditNodePage), node);
                         break;
                     case "Tie":
                         Tie tie = App.mindMap.GetTie((int)selectedItem.Tag);
                         List<Node> nodes = App.mindMap.GetNodes(tie);
                         ChangeView((nodes[0].X + nodes[1].X) / 2, (nodes[0].Y + nodes[1].Y) / 2, null);
+                        ShowFrame(typeof(EditPage.EditTiePage), tie);
                         break;
                 }
             }
@@ -780,11 +768,7 @@ namespace MindCanvas
             if (args.ChosenSuggestion == null)
             {
                 // Use args.QueryText to determine what to do.
-                Dictionary<string, object> data = new Dictionary<string, object>
-                {
-                    { "QueryText", args.QueryText },
-                };
-                ShowFrame(typeof(EditPage.SearchResultPage), data);
+                ShowFrame(typeof(EditPage.SearchResultPage), args.QueryText);
             }
         }
     }

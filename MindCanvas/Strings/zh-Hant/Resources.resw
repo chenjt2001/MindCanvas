@@ -503,7 +503,7 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
     <value>刪除所有線</value>
   </data>
   <data name="MainPage_SearchMindMap.PlaceholderText" xml:space="preserve">
-    <value>搜索心智圖</value>
+    <value>在此心智圖中搜索</value>
   </data>
   <data name="MenuPage_Encrypt.Content" xml:space="preserve">
     <value>加密</value>

@@ -503,7 +503,7 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>Delete all ties</value>
   </data>
   <data name="MainPage_SearchMindMap.PlaceholderText" xml:space="preserve">
-    <value>Search mind map</value>
+    <value>Search in this mind map</value>
   </data>
   <data name="MenuPage_Encrypt.Content" xml:space="preserve">
     <value>Encrypt</value>

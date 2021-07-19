@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Windows.System;
+﻿using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,7 +18,6 @@ namespace MindCanvas.EditPage
         private Node node;
         private NodeControl border;
         private MainPage mainPage;
-        private Dictionary<string, object> data;
 
         public EditNodePage()
         {
@@ -34,14 +32,13 @@ namespace MindCanvas.EditPage
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            data = (Dictionary<string, object>)e.Parameter;
+            node = e.Parameter as Node;
         }
 
         private void LoadData()
         {
-            node = (Node)data["node"];
-            border = (NodeControl)data["border"];
             mainPage = MainPage.mainPage;
+            border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
 
             // 名称和描述
             NameTextBox.Text = node.Name;

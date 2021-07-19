@@ -13,7 +13,7 @@ namespace MindCanvas.EditPage
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
-                InfoTextBlock.Text = (string)e.Parameter;
+                InfoTextBlock.Text = e.Parameter as string;
         }
 
         public InfoPage()

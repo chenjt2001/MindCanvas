@@ -22,6 +22,7 @@ namespace MindCanvas
         private Brush borderBrush;
         private double fontSize;
         private string toolTipContent;
+        private double toolTipVerticalOffset;
         private string style;
         private Thickness borderThickness;
         private CornerRadius cornerRadius;
@@ -140,6 +141,11 @@ namespace MindCanvas
         private void DescriptionToolTip_Opened(object sender, RoutedEventArgs e)
         {
             DescriptionToolTip.IsOpen = toolTipContent != "";
+            DescriptionToolTip.PlacementTarget = this;
+
+            DescriptionToolTip.UpdateLayout();
+
+            ToolTipVerticalOffset = -60 - DescriptionToolTip.DesiredSize.Height;
         }
 
         // 动画配置
@@ -235,6 +241,20 @@ namespace MindCanvas
                 if (value != this.toolTipContent)
                 {
                     toolTipContent = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        // 描述位置
+        public double ToolTipVerticalOffset
+        {
+            get => toolTipVerticalOffset;
+            set
+            {
+                if (value != this.toolTipVerticalOffset)
+                {
+                    toolTipVerticalOffset = value;
                     NotifyPropertyChanged();
                 }
             }

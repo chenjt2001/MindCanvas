@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -17,7 +16,6 @@ namespace MindCanvas.EditPage
         private Tie tie;
         private Windows.UI.Xaml.Shapes.Path path;
         private MainPage mainPage;
-        private Dictionary<string, object> data;
 
         public EditTiePage()
         {
@@ -32,13 +30,12 @@ namespace MindCanvas.EditPage
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            data = (Dictionary<string, object>)e.Parameter;
+            tie = e.Parameter as Tie;
         }
 
         private void LoadData()
         {
-            tie = (Tie)data["tie"];
-            path = (Windows.UI.Xaml.Shapes.Path)data["path"];
+            path = MainPage.mindMapCanvas.ConvertTieToPath(tie);
             mainPage = MainPage.mainPage;
 
             // 描述
