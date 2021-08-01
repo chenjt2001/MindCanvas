@@ -1,7 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -431,96 +429,6 @@ namespace MindCanvas
                 App.mindMap.VisualCenterY = visualCenterY.Value;
             if (zoomFactor != null)
                 App.mindMap.ZoomFactor = zoomFactor.Value;
-        }
-
-        // 整理点
-        public static async Task Tidy(List<Node> nodes)
-        {
-
-            await LoadingHelper.ShowLoading(resourceLoader.GetString("Code_Tidying"));// 正在整理……
-
-            // 计时器
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            foreach (Node node in nodes)
-                await TidyTask(node);
-
-            // 获取用时
-            sw.Stop();
-            LogHelper.Debug(sw.Elapsed);
-
-            MainPage.mindMapCanvas.ReDraw();
-            Record();
-
-            LoadingHelper.HideLoading();
-
-            InfoHelper.ShowInfoBar(resourceLoader.GetString("Code_FinishTidying"), InfoBarSeverity.Success);// 整理完成
-        }
-
-        // 整理点
-        public static Task<bool> TidyTask(Node parentNode)
-        {
-            var task = Task.Run(() =>
-            {
-                List<Node> childrenNode = new List<Node>();// 子节点
-                List<Node> leftNodes = new List<Node>();// 在父节点左侧的点
-                List<Node> rightNodes = new List<Node>();// 在父节点右侧的点
-
-                childrenNode = App.mindMap.GetNodes(parentNode);
-                if (childrenNode.Count == 0)
-                    return false;
-
-                foreach (Node childNode in childrenNode)
-                {
-                    if (childNode.X < parentNode.X)
-                        leftNodes.Add(childNode);
-                    else
-                        rightNodes.Add(childNode);
-                }
-
-                // 在y轴上排序
-                leftNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
-                rightNodes.Sort((node1, node2) => node1.Y.CompareTo(node2.Y));
-
-                // 安排位置
-                double spacingY = 70;
-                double spacingX = 200;
-
-                double minY;
-                double y;
-
-                // 左侧
-                minY = parentNode.Y - leftNodes.Count / 2 * spacingY;
-                if (leftNodes.Count % 2 == 0)
-                    minY += spacingY / 2;
-
-                y = minY;
-                for (int i = 0; i < leftNodes.Count; i++)
-                {
-                    Node leftNode = leftNodes[i];
-                    leftNode.X = parentNode.X - spacingX;
-                    leftNode.Y = y;
-                    y += spacingY;
-                }
-
-                // 右侧
-                minY = parentNode.Y - rightNodes.Count / 2 * spacingY;
-                if (rightNodes.Count % 2 == 0)
-                    minY += spacingY / 2;
-
-                y = minY;
-                for (int i = 0; i < rightNodes.Count; i++)
-                {
-                    Node rightNode = rightNodes[i];
-                    rightNode.X = parentNode.X + spacingX;
-                    rightNode.Y = y;
-                    y += spacingY;
-                }
-
-                return true;
-            });
-            return task;
         }
 
         // 撤销

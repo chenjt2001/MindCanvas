@@ -8,7 +8,7 @@ namespace MindCanvas
     static class LoadingHelper
     {
         // 显示加载界面
-        public static Task ShowLoading(string message)
+        public static Task ShowLoading(string message = null)
         {
             if (Window.Current.Content is Frame frame)
             {

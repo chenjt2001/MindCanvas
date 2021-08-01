@@ -125,27 +125,14 @@ namespace MindCanvas
         {
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
-            MenuFlyoutItem item1 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Tidy"),// 整理
-                                                            VirtualKey.T,
-                                                            VirtualKeyModifiers.None,
-                                                            "\xE8CB");
+
             MenuFlyoutItem item2 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Delete"),// 删除
                                                             VirtualKey.D,
                                                             VirtualKeyModifiers.None,
                                                             "\xE74D");
-            item1.Click += TidyNodeMenuFlyoutItem_Click;
             item2.Click += DeleteNodeMenuFlyoutItem_Click;
 
             contextMenuFlyout.ShowAt(this, e.GetPosition(this));
-        }
-
-        // 点击了右键的整理点按钮
-        private async void TidyNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            await EventsManager.Tidy(new List<Node> { nowNode });
-            RefreshUnRedoBtn();
-            ConfigNodesBorder();
-            ConfigTiesPath();
         }
 
         // 点击了右键的删除点按钮
@@ -392,6 +379,7 @@ namespace MindCanvas
                 ConfigNodesBorder(new List<Node> { newNode });
                 RefreshUnRedoBtn();
                 InkToolToggleSwitch.IsOn = false;
+                AddNodeTextBox.Text = "";
 
                 // 如果新的点在可视区域外则移动可视区域到以新的点为中心
                 if (!IsInViewport(newNode.X, newNode.Y))
@@ -769,6 +757,25 @@ namespace MindCanvas
             {
                 // Use args.QueryText to determine what to do.
                 ShowFrame(typeof(EditPage.SearchResultPage), args.QueryText);
+            }
+        }
+
+        // 右键隐藏或显示侧栏
+        private void HideOrShowTheSidebarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (RightBottomGrid.Visibility == Visibility.Visible)
+            {
+                // 处于显示状态，现在要隐藏
+                RightBottomGrid.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(LeftBottomGrid, 3);
+                HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_ShowTheSidebar");// 显示侧栏
+            }
+            else
+            {
+                // 处于隐藏状态，现在要显示
+                RightBottomGrid.Visibility = Visibility.Visible;
+                Grid.SetColumnSpan(LeftBottomGrid, 2);
+                HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_HideTheSidebar");// 隐藏侧栏
             }
         }
     }

@@ -547,15 +547,6 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   <data name="Code_FileOpeningFailedPasswordError" xml:space="preserve">
     <value>文件打開失敗，密碼錯誤！</value>
   </data>
-  <data name="Code_FinishTidying" xml:space="preserve">
-    <value>整理完成（實驗性功能，如不滿意可點“撤銷”恢復）</value>
-  </data>
-  <data name="Code_Tidy" xml:space="preserve">
-    <value>整理</value>
-  </data>
-  <data name="Code_Tidying" xml:space="preserve">
-    <value>正在整理……</value>
-  </data>
   <data name="DefaultSettingsPage_Style1.Content" xml:space="preserve">
     <value>樣式 1</value>
   </data>
@@ -591,5 +582,14 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   </data>
   <data name="EditTiePage_UseDefaultValue.Header" xml:space="preserve">
     <value>使用默認值</value>
+  </data>
+  <data name="Code_HideTheSidebar" xml:space="preserve">
+    <value>隱藏側欄</value>
+  </data>
+  <data name="Code_ShowTheSidebar" xml:space="preserve">
+    <value>顯示側欄</value>
+  </data>
+  <data name="MainPage_HideTheSidebar.Text" xml:space="preserve">
+    <value>隱藏側欄</value>
   </data>
 </root>

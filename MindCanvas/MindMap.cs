@@ -215,7 +215,7 @@ namespace MindCanvas
         }
 
         // 加载数据并清空当前的数据
-        public void LoadData(MindCanvasFileData mindCanvasFileData, string password = null)
+        public void LoadData(MindCanvasFileData mindCanvasFileData)
         {
             this.nodes = mindCanvasFileData.Nodes;
             this.ties = mindCanvasFileData.Ties;

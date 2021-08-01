@@ -121,6 +121,8 @@ namespace MindCanvas
 
             if (oldPassword == this.password)
             {
+                await LoadingHelper.ShowLoading();
+
                 this.password = newPassword;
                 if (newPassword != null)
                     isEncrypted = true;
@@ -129,6 +131,8 @@ namespace MindCanvas
 
                 if (file != null)
                     await SaveFile();
+
+                LoadingHelper.HideLoading();
 
                 return true;
             }

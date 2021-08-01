@@ -117,7 +117,7 @@
                     Text="MindCanvas"/>
             </Border>
 
-            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid x:Name="LeftBottomGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>
@@ -207,6 +207,7 @@
                                     <MenuFlyout x:Name="ContextMenuFlyout">
                                         <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" x:Uid="MainPage_DeleteAllNodes" Click="DeleteAllNodesMenuFlyoutItem_Click"/>
                                         <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" x:Uid="MainPage_DeleteAllTies" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem x:Name="HideOrShowTheSidebarMenuFlyoutItem" x:Uid="MainPage_HideTheSidebar" Click="HideOrShowTheSidebarMenuFlyoutItem_Click"/>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
 
@@ -216,13 +217,13 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid x:Name="RightBottomGrid" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" >
+                <Border x:Name="SearchBorder" Grid.Row="0" >
                     <AutoSuggestBox 
                         x:Name="SearchAutoSuggestBox"
                         x:Uid="MainPage_SearchMindMap"

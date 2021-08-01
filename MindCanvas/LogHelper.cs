@@ -19,7 +19,7 @@ namespace MindCanvas
             System.Diagnostics.Debug.WriteLine(message);
 #endif
 #if !DEBUG
-            string eventName = string.Format("[INFO][{0}]{1}", version, message);
+            string eventName = string.Format("[INFO]{0}", message);
             logger.Log(eventName);
 #endif
         }
@@ -33,25 +33,11 @@ namespace MindCanvas
 #endif
                 Settings.LastError = message;
 #if !DEBUG
-                string eventName = string.Format("[ERROR][{0}]{1}", version, message);
+                string eventName = string.Format("[ERROR]{0}", message);
                 logger.Log(eventName);
 #endif
             }
             catch { }
-        }
-
-        private static string version
-        {
-            get
-            {
-                var v = Windows.ApplicationModel.Package.Current.Id.Version;
-                string r = string.Format("{0}.{1}.{2}.{3}", v.Major, v.Minor, v.Build, v.Revision);
-#if DEBUG
-                r += "(DEBUG MODE)";
-#endif
-                return r;
-            }
-
         }
     }
 }

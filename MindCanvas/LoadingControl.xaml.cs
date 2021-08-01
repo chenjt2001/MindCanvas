@@ -16,7 +16,8 @@ namespace MindCanvas
         {
             LoadingGrid.Visibility = Visibility.Visible;
             LoadingProgressRing.IsActive = true;
-            LoadingTextBlock.Text = message;
+            if (message != null)
+                LoadingTextBlock.Text = message;
         }
 
         public void HideLoading()
