@@ -39,7 +39,7 @@ namespace MindCanvas
         // 资源加载器，用于翻译
         private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
-        // 边框颜色
+        /// <summary>边框颜色</summary>
         public Brush BorderBrush
         {
             get
@@ -62,7 +62,7 @@ namespace MindCanvas
             }
         }
 
-        // 版本兼容
+        /// <summary>版本兼容</summary>
         public static void VersionHelper(Node node)
         {
             // V1.0 -> V1.1
@@ -101,7 +101,7 @@ namespace MindCanvas
         // 资源加载器，用于翻译
         private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
-        // 边框颜色
+        /// <summary>边框颜色</summary>
         public Brush Stroke
         {
             get
@@ -124,7 +124,7 @@ namespace MindCanvas
             }
         }
 
-        // 版本兼容
+        /// <summary>版本兼容</summary>
         public static void VersionHelper(Tie tie)
         {
             // V1.5 -> V1.6
@@ -221,7 +221,7 @@ namespace MindCanvas
             }
         }
 
-        // 版本兼容
+        /// <summary>版本兼容</summary>
         public static void VersionHelper(ref MindCanvasFileData data)
         {
             foreach (Node node in data.Nodes)
@@ -277,14 +277,14 @@ namespace MindCanvas
         public string DefaultNodeStyle { get => defaultNodeStyle; set => defaultNodeStyle = value; }
     }
 
-    // 加密的数据
+    /// <summary>加密的数据</summary>
     [Serializable]
     public struct EncryptedData
     {
         public string Tag => "MindCanvasFile";
         public byte[] Data { get; set; }
 
-        // 加密
+        /// <summary>加密</summary>
         public static EncryptedData Encrypt(MindCanvasFileData data, string password)
         {
             // password转md5
@@ -317,7 +317,7 @@ namespace MindCanvas
             return encryptedData;
         }
 
-        // 解密
+        /// <summary>解密</summary>
         public static MindCanvasFileData Decrypt(EncryptedData encryptedData, string password)
         {
             // password转md5

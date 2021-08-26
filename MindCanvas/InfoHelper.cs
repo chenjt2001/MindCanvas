@@ -45,7 +45,7 @@ namespace MindCanvas
             return infoBar;
         }
 
-        // 显示一个InfoBar
+        /// <summary>显示一个InfoBar</summary>
         public static void ShowInfoBar(string message, InfoBarSeverity severity = InfoBarSeverity.Informational)
         {
             if (Window.Current.Content is Frame frame && frame.Content is Page page && page.Content is Grid grid)

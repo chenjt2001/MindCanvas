@@ -10,21 +10,21 @@ namespace MindCanvas
     {
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-        // 应用设置
+        /// <summary>应用设置</summary>
         public static void Apply()
         {
             Theme = Theme;
             Language = Language;
         }
 
-        // 清除设置
+        /// <summary>清除设置</summary>
         public static void Clear()
         {
             ApplicationData.Current.LocalSettings.Values.Clear();
             ApplicationLanguages.PrimaryLanguageOverride = GlobalizationPreferences.Languages.First();
         }
 
-        // 主题
+        /// <summary>主题</summary>
         public static string Theme
         {
             get
@@ -42,7 +42,7 @@ namespace MindCanvas
 
         }
 
-        // 语言
+        /// <summary>语言</summary>
         public static string Language
         {
             get
@@ -60,7 +60,7 @@ namespace MindCanvas
             }
         }
 
-        // 总启动次数
+        /// <summary>总启动次数</summary>
         public static long TotalLaunchCount
         {
             get
@@ -73,7 +73,7 @@ namespace MindCanvas
             }
         }
 
-        // 上一错误
+        /// <summary>上一错误</summary>
         public static string LastError
         {
             get

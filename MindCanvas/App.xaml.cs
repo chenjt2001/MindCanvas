@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -77,13 +78,13 @@ namespace MindCanvas
             deferral.Complete();
         }
 
-        // 文件激活事件
+        /// <summary>文件激活事件</summary>
         protected override async void OnFileActivated(FileActivatedEventArgs e)
         {
             await OnLaunchedOrActivated(e);
         }
 
-        // 用户单击通知
+        /// <summary>用户单击通知</summary>
         protected override async void OnActivated(IActivatedEventArgs e)
         {
             await OnLaunchedOrActivated(e);
@@ -208,24 +209,40 @@ namespace MindCanvas
 
             // 显示新功能
             if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
+            {
                 await Dialog.Show.ShowNewFunction();
+
+                // 开源提示
+                ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+                var msgDialog = new ContentDialog()
+                {
+                    Content = resourceLoader.GetString("OpenSourceTip"),
+                    PrimaryButtonText = "Go to GitHub",
+                    SecondaryButtonText = "OK",
+                };
+                ContentDialogResult r = await msgDialog.ShowAsync();
+                if (r == ContentDialogResult.Primary)
+                    await Windows.System.Launcher.LaunchUriAsync(new Uri(@"http://www.chenjt.com"));
+            }
         }
 
-        // 退出应用程序
+        /// <summary>退出应用程序</summary>
         private void App_CloseRequested(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
         {
             e.Handled = true;
             EventsManager.CloseRequested();
         }
 
-        // 出现未捕获的异常
+        /// <summary>出现未捕获的异常</summary>
         private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             LogHelper.Error(e.Message);
         }
 
-        // 在ThemeHelper中用到
-        // 来自Xaml-Controls-Gallery
+        /// <summary>
+        /// 在ThemeHelper中用到
+        /// 来自Xaml-Controls-Gallery
+        /// </summary>
         public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
         {
             if (!typeof(TEnum).GetTypeInfo().IsEnum)

@@ -15,9 +15,11 @@ using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
 {
-    // 事件管理器
-    // 所有的修改都要通过这个东西
-    // 已保存历史操作，提供撤销、重做功能
+    /// <summary>
+    /// 事件管理器
+    /// 所有的修改都要通过这个东西
+    /// 保存历史操作，提供撤销、重做功能
+    /// </summary>
     public static class EventsManager
     {
         private static List<MindCanvasFileData> records = new List<MindCanvasFileData>();// 记录每次操作后的数据
@@ -50,7 +52,7 @@ namespace MindCanvas
             modified = false;
         }
 
-        // 新建文件
+        /// <summary>新建文件</summary>
         public static async Task<bool> NewFile()
         {
             LogHelper.Info("NewFile");
@@ -98,7 +100,7 @@ namespace MindCanvas
             records.Clear();
         }
 
-        // 打开文件
+        /// <summary>打开文件</summary>
         public static async Task<bool> OpenFile(StorageFile file)
         {
             LogHelper.Info("OpenFile");
@@ -156,7 +158,7 @@ namespace MindCanvas
             }
         }
 
-        // 退出应用
+        /// <summary>退出应用</summary>
         public static async void CloseRequested()
         {
             // 当前文件已修改
@@ -187,14 +189,14 @@ namespace MindCanvas
                 Application.Current.Exit();
         }
 
-        // 清除主页面缓存
+        /// <summary>清除主页面缓存</summary>
         public static void ResetMainPageCache()
         {
             if (MainPage.mainPage != null)
                 MainPage.mainPage.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
         }
 
-        // 保存文件
+        /// <summary>保存文件</summary>
         public static async Task<bool> SaveFile()
         {
             LogHelper.Info("SaveFile");
@@ -233,7 +235,7 @@ namespace MindCanvas
             }
         }
 
-        // 修改点的名称和描述
+        /// <summary>修改点的名称和描述</summary>
         public static void ModifyNode(Node node, string newName, string newDescription)
         {
             NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
@@ -244,7 +246,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改点的坐标
+        /// <summary>修改点的坐标</summary>
         public static void ModifyNode(Node node, double x, double y)
         {
             App.mindMap.ModifyNode(node.Id, x, y);
@@ -257,7 +259,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改点的边框颜色
+        /// <summary>修改点的边框颜色</summary>
         public static void ModifyNodeBorderBrushColor(Node node, Color? borderBrushColor)
         {
             NodeControl border = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
@@ -276,7 +278,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改点的字体大小
+        /// <summary>修改点的字体大小</summary>
         public static void ModifyNodeNameFontSize(Node node, double? nameFontSize)
         {
             NodeControl nodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
@@ -288,7 +290,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改点的样式
+        /// <summary>修改点的样式</summary>
         public static void ModifyNodeStyle(Node node, string style)
         {
             NodeControl nodeControl = MainPage.mindMapCanvas.ConvertNodeToBorder(node);
@@ -307,15 +309,14 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改线的描述
+        /// <summary>修改线的描述</summary>
         public static void ModifyTie(Tie tie, string newDescription)
         {
             App.mindMap.ModifyTie(tie.Id, newDescription);
             Record();
         }
 
-        // 修改线的颜色
-        // 修改点的边框颜色
+        /// <summary>修改线的颜色</summary>
         public static void ModifyTieStrokeColor(Tie tie, Color? strokeColor)
         {
             Windows.UI.Xaml.Shapes.Path path = MainPage.mindMapCanvas.ConvertTieToPath(tie);
@@ -335,7 +336,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 新建点
+        /// <summary>新建点</summary>
         public static Node AddNode(string name, string description = "")
         {
             LogHelper.Info("AddNode");
@@ -346,7 +347,7 @@ namespace MindCanvas
             return newNode;
         }
 
-        // 新建线
+        /// <summary>新建线</summary>
         public static Tie AddTie(Node node1, Node node2, string description = "")
         {
             LogHelper.Info("AddTie");
@@ -357,7 +358,7 @@ namespace MindCanvas
             return newTie;
         }
 
-        // 删除点
+        /// <summary>删除点</summary>
         public static void RemoveNode(Node node)
         {
             foreach (Tie tie in App.mindMap.GetTies(node))
@@ -368,7 +369,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 删除所有点
+        /// <summary>删除所有点</summary>
         public static void RemoveAllNodes()
         {
             if (App.mindMap.Nodes.Count() == 0)
@@ -380,7 +381,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 删除线
+        /// <summary>删除线</summary>
         public static void RemoveTie(Tie tie)
         {
             App.mindMap.RemoveTie(tie);
@@ -388,7 +389,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 删除所有线
+        /// <summary>删除所有线</summary>
         public static void RemoveAllTies()
         {
             if (App.mindMap.Ties.Count() == 0)
@@ -399,14 +400,14 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改墨迹
+        /// <summary>修改墨迹</summary>
         public static void ModifyInkCanvas(InkStrokeContainer newInkStrokeContainer)
         {
             App.mindMap.InkStrokeContainer = newInkStrokeContainer;
             Record();
         }
 
-        // 修改默认值
+        /// <summary>修改默认值</summary>
         public static void ModifyDefaultSettings(Color defaultNodeBorderBrushColor,
                                                  double defaultNodeNameFontSize,
                                                  string defaultNodeStyle,
@@ -420,7 +421,7 @@ namespace MindCanvas
             Record();
         }
 
-        // 修改可视区域
+        /// <summary>修改可视区域</summary>
         public static void ModifyViewport(double? visualCenterX, double? visualCenterY, float? zoomFactor)
         {
             if (visualCenterX != null)
@@ -431,7 +432,7 @@ namespace MindCanvas
                 App.mindMap.ZoomFactor = zoomFactor.Value;
         }
 
-        // 撤销
+        /// <summary>撤销</summary>
         public static void Undo()
         {
             MindCanvasFileData lastData = DeepCopy(records[--nowIndex]);
@@ -449,10 +450,10 @@ namespace MindCanvas
             modified = true;
         }
 
-        // 判断能否撤销
+        /// <summary>判断能否撤销</summary>
         public static bool CanUndo => nowIndex > 0;
 
-        // 重做
+        /// <summary>重做</summary>
         public static void Redo()
         {
             MindCanvasFileData nextData = DeepCopy(records[++nowIndex]);
@@ -470,10 +471,10 @@ namespace MindCanvas
             modified = true;
         }
 
-        // 判断能否重做
+        /// <summary>判断能否重做</summary>
         public static bool CanRedo => records.Count() > nowIndex + 1;
 
-        // 记录一下
+        /// <summary>记录一下</summary>
         private static void Record()
         {
             // 判断现在是不是在records列表的最后一项操作，是的话直接添加记录就好
@@ -486,7 +487,7 @@ namespace MindCanvas
             modified = true;
         }
 
-        // 深拷贝
+        /// <summary>深拷贝</summary>
         private static T DeepCopy<T>(T obj)
         {
             object retval;
@@ -503,14 +504,14 @@ namespace MindCanvas
             return (T)retval;
         }
 
-        // 刷新标题
+        /// <summary>刷新标题</summary>
         public static void RefreshAppTitle()
         {
             string fileName = App.mindCanvasFile.File?.DisplayName ?? resourceLoader.GetString("Code_Untitled");// 无标题
             AppTitleBarControl.SetFileName(fileName);
         }
 
-        // 搜索思维导图
+        /// <summary>搜索思维导图</summary>
         public static List<Item> SearchMindMap(string queryText)
         {
             List<Item> result = new List<Item>();

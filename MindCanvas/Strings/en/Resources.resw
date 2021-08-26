@@ -592,4 +592,10 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   <data name="MainPage_HideTheSidebar.Text" xml:space="preserve">
     <value>Hide the sidebar</value>
   </data>
+  <data name="HelpPage_Licenses.Text" xml:space="preserve">
+    <value>Licenses</value>
+  </data>
+  <data name="OpenSourceTip" xml:space="preserve">
+    <value>MindCanvas has opened source in GitHub!</value>
+  </data>
 </root>

@@ -592,4 +592,10 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   <data name="MainPage_HideTheSidebar.Text" xml:space="preserve">
     <value>隱藏側欄</value>
   </data>
+  <data name="HelpPage_Licenses.Text" xml:space="preserve">
+    <value>許可</value>
+  </data>
+  <data name="OpenSourceTip" xml:space="preserve">
+    <value>MindCanvas 現已在GitHub上開源！</value>
+  </data>
 </root>

@@ -76,22 +76,22 @@
                         <!--作者：珒陶（陈锦涛）-->
                         <Run x:Uid="HelpPage_Paragraph3"></Run>
                     </Paragraph>
-                    
+
                     <Paragraph Margin="0,10,0,0">
                         <!--版本：-->
                         <Run x:Uid="HelpPage_Paragraph4"></Run>
                         <Run Text="{x:Bind Version}"/>
                     </Paragraph>
-                    
+
                     <Paragraph Margin="0,10,0,0">
                         <!--Copyright © 2021 珒陶. All rights reserved.-->
                         <Run x:Uid="HelpPage_Paragraph5"></Run>
                     </Paragraph>
-                    
+
                     <Paragraph Margin="0,10,0,0">
                         <!--更多信息可访问-->
                         <Run x:Uid="HelpPage_Paragraph6_1"></Run>
-                        
+
                         <Hyperlink NavigateUri="http://www.chenjt.com/mindcanvas">
                             <!--官方网站-->
                             <Run x:Uid="HelpPage_Paragraph6_2"></Run>
@@ -104,10 +104,62 @@
                             <!--隐私策略-->
                             <Run x:Uid="HelpPage_Paragraph6_4"></Run>
                         </Hyperlink>
-                        
+
                         <!--。-->
                         <Run x:Uid="HelpPage_Paragraph6_5"></Run>
                     </Paragraph>
+                </RichTextBlock>
+
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,40,0,0"
+                    FontWeight="Normal"
+                    x:Uid="HelpPage_Licenses"/>
+
+                <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
+
+                    <Paragraph>
+                        <Hyperlink NavigateUri="https://github.com/Microsoft/dotnet/blob/master/releases/UWP/LICENSE.TXT">
+                            Microsoft.NETCore.UniversalWindowsPlatform
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://go.microsoft.com/fwlink/p/?linkid=248155">
+                            Microsoft.Services.Store.SDK
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://licenses.nuget.org/MIT">
+                            Microsoft.Toolkit.Uwp
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://licenses.nuget.org/MIT">
+                            Microsoft.Toolkit.Uwp.Notifications
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://licenses.nuget.org/MIT">
+                            Microsoft.Toolkit.Uwp.UI
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://licenses.nuget.org/MIT">
+                            Microsoft.Toolkit.Uwp.UI.Controls
+                        </Hyperlink>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <Hyperlink NavigateUri="https://www.nuget.org/packages/Microsoft.UI.Xaml/2.6.2/License">
+                            Microsoft.UI.Xaml
+                        </Hyperlink>
+                    </Paragraph>
+
                 </RichTextBlock>
 
             </StackPanel>

@@ -7,7 +7,7 @@ namespace MindCanvas
     {
         private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
-        // 请求评价
+        /// <summary>请求评价</summary>
         public static void RequestRatingsAndReviews()
         {
             new ToastContentBuilder()

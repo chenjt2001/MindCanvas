@@ -78,14 +78,14 @@ namespace MindCanvas
             MindMapInkToolbar.IsStencilButtonChecked = false;
         }
 
-        // 擦除所有墨迹
+        /// <summary>擦除所有墨迹</summary>
         private void MindMapInkToolbar_EraseAllClicked(InkToolbar sender, object args)
         {
             EventsManager.ModifyInkCanvas(sender.TargetInkCanvas.InkPresenter.StrokeContainer);
             RefreshUnRedoBtn();
         }
 
-        // 刷新主题设置
+        /// <summary>刷新主题设置</summary>
         public void RefreshTheme()
         {
             // 应用主题颜色
@@ -105,7 +105,7 @@ namespace MindCanvas
             }
         }
 
-        // 配置点Border
+        /// <summary>配置点Border</summary>
         private void ConfigNodesBorder(List<Node> needConfig = null)
         {
             if (needConfig == null)
@@ -120,7 +120,7 @@ namespace MindCanvas
             }
         }
 
-        // 右键单击点
+        /// <summary>右键单击点</summary>
         private void NodeControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             // 创建右键菜单
@@ -135,15 +135,24 @@ namespace MindCanvas
             contextMenuFlyout.ShowAt(this, e.GetPosition(this));
         }
 
-        // 点击了右键的删除点按钮
+        /// <summary>点击了右键的删除点按钮</summary>
         private void DeleteNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
+            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(nowNode);
+
+            // BUG修复
+            // 如果这个点在selectedBorderList里，则移除
+            // 避免在连接点时发生异常
+            if (selectedBorderList.Contains(nodeControl))
+                selectedBorderList.Remove(nodeControl);
+
             EventsManager.RemoveNode(nowNode);
+
             RefreshUnRedoBtn();
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 配置线Path
+        /// <summary>配置线Path</summary>
         public void ConfigTiesPath(List<Tie> needConfig = null)
         {
             if (needConfig == null)
@@ -157,7 +166,7 @@ namespace MindCanvas
             }
         }
 
-        // 右键单击线
+        /// <summary>右键单击线</summary>
         private void Path_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             // 创建右键菜单
@@ -171,7 +180,7 @@ namespace MindCanvas
             contextMenuFlyout.ShowAt(this, e.GetPosition(this));
         }
 
-        // 点击了右键的删除线按钮
+        /// <summary>点击了右键的删除线按钮</summary>
         private void DeleteTieMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.RemoveTie(mindMapCanvas.ConvertPathToTie(sender as Windows.UI.Xaml.Shapes.Path));
@@ -179,7 +188,7 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 鼠标在线内释放，算按了一下线
+        /// <summary>鼠标在线内释放，算按了一下线</summary>
         private void Path_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             Windows.UI.Xaml.Shapes.Path path = sender as Windows.UI.Xaml.Shapes.Path;
@@ -189,7 +198,7 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.EditTiePage), tie);
         }
 
-        // 鼠标在点内释放，算按了一下点
+        /// <summary>鼠标在点内释放，算按了一下点</summary>
         private void Node_Released(object sender, PointerRoutedEventArgs e)
         {
             // 使EditFrame中的内容失去焦点
@@ -258,7 +267,7 @@ namespace MindCanvas
             }
         }
 
-        // 鼠标释放
+        /// <summary>鼠标释放</summary>
         private void MainPage_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
 
@@ -287,14 +296,14 @@ namespace MindCanvas
                                   // 那MainPage_PointerReleased就不能获取nowPressedNode了
         }
 
-        // 鼠标按下border
+        /// <summary>鼠标按下border</summary>
         private void Node_Pressed(object sender, PointerRoutedEventArgs e)
         {
             NodeControl border = sender as NodeControl;
             nowPressedNode = mindMapCanvas.ConvertBorderToNode(border);
         }
 
-        // 鼠标移动事件
+        /// <summary>鼠标移动事件</summary>
         private void MainPage_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             // 如果这时有个点正在被按下，就移动它
@@ -335,7 +344,7 @@ namespace MindCanvas
             }
         }
 
-        // 连接点按钮
+        /// <summary>连接点按钮</summary>
         private void TieBtn_Click(object sender, RoutedEventArgs e)
         {
             InkToolToggleSwitch.IsOn = false;
@@ -370,7 +379,7 @@ namespace MindCanvas
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
-        // 添加点
+        /// <summary>添加点</summary>
         private void ConfirmAddingNodeBtn_Click(object sender, RoutedEventArgs e)
         {
             if (AddNodeTextBox.Text != "")
@@ -387,7 +396,7 @@ namespace MindCanvas
             }
         }
 
-        // 撤销重做
+        /// <summary>撤销重做</summary>
         private void UnRedoBtn_Click(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Tag)
@@ -408,14 +417,14 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 刷新撤销重做按钮
+        /// <summary>刷新撤销重做按钮</summary>
         public void RefreshUnRedoBtn()
         {
             UndoBtn.IsEnabled = EventsManager.CanUndo;
             RedoBtn.IsEnabled = EventsManager.CanRedo;
         }
 
-        // MindMapBorder加载完成
+        /// <summary>MindMapBorder加载完成</summary>
         private void MindMapBorder_Loaded(object sender, RoutedEventArgs e)
         {
             mindMapCanvas = new MindMapCanvas();
@@ -428,7 +437,7 @@ namespace MindCanvas
             ChangeView(App.mindMap.VisualCenterX, App.mindMap.VisualCenterY, App.mindMap.ZoomFactor);
         }
 
-        // MindMapInkBorder加载完成
+        /// <summary>MindMapInkBorder加载完成</summary>
         private void MindMapInkBorder_Loaded(object sender, RoutedEventArgs e)
         {
             mindMapInkCanvas = new MindMapInkCanvas();
@@ -453,14 +462,14 @@ namespace MindCanvas
             }
         }
 
-        // MindMapScrollViewer大小改变
+        /// <summary>MindMapScrollViewer大小改变</summary>
         private void MindMapScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // 保持显示的相对位置不变
             MoveView();
         }
 
-        // 触控书写支持
+        /// <summary>触控书写支持</summary>
         private void TouchWritingBtn_Click(object sender, RoutedEventArgs e)
         {
             if (TouchWritingBtn.IsChecked == true)
@@ -473,7 +482,7 @@ namespace MindCanvas
             }
         }
 
-        // 墨迹书写模式切换
+        /// <summary>墨迹书写模式切换</summary>
         private void InkToolToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             if (InkToolToggleSwitch.IsOn)
@@ -493,7 +502,7 @@ namespace MindCanvas
                 mindMapInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Pen;
         }
 
-        // 尺子和量角器
+        /// <summary>尺子和量角器</summary>
         private void MindMapInkToolbar_IsStencilButtonCheckedChanged(InkToolbar sender, InkToolbarIsStencilButtonCheckedChangedEventArgs args)
         {
             InkPresenterRuler ruler = args.StencilButton.Ruler;// 直尺
@@ -516,7 +525,7 @@ namespace MindCanvas
             protractor.Transform = viewportTransform;
         }
 
-        // EditFrame跳转
+        /// <summary>EditFrame跳转</summary>
         public void ShowFrame(Type sourcePageType, object parameter = null)
         {
             NavigationTransitionInfo info;
@@ -529,13 +538,13 @@ namespace MindCanvas
             EditFrame.BackStack.Clear();
         }
 
-        // 默认值设置
+        /// <summary>默认值设置</summary>
         private void DefaultSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(DefaultSettingsPage));
         }
 
-        // 移动画布按钮
+        /// <summary>移动画布按钮</summary>
         private void Chevron_Click(object sender, RoutedEventArgs e)
         {
             string tag = (string)(sender as RepeatButton).Tag;
@@ -549,7 +558,7 @@ namespace MindCanvas
             }
         }
 
-        // 放大、缩小
+        /// <summary>放大、缩小</summary>
         private void Zoom_Click(object sender, RoutedEventArgs e)
         {
             string tag = (string)(sender as Button).Tag;
@@ -575,9 +584,13 @@ namespace MindCanvas
                 ZoomInBtn.IsEnabled = MindMapScrollViewer.ZoomFactor * 1.2 <= InitialValues.MaxZoomFactor;
                 ZoomOutBtn.IsEnabled = MindMapScrollViewer.ZoomFactor / 1.2 >= InitialValues.MinZoomFactor;
             }
+
+            double x = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2 - mindMapCanvas.Width * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
+            double y = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2 - mindMapCanvas.Height * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
+            EventsManager.ModifyViewport(x, y, MindMapScrollViewer.ZoomFactor);
         }
 
-        // 禁用鼠标滚轮
+        /// <summary>禁用鼠标滚轮</summary>
         private void MindMapGrid_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
             float power = e.GetCurrentPoint(MindMapScrollViewer).Properties.MouseWheelDelta > 0 ? 1.1f : 1 / 1.1f;
@@ -601,7 +614,10 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 改变可视区域（接受相对于画布中间的x和y）
+        /// <summary>改变可视区域</summary>
+        /// <param name="x">相对于画布中间的x</param>
+        /// <param name="y">相对于画布中间的y</param>
+        /// <param name="zoomFactor">缩放倍数</param>
         public void ChangeView(double? x, double? y, float? zoomFactor)
         {
             double horizontalOffset, verticalOffset;
@@ -623,11 +639,12 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
 
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor.Value);
-
-            EventsManager.ModifyViewport(x, y, zoomFactor.Value);
         }
 
-        // 移动可视区域（接受相对于画布中间的x和y的相对移动值和相对缩放倍数）
+        /// <summary>移动可视区域</summary>
+        /// <param name="relx">相对移动x</param>
+        /// <param name="rely">相对移动y</param>
+        /// <param name="power">相对缩放倍数</param>
         private void MoveView(double relx = 0, double rely = 0, float power = 1)
         {
             double horizontalOffset, verticalOffset, x, y;
@@ -645,11 +662,9 @@ namespace MindCanvas
             horizontalOffset = mindMapCanvas.Width * zoomFactor / 2 + x * zoomFactor - MindMapScrollViewer.ActualWidth / 2;
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
-
-            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
-        // 确保ZoomFactor规范化
+        /// <summary>确保ZoomFactor规范化</summary>
         private void FixZoomFactor(ref float zoomFactor)
         {
             if (zoomFactor < InitialValues.MinZoomFactor)
@@ -658,7 +673,7 @@ namespace MindCanvas
                 zoomFactor = InitialValues.MaxZoomFactor;
         }
 
-        // 设置RepeatButton的IsHitTestVisible
+        /// <summary>设置RepeatButton的IsHitTestVisible</summary>
         private void SetRepeatButtonIsHitTestVisible(bool value)
         {
             UpRepeatButton.IsHitTestVisible = value;
@@ -667,7 +682,7 @@ namespace MindCanvas
             RightRepeatButton.IsHitTestVisible = value;
         }
 
-        // 判断某点是否在可视区域
+        /// <summary>判断某点是否在可视区域</summary>
         private bool IsInViewport(double x, double y)
         {
             return App.mindMap.VisualCenterX - MindMapScrollViewer.ActualWidth / MindMapScrollViewer.ZoomFactor / 2 < x
@@ -676,7 +691,7 @@ namespace MindCanvas
                 && y < App.mindMap.VisualCenterY + MindMapScrollViewer.ActualHeight / MindMapScrollViewer.ZoomFactor / 2;
         }
 
-        // 按下Enter键就输入完成
+        /// <summary>按下Enter键就输入完成</summary>
         private void AddNodeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter && AddNodeTextBox.Text != "")
@@ -685,21 +700,24 @@ namespace MindCanvas
             }
         }
 
-        // 右键或触摸设备长按
+        /// <summary>右键或触摸设备长按</summary>
         private void MindMapBackgroundBorder_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             ContextMenuFlyout.ShowAt(this, e.GetPosition(this));
         }
 
-        // 删除所有点
+        /// <summary>删除所有点</summary>
         private void DeleteAllNodesMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
+            selectedBorderList.Clear();
+
             EventsManager.RemoveAllNodes();
+
             RefreshUnRedoBtn();
-            ShowFrame(typeof(EditPage.InfoPage));
+            ShowFrame(typeof(EditPage.InfoPage));            
         }
 
-        // 删除所有线
+        /// <summary>删除所有线</summary>
         private void DeleteAllTiesMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.RemoveAllTies();
@@ -707,7 +725,7 @@ namespace MindCanvas
             ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 用户输入文本
+        /// <summary>用户输入文本</summary>
         private void SearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
 
@@ -724,7 +742,7 @@ namespace MindCanvas
             }
         }
 
-        // 用户在建议列表中选择某个建议
+        /// <summary>用户在建议列表中选择某个建议</summary>
         private void SearchAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             // Set sender.Text. You can use args.SelectedItem to build your text string.
@@ -750,7 +768,7 @@ namespace MindCanvas
             }
         }
 
-        // 用户提交某个查询
+        /// <summary>用户提交某个查询</summary>
         private void SearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (args.ChosenSuggestion == null)
@@ -760,7 +778,7 @@ namespace MindCanvas
             }
         }
 
-        // 右键隐藏或显示侧栏
+        /// <summary>右键隐藏或显示侧栏</summary>
         private void HideOrShowTheSidebarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             if (RightBottomGrid.Visibility == Visibility.Visible)

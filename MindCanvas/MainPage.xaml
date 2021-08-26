@@ -164,7 +164,7 @@
                     <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
                     <RepeatButton Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
 
-                    <ScrollViewer 
+                    <ScrollViewer
                         Canvas.ZIndex="-1"
                         Grid.ColumnSpan="3"
                         Grid.RowSpan="3"
