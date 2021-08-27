@@ -159,6 +159,14 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
+                    <Grid.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <XamlControlsResources ControlsResourcesVersion="Version1" xmlns="using:Microsoft.UI.Xaml.Controls"/>
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </Grid.Resources>
+
                     <RepeatButton Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
                     <RepeatButton Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
                     <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>

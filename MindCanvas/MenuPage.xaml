@@ -4,15 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-
-    <Page.Resources>
-        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" />
-        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#1D2227" />
-    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,7 +16,7 @@
         </Grid.RowDefinitions>
         <local:AppTitleBarControl Grid.Row="0"/>
 
-        <NavigationView 
+        <muxc:NavigationView 
             Grid.Row="1"
             x:Name="NavView" 
             IsSettingsVisible="True" 
@@ -31,32 +27,33 @@
             Loaded="NavView_Loaded"
             SelectionChanged="NavView_SelectionChanged">
 
-            <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/><!--icon: Page-->
-                <NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" x:Uid="MenuPage_Open" />
-                <NavigationViewItem Icon="Save" Tag="Save" x:Uid="MenuPage_Save"/>
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/>
+                <!--icon: Page-->
+                <muxc:NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" x:Uid="MenuPage_Open" />
+                <muxc:NavigationViewItem Icon="Save" Tag="Save" x:Uid="MenuPage_Save"/>
 
-                <NavigationViewItem Tag="SaveAs" x:Uid="MenuPage_SaveAs" >
-                    <NavigationViewItem.Icon>
+                <muxc:NavigationViewItem Tag="SaveAs" x:Uid="MenuPage_SaveAs" >
+                    <muxc:NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE792;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
 
-                <NavigationViewItemSeparator/>
+                <muxc:NavigationViewItemSeparator/>
 
-                <NavigationViewItem Tag="Encrypt" x:Uid="MenuPage_Encrypt" >
-                    <NavigationViewItem.Icon>
+                <muxc:NavigationViewItem Tag="Encrypt" x:Uid="MenuPage_Encrypt" >
+                    <muxc:NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72E;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItemSeparator/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
 
-                <NavigationViewItem Tag="Export" x:Uid="MenuPage_Export" >
-                    <NavigationViewItem.Icon>
+                <muxc:NavigationViewItemSeparator/>
+
+                <muxc:NavigationViewItem Tag="Export" x:Uid="MenuPage_Export" >
+                    <muxc:NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDE1;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
 
                 <!--<NavigationViewItem Tag="Print" Content="打印">
                     <NavigationViewItem.Icon>
@@ -64,16 +61,17 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>-->
 
-                <NavigationViewItem Icon="Share" Tag="Share" x:Uid="MenuPage_Share"/>
+                <muxc:NavigationViewItem Icon="Share" Tag="Share" x:Uid="MenuPage_Share"/>
+
+            </muxc:NavigationView.MenuItems>
+            <muxc:NavigationView.FooterMenuItems>
                 
-                <NavigationViewItemSeparator/>
-
-                <NavigationViewItem Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>
-
-            </NavigationView.MenuItems>
+                <muxc:NavigationViewItem Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>
+                
+            </muxc:NavigationView.FooterMenuItems>
 
             <Frame x:Name="ContentFrame"/>
 
-        </NavigationView>
+        </muxc:NavigationView>
     </Grid>
 </Page>

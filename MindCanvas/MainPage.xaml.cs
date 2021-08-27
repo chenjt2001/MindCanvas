@@ -91,16 +91,16 @@ namespace MindCanvas
             // 应用主题颜色
             if (ThemeHelper.ActualTheme == ElementTheme.Light)
             {
-                MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
-                AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
-                AppNameBorder.Background = new SolidColorBrush(Colors.White);
+                //MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
+                //AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
+                //AppNameBorder.Background = new SolidColorBrush(Colors.White);
                 MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.White);
             }
             else if (ThemeHelper.ActualTheme == ElementTheme.Dark)
             {
-                MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
-                AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
-                AppNameBorder.Background = new SolidColorBrush(Colors.Black);
+                //MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
+                //AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
+                //AppNameBorder.Background = new SolidColorBrush(Colors.Black);
                 MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.DimGray);
             }
         }
