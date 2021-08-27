@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -209,21 +208,7 @@ namespace MindCanvas
 
             // 显示新功能
             if (SystemInformation.Instance.IsFirstRun || SystemInformation.Instance.IsAppUpdated)
-            {
                 await Dialog.Show.ShowNewFunction();
-
-                // 开源提示
-                ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
-                var msgDialog = new ContentDialog()
-                {
-                    Content = resourceLoader.GetString("OpenSourceTip"),
-                    PrimaryButtonText = "Go to GitHub",
-                    SecondaryButtonText = "OK",
-                };
-                ContentDialogResult r = await msgDialog.ShowAsync();
-                if (r == ContentDialogResult.Primary)
-                    await Windows.System.Launcher.LaunchUriAsync(new Uri(@"http://www.chenjt.com"));
-            }
         }
 
         /// <summary>退出应用程序</summary>

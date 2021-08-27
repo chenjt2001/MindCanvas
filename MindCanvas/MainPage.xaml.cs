@@ -714,7 +714,7 @@ namespace MindCanvas
             EventsManager.RemoveAllNodes();
 
             RefreshUnRedoBtn();
-            ShowFrame(typeof(EditPage.InfoPage));            
+            ShowFrame(typeof(EditPage.InfoPage));
         }
 
         /// <summary>删除所有线</summary>

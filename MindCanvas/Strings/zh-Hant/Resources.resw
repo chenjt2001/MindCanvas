@@ -595,7 +595,16 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   <data name="HelpPage_Licenses.Text" xml:space="preserve">
     <value>許可</value>
   </data>
-  <data name="OpenSourceTip" xml:space="preserve">
-    <value>MindCanvas 現已在GitHub上開源！</value>
+  <data name="HelpPage_Paragraph10.Text" xml:space="preserve">
+    <value>如有幫助，歡迎打賞，非常感謝~</value>
+  </data>
+  <data name="HelpPage_Paragraph8.Text" xml:space="preserve">
+    <value>是否打賞均不影響使用此軟件的任何功能，量力而行</value>
+  </data>
+  <data name="HelpPage_Paragraph9.Text" xml:space="preserve">
+    <value>打賞不意味著作者承諾對此軟件的後續維護和功能更新</value>
+  </data>
+  <data name="HelpPage_RewardTheAuthor.Content" xml:space="preserve">
+    <value>打賞作者</value>
   </data>
 </root>

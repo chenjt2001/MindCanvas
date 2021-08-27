@@ -595,7 +595,16 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   <data name="HelpPage_Licenses.Text" xml:space="preserve">
     <value>Licenses</value>
   </data>
-  <data name="OpenSourceTip" xml:space="preserve">
-    <value>MindCanvas has opened source in GitHub!</value>
+  <data name="HelpPage_Paragraph10.Text" xml:space="preserve">
+    <value>If this software is helpful to you, welcome to give a reward, thank you~</value>
+  </data>
+  <data name="HelpPage_Paragraph8.Text" xml:space="preserve">
+    <value>Whether to give a reward or not will not affect the use of any function of this software, do according to your ability</value>
+  </data>
+  <data name="HelpPage_Paragraph9.Text" xml:space="preserve">
+    <value>Rewarding does not mean that the author commits to subsequent maintenance and feature updates of this software</value>
+  </data>
+  <data name="HelpPage_RewardTheAuthor.Content" xml:space="preserve">
+    <value>Reward the author</value>
   </data>
 </root>
