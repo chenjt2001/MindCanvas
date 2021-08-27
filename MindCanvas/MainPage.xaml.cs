@@ -662,6 +662,8 @@ namespace MindCanvas
             horizontalOffset = mindMapCanvas.Width * zoomFactor / 2 + x * zoomFactor - MindMapScrollViewer.ActualWidth / 2;
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
+
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
         /// <summary>确保ZoomFactor规范化</summary>
