@@ -16,9 +16,12 @@ namespace MindCanvas
     public sealed partial class MenuPage : Page
     {
         // 声明共享的文件
-        private StorageFile SharedFile;
+        private StorageFile sharedFile;
 
         public static Frame MenuPageFrame;
+
+        // 上一Frame
+        private Microsoft.UI.Xaml.Controls.NavigationViewItem lastItem;
 
         // 资源加载器
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
@@ -33,6 +36,7 @@ namespace MindCanvas
         {
             // 默认选择打开文件界面
             NavView.SelectedItem = OpenItem;
+            lastItem = OpenItem;
 
             MenuPageFrame = this.Frame;
         }
@@ -61,26 +65,31 @@ namespace MindCanvas
             {
                 case "settings":
                     page = typeof(SettingsPage);
+                    lastItem = NavView.SettingsItem as Microsoft.UI.Xaml.Controls.NavigationViewItem;
                     header = resourceLoader.GetString("Code_Settings");// 设置
                     break;
 
                 case "Help":
                     page = typeof(HelpPage);
+                    lastItem = HelpItem;
                     header = resourceLoader.GetString("Code_Help");// 帮助
                     break;
 
                 case "Open":
                     page = typeof(OpenPage);
+                    lastItem = OpenItem;
                     header = resourceLoader.GetString("Code_Open");// 打开
                     break;
 
                 case "Encrypt":
                     page = typeof(EncryptPage);
+                    lastItem = EncryptItem;
                     header = resourceLoader.GetString("Code_Encrypt");// 加密
                     break;
 
                 case "Export":
                     page = typeof(ExportPage);
+                    lastItem = ExportItem;
                     header = resourceLoader.GetString("Code_Export");// 导出
                     break;
 
@@ -119,7 +128,7 @@ namespace MindCanvas
             if (await EventsManager.NewFile())
                 On_BackRequested();
             else
-                NavView.SelectedItem = OpenItem;
+                NavView.SelectedItem = lastItem;
         }
 
         // 保存文件
@@ -128,7 +137,7 @@ namespace MindCanvas
             if (await EventsManager.SaveFile())
                 On_BackRequested();// 保存成功则返回
             else
-                NavView.SelectedItem = OpenItem;// 没保存，回到打开文件界面
+                NavView.SelectedItem = lastItem;// 没保存，回到上一界面
         }
 
         // 分享
@@ -136,14 +145,14 @@ namespace MindCanvas
         {
             // 生成当前状态的文件
             StorageFolder storageFolder = ApplicationData.Current.TemporaryFolder;
-            SharedFile = await storageFolder.CreateFileAsync(
+            sharedFile = await storageFolder.CreateFileAsync(
                 DateTime.Now.ToLongDateString().ToString() + ".mindcanvas",
                 CreationCollisionOption.ReplaceExisting
             );
 
             MindCanvasFile mindCanvasFile = new MindCanvasFile();
             mindCanvasFile.MindMap = App.mindMap;
-            mindCanvasFile.File = SharedFile;
+            mindCanvasFile.File = sharedFile;
             await mindCanvasFile.SaveFile(addToMru: false);
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -151,19 +160,19 @@ namespace MindCanvas
 
             DataTransferManager.ShowShareUI();
 
-            NavView.SelectedItem = OpenItem;
+            NavView.SelectedItem = lastItem;
         }
 
         // DataRequested 事件处理程序，在用户每次调用共享时调用
         private void DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
-            if (SharedFile != null)
+            if (sharedFile != null)
             {
                 List<IStorageItem> storageItems = new List<IStorageItem>();
-                storageItems.Add(SharedFile);
+                storageItems.Add(sharedFile);
 
                 DataRequest request = args.Request;
-                request.Data.Properties.Title = SharedFile.Name;
+                request.Data.Properties.Title = sharedFile.Name;
                 request.Data.Properties.Description = resourceLoader.GetString("Code_SharedFromMindCanvas");// 已从 MindCanvas 共享
                 request.Data.SetStorageItems(storageItems);
             }
@@ -181,7 +190,7 @@ namespace MindCanvas
             else
             {
                 App.mindCanvasFile.File = originalFile;
-                NavView.SelectedItem = OpenItem;
+                NavView.SelectedItem = lastItem;
             }
         }
 

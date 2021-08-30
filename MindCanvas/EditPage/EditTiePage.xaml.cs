@@ -92,7 +92,7 @@ namespace MindCanvas.EditPage
         }
 
         // 使颜色跟随当前值改变
-        private void StrokeColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        private void StrokeColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
         {
             path.Stroke = new SolidColorBrush(StrokeColorPicker.Color);
         }

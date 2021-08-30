@@ -32,14 +32,14 @@
                 IsEnabled="{x:Bind Frame.CanGoBack, Mode=OneWay}"
                 x:Uid="DefaultSettingsPage_Back"
                 Click="BackButton_Click"/>
-            
-            
+
+
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <TextBlock HorizontalAlignment="Center"  Margin="0,4,0,0" Style="{StaticResource HeaderTextBlockStyle}" x:Uid="DefaultSettingsPage_DefaultValueSettings"/>
 
                     <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" x:Uid="DefaultSettingsPage_TheDefaultBorderColorOfTheNode" />
-                    <ColorPicker
+                    <muxc:ColorPicker
                         Margin="0,10,0,0"
                         x:Name="BorderBrushColorPicker"
                         ColorSpectrumShape="Box"
@@ -68,7 +68,7 @@
                     </muxc:RadioButtons>
 
                     <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,40,0,0" FontWeight="Normal" x:Uid="DefaultSettingsPage_TheDefaultColorOfTheTie" />
-                    <ColorPicker
+                    <muxc:ColorPicker
                         Margin="0,10,0,0"
                         x:Name="StrokeColorPicker"
                         ColorSpectrumShape="Box"

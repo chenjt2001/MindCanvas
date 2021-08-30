@@ -112,7 +112,7 @@ namespace MindCanvas.EditPage
         }
 
         // 使边框颜色跟随当前值改变
-        private void BorderBrushColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        private void BorderBrushColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
         {
             border.BorderBrush = new SolidColorBrush(BorderBrushColorPicker.Color);
         }

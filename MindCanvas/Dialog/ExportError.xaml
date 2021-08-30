@@ -7,6 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="ExportError">
+    <ContentDialog.Resources>
+        <Style TargetType="local:ExportError" BasedOn="{StaticResource DefaultContentDialogStyle}"/>
+    </ContentDialog.Resources>
 
     <Grid>
     </Grid>

@@ -35,7 +35,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="MindCanvas:Item">
                             <StackPanel Orientation="Horizontal">
-                                <Button Tag="{x:Bind}" x:Name="ItemEditButton" Margin="0,0,2,0" FontFamily="Segoe MDL2 Assets" Content="&#xE70F;" Click="ItemEditButton_Click"/>
+                                <Button Tag="{x:Bind}" x:Name="ItemEditButton" Margin="0,0,2,0" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70F;" Click="ItemEditButton_Click"/>
                                 <TextBlock Text="{x:Bind Text}" />
                             </StackPanel>
                         </DataTemplate>

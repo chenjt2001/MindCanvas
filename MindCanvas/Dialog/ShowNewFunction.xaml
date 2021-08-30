@@ -2,11 +2,14 @@
     x:Class="MindCanvas.Dialog.ShowNewFunction"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MindCanvas"
+    xmlns:local="using:MindCanvas.Dialog"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="ShowNewFunction">
+    <ContentDialog.Resources>
+        <Style TargetType="local:ShowNewFunction" BasedOn="{StaticResource DefaultContentDialogStyle}"/>
+    </ContentDialog.Resources>
 
     <Grid>
     </Grid>

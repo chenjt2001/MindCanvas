@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -23,41 +23,39 @@
             x:Uid="MenuPage_Menu"
             BackRequested="NavView_BackRequested"
             IsBackEnabled="True"
-            PaneDisplayMode="Left"
             Loaded="NavView_Loaded"
             SelectionChanged="NavView_SelectionChanged">
 
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/>
-                <!--icon: Page-->
+                <muxc:NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/><!--icon: Page-->
                 <muxc:NavigationViewItem x:Name="OpenItem" Icon="OpenFile" Tag="Open" x:Uid="MenuPage_Open" />
                 <muxc:NavigationViewItem Icon="Save" Tag="Save" x:Uid="MenuPage_Save"/>
 
                 <muxc:NavigationViewItem Tag="SaveAs" x:Uid="MenuPage_SaveAs" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE792;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE792;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
                 <muxc:NavigationViewItemSeparator/>
 
-                <muxc:NavigationViewItem Tag="Encrypt" x:Uid="MenuPage_Encrypt" >
+                <muxc:NavigationViewItem x:Name="EncryptItem" Tag="Encrypt" x:Uid="MenuPage_Encrypt" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72E;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE72E;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
                 <muxc:NavigationViewItemSeparator/>
 
-                <muxc:NavigationViewItem Tag="Export" x:Uid="MenuPage_Export" >
+                <muxc:NavigationViewItem x:Name="ExportItem" Tag="Export" x:Uid="MenuPage_Export" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDE1;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xEDE1;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
                 <!--<NavigationViewItem Tag="Print" Content="打印">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE749;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE749;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>-->
 
@@ -65,8 +63,8 @@
 
             </muxc:NavigationView.MenuItems>
             <muxc:NavigationView.FooterMenuItems>
-                
-                <muxc:NavigationViewItem Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>
+
+                <muxc:NavigationViewItem x:Name="HelpItem" Icon="Help" Tag="Help"  x:Uid="MenuPage_Help"/>
                 
             </muxc:NavigationView.FooterMenuItems>
 

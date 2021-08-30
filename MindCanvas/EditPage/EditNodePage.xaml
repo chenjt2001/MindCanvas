@@ -63,7 +63,7 @@
                     <ToggleSwitch x:Name="UseDefaultBorderBrushToggleSwitch" Margin="0,20,0,0" x:Uid="EditNodePage_UseDefaultValue" Toggled="UseDefaultBorderBrushToggleSwitch_Toggled"/>
 
                     <Viewbox x:Name="ColorPickerViewbox" MaxWidth="200">
-                        <ColorPicker
+                        <muxc:ColorPicker
                             x:Name="BorderBrushColorPicker"
                             ColorSpectrumShape="Box"
                             IsMoreButtonVisible="False"

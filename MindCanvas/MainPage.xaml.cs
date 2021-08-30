@@ -587,7 +587,8 @@ namespace MindCanvas
 
             double x = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2 - mindMapCanvas.Width * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
             double y = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2 - mindMapCanvas.Height * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
-            EventsManager.ModifyViewport(x, y, MindMapScrollViewer.ZoomFactor);
+            float zoomFactor = MindMapScrollViewer.ZoomFactor;
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
         /// <summary>禁用鼠标滚轮</summary>
@@ -639,6 +640,8 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
 
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor.Value);
+
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
         /// <summary>移动可视区域</summary>
@@ -663,6 +666,9 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
+            // 之所以在这里写ModifyViewport而不是交给MindMapScrollViewer_ViewChanged处理，是因为
+            // MindMapScrollViewer_ManipulationDelta函数可能被调用多次后才发生一次
+            // MindMapScrollViewer_ViewChanged，从而导致App.mindMap.VisualCenterX等没有实时更新
             EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
@@ -798,5 +804,8 @@ namespace MindCanvas
                 HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_HideTheSidebar");// 隐藏侧栏
             }
         }
+
+        /// <summary>两只手指在触摸板捏合时会发生该事件</summary>
+        //private void MindMapScrollViewer_DirectManipulationCompleted(object sender, object e) { }
     }
 }

@@ -7,6 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="OpenFileError">
+    <ContentDialog.Resources>
+        <Style TargetType="local:OpenFileError" BasedOn="{StaticResource DefaultContentDialogStyle}"/>
+    </ContentDialog.Resources>
 
     <Grid>
     </Grid>

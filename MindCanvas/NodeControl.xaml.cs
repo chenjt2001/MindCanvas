@@ -89,6 +89,7 @@ namespace MindCanvas
 
             if (ShowAnimation)
             {
+                NodeDropShadowPanel.ShadowOpacity = 0.5;
                 CreateOrUpdateSpringAnimation(1.1f);
                 StartAnimation();
             }
@@ -101,11 +102,13 @@ namespace MindCanvas
             {
                 if (IsSelected)
                 {
+                    NodeDropShadowPanel.ShadowOpacity = 0.5;
                     CreateOrUpdateSpringAnimation(1.05f);
                     StartAnimation();
                 }
                 else
                 {
+                    NodeDropShadowPanel.ShadowOpacity = 0;
                     // Scale back down to 1.0
                     CreateOrUpdateSpringAnimation(1.0f);
                     StartAnimation();
@@ -120,6 +123,7 @@ namespace MindCanvas
 
             if (ShowAnimation)
             {
+                NodeDropShadowPanel.ShadowOpacity = 0.5;
                 // 缩放到1.05倍
                 CreateOrUpdateSpringAnimation(1.05f);
                 StartAnimation();
@@ -133,6 +137,7 @@ namespace MindCanvas
 
             if (ShowAnimation)
             {
+                NodeDropShadowPanel.ShadowOpacity = 0.5;
                 CreateOrUpdateSpringAnimation(1.1f);
                 StartAnimation();
             }
@@ -328,11 +333,14 @@ namespace MindCanvas
                 {
                     if (isSelected)
                     {
+                        NodeDropShadowPanel.ShadowOpacity = 0.5;
+                        //this.BorderBrush = new RevealBorderBrush();
                         CreateOrUpdateSpringAnimation(1.05f);
                         StartAnimation();
                     }
                     else
                     {
+                        NodeDropShadowPanel.ShadowOpacity = 0;
                         CreateOrUpdateSpringAnimation(1.0f);
                         StartAnimation();
                     }

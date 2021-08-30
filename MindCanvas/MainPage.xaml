@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -167,12 +168,12 @@
                         </ResourceDictionary>
                     </Grid.Resources>
 
-                    <RepeatButton Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
 
-                    <ScrollViewer
+                    <ScrollViewer 
                         Canvas.ZIndex="-1"
                         Grid.ColumnSpan="3"
                         Grid.RowSpan="3"
@@ -186,6 +187,17 @@
                         SizeChanged="MindMapScrollViewer_SizeChanged"
                         ViewChanged="MindMapScrollViewer_ViewChanged"
                         ManipulationMode="All">
+
+                        <!--应该是Winui2.6的bug，由于我上面临时搞了一下ControlsResourcesVersion="Version1"，
+                        现在如果不设置Version2的话后面的NavigationView效果就会有问题-->
+                        <ScrollViewer.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <XamlControlsResources ControlsResourcesVersion="Version2" xmlns="using:Microsoft.UI.Xaml.Controls"/>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </ScrollViewer.Resources>
+                        
                         <Grid 
                             Canvas.ZIndex="-1" 
                             x:Name="MindMapGrid" 
@@ -225,7 +237,7 @@
                 </Grid>
             </Grid>
 
-            <Grid x:Name="RightBottomGrid" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid x:Name="RightBottomGrid" CornerRadius="10,0,0,0" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>

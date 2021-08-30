@@ -40,7 +40,7 @@
                     <ToggleSwitch x:Name="UseDefaultStrokeToggleSwitch" Margin="0,20,0,0" x:Uid="EditTiePage_UseDefaultValue" Toggled="UseDefaultStrokeToggleSwitch_Toggled"/>
 
                     <Viewbox x:Name="ColorPickerViewbox" MaxWidth="200">
-                        <ColorPicker
+                        <muxc:ColorPicker
                             x:Name="StrokeColorPicker"
                             ColorSpectrumShape="Box"
                             IsMoreButtonVisible="False"

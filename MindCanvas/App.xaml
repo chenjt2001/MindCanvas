@@ -16,7 +16,12 @@
                 <Setter Property="FontSize" Value="24" />
                 <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings" />
             </Style>
-            
+
+            <!--Win10-->
+            <!--<FontFamily x:Key="SymbolThemeFontFamily">Segoe MDL2 Assets</FontFamily>-->
+            <!--Win11-->
+            <FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons</FontFamily>
+
         </ResourceDictionary>
     </Application.Resources>
 
