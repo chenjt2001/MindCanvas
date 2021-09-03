@@ -41,7 +41,7 @@ namespace MindCanvas
             MenuPageFrame = this.Frame;
         }
 
-        // 点击导致新项被选中
+        /// <summary>点击导致新项被选中</summary>
         private void NavView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected == true)
@@ -55,7 +55,7 @@ namespace MindCanvas
             }
         }
 
-        // 导航
+        /// <summary>导航</summary>
         private void NavView_Navigate(string navItemTag, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
         {
             Type page = null;
@@ -122,7 +122,7 @@ namespace MindCanvas
             }
         }
 
-        // 新建文件
+        /// <summary>新建文件</summary>
         private async void NewFile()
         {
             if (await EventsManager.NewFile())
@@ -131,7 +131,7 @@ namespace MindCanvas
                 NavView.SelectedItem = lastItem;
         }
 
-        // 保存文件
+        /// <summary>保存文件</summary>
         private async void Save()
         {
             if (await EventsManager.SaveFile())
@@ -140,7 +140,7 @@ namespace MindCanvas
                 NavView.SelectedItem = lastItem;// 没保存，回到上一界面
         }
 
-        // 分享
+        /// <summary>分享</summary>
         private async void Share()
         {
             // 生成当前状态的文件
@@ -163,7 +163,7 @@ namespace MindCanvas
             NavView.SelectedItem = lastItem;
         }
 
-        // DataRequested 事件处理程序，在用户每次调用共享时调用
+        /// <summary>DataRequested 事件处理程序，在用户每次调用共享时调用</summary>
         private void DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             if (sharedFile != null)
@@ -178,7 +178,7 @@ namespace MindCanvas
             }
         }
 
-        // 另存为
+        /// <summary>另存为</summary>
         private async void SaveAs()
         {
             // 暂时将mindCanvasFile.file设为空，然后发起保存
@@ -194,13 +194,13 @@ namespace MindCanvas
             }
         }
 
-        // 用户点击后退按钮
+        /// <summary>用户点击后退按钮</summary>
         private void NavView_BackRequested(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewBackRequestedEventArgs args)
         {
             On_BackRequested();
         }
 
-        // Handles system-level BackRequested events and page-level back button Click events
+        /// <summary>Handles system-level BackRequested events and page-level back button Click events</summary>
         private bool On_BackRequested()
         {
             try// 防止用户已经返回了

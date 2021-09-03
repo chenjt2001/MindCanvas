@@ -120,8 +120,8 @@
 
             <Grid x:Name="LeftBottomGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">

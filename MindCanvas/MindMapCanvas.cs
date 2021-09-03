@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace MindCanvas
 {
-    // 思维导图Canvas
+    /// <summary>思维导图Canvas</summary>
     public class MindMapCanvas : Canvas// InfiniteCanvas
     {
         private MindMap mindMap;
@@ -47,7 +47,7 @@ namespace MindCanvas
             }
         }
 
-        // 画一个点
+        /// <summary>画一个点</summary>
         public void Draw(Node node)
         {
             NodeControl nodeControl = new NodeControl(node, mindMap, showAnimation: showAnimation);
@@ -62,7 +62,7 @@ namespace MindCanvas
             nodeControl.UpdateLayout();
         }
 
-        // 画一条线
+        /// <summary>画一条线</summary>
         public void Draw(Tie tie)
         {
             // 获取这条线的两个点
@@ -83,7 +83,7 @@ namespace MindCanvas
             tieIdPath[tie.Id] = path;
         }
 
-        // 查询border对应的点
+        /// <summary>查询border对应的点</summary>
         public Node ConvertBorderToNode(NodeControl border)
         {
             Node requiredNode = new Node();
@@ -106,14 +106,14 @@ namespace MindCanvas
             return requiredNode;
         }
 
-        // 查询点对应的Border
+        /// <summary>查询点对应的Border</summary>
         public NodeControl ConvertNodeToBorder(Node node)
         {
             return nodeIdBorder[node.Id];
         }
 
 
-        // 查询path对应的线
+        /// <summary>查询path对应的线</summary>
         public Tie ConvertPathToTie(Windows.UI.Xaml.Shapes.Path path)
         {
             Tie requiredTie = new Tie();
@@ -136,13 +136,13 @@ namespace MindCanvas
             return requiredTie;
         }
 
-        // 查询线对应的Path
+        /// <summary>查询线对应的Path</summary>
         public Windows.UI.Xaml.Shapes.Path ConvertTieToPath(Tie tie)
         {
             return tieIdPath[tie.Id];
         }
 
-        // 绘制全部
+        /// <summary>绘制全部</summary>
         public void DrawAll()
         {
             // 绘制点
@@ -154,21 +154,21 @@ namespace MindCanvas
                 Draw(tie);
         }
 
-        // 清除点
+        /// <summary>清除点</summary>
         public void Clear(Node node)
         {
             NodeControl border = ConvertNodeToBorder(node);
             Children.Remove(border);
         }
 
-        // 清除连接
+        /// <summary>清除连接</summary>
         public void Clear(Tie tie)
         {
             Windows.UI.Xaml.Shapes.Path path = ConvertTieToPath(tie);
             Children.Remove(path);
         }
 
-        // 重绘
+        /// <summary>重绘</summary>
         public void ReDraw()
         {
             Children.Clear();
@@ -177,6 +177,7 @@ namespace MindCanvas
             DrawAll();
         }
 
+        /// <summary>重绘</summary>
         public void ReDraw(Tie tie)
         {
             Children.Remove(ConvertTieToPath(tie));
@@ -184,14 +185,14 @@ namespace MindCanvas
             Draw(tie);
         }
 
-        // 重绘线
+        /// <summary>重绘线</summary>
         public void ReDrawTies(Node node)
         {
             foreach (Tie tie in mindMap.GetTies(node))
                 ReDraw(tie);
         }
 
-        // 获取边框
+        /// <summary>获取边框</summary>
         public Rect BoundingRect
         {
             get

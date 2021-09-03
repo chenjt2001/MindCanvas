@@ -7,7 +7,7 @@ namespace MindCanvas
 {
     static class LoadingHelper
     {
-        // 显示加载界面
+        /// <summary>显示加载界面</summary>
         public static Task ShowLoading(string message = null)
         {
             if (Window.Current.Content is Frame frame)
@@ -36,7 +36,7 @@ namespace MindCanvas
             return Task.Run(() => Thread.Sleep(1000));
         }
 
-        // 隐藏加载界面
+        /// <summary>隐藏加载界面</summary>
         public static void HideLoading()
         {
             if (Window.Current.Content is Frame frame)

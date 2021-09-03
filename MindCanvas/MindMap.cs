@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
 {
-    // 思维导图
+    /// <summary>思维导图</summary>
     public class MindMap
     {
         private List<Node> nodes;
@@ -40,7 +40,7 @@ namespace MindCanvas
             ties = new List<Tie>();
         }
 
-        // 初始化成新的思维导图
+        /// <summary>初始化成新的思维导图</summary>
         public void Initialize(bool createFirst = true)
         {
             nodes.Clear();
@@ -70,7 +70,7 @@ namespace MindCanvas
             defaultTieStroke = new SolidColorBrush(InitialValues.TieStrokeColor);
         }
 
-        // 添加点
+        /// <summary>添加点</summary>
         public Node AddNode(string name, string description)
         {
             Node newNode;
@@ -102,7 +102,7 @@ namespace MindCanvas
             return newNode;
         }
 
-        // 添加连接
+        /// <summary>添加连接</summary>
         public Tie AddTie(int node1id, int node2id, string description)
         {
             int id;
@@ -124,7 +124,7 @@ namespace MindCanvas
             return newTie;
         }
 
-        // 获取一条线连接的两个点
+        /// <summary>获取一条线连接的两个点</summary>
         public List<Node> GetNodes(Tie tie)
         {
             List<Node> needNodes = new List<Node>();
@@ -139,7 +139,7 @@ namespace MindCanvas
             return needNodes;
         }
 
-        // 获取连接着的点
+        /// <summary>获取连接着的点</summary>
         public List<Node> GetNodes(Node node)
         {
             List<Node> nodes = new List<Node>();
@@ -153,7 +153,7 @@ namespace MindCanvas
             return nodes;
         }
 
-        // 获取连着一个点的线有哪些
+        /// <summary>获取连着一个点的线有哪些</summary>
         public List<Tie> GetTies(Node node)
         {
             List<Tie> needTies = new List<Tie>();
@@ -163,7 +163,7 @@ namespace MindCanvas
             return needTies;
         }
 
-        // 按Id获取点
+        /// <summary>按Id获取点</summary>
         public Node GetNode(int id)
         {
             foreach (Node node in nodes)
@@ -172,7 +172,7 @@ namespace MindCanvas
             return null;
         }
 
-        // 按Id获取线
+        /// <summary>按Id获取线</summary>
         public Tie GetTie(int id)
         {
             foreach (Tie tie in ties)
@@ -181,7 +181,7 @@ namespace MindCanvas
             return null;
         }
 
-        // 获取两个点间的线
+        /// <summary>获取两个点间的线</summary>
         public Tie GetTie(Node node1, Node node2)
         {
             foreach (Tie tie in ties)
@@ -190,7 +190,7 @@ namespace MindCanvas
             return null;
         }
 
-        // 删除点
+        /// <summary>删除点</summary>
         public List<Tie> RemoveNode(Node node)
         {
             // 删除这个点本身
@@ -208,13 +208,13 @@ namespace MindCanvas
             return needRemove;
         }
 
-        // 删除连接
+        /// <summary>删除连接</summary>
         public void RemoveTie(Tie tie)
         {
             ties.Remove(tie);
         }
 
-        // 加载数据并清空当前的数据
+        /// <summary>加载数据并清空当前的数据</summary>
         public void LoadData(MindCanvasFileData mindCanvasFileData)
         {
             this.nodes = mindCanvasFileData.Nodes;
@@ -230,7 +230,7 @@ namespace MindCanvas
             this.defaultTieStroke = mindCanvasFileData.DefaultTieStroke as SolidColorBrush;
         }
 
-        // 获取可序列化的数据
+        /// <summary>获取可序列化的数据</summary>
         public MindCanvasFileData GetData()
         {
             MindCanvasFileData mindCanvasFileData = new MindCanvasFileData
@@ -250,7 +250,7 @@ namespace MindCanvas
             return mindCanvasFileData;
         }
 
-        // 修改点
+        /// <summary>修改点名称和描述</summary>
         public Node ModifyNode(int id, string name, string description)
         {
             Node node = GetNode(id);
@@ -261,6 +261,7 @@ namespace MindCanvas
             return node;
         }
 
+        /// <summary>修改点位置</summary>
         public Node ModifyNode(int id, double x, double y)
         {
             Node node = GetNode(id);
@@ -271,7 +272,7 @@ namespace MindCanvas
             return node;
         }
 
-        // 修改线
+        /// <summary>修改线</summary>
         public Tie ModifyTie(int id, string description)
         {
             Tie tie = GetTie(id);

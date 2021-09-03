@@ -25,13 +25,13 @@ namespace MindCanvas
             StrokeColorPicker.Color = App.mindMap.DefaultTieStroke.Color;// 线的默认颜色
         }
 
-        // 取消
+        /// <summary>取消</summary>
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             On_BackRequested();
         }
 
-        // 保存
+        /// <summary>保存</summary>
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
             Save();
@@ -44,7 +44,7 @@ namespace MindCanvas
             return true;
         }
 
-        // 恢复初始值
+        /// <summary>恢复初始值</summary>
         private void InitializeBtn_Click(object sender, RoutedEventArgs e)
         {
             BorderBrushColorPicker.Color = InitialValues.NodeBorderBrushColor;
@@ -60,7 +60,7 @@ namespace MindCanvas
             StrokeColorPicker.Color = InitialValues.TieStrokeColor;
         }
 
-        // 返回
+        /// <summary>返回</summary>
         private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
             // 默认设置已修改
@@ -90,7 +90,7 @@ namespace MindCanvas
                 On_BackRequested();
         }
 
-        // 保存
+        /// <summary>保存</summary>
         private void Save()
         {
             EventsManager.ModifyDefaultSettings(BorderBrushColorPicker.Color,

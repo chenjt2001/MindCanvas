@@ -58,7 +58,7 @@ namespace MindCanvas.EditPage
             UseDefaultStyleToggleSwitch_Toggled(UseDefaultStyleToggleSwitch, null);
         }
 
-        // 删除点
+        /// <summary>删除点</summary>
         private void RemoveNodeBtn_Click(object sender, RoutedEventArgs e)
         {
             EventsManager.RemoveNode(node);
@@ -66,7 +66,7 @@ namespace MindCanvas.EditPage
             mainPage.ShowFrame(typeof(EditPage.InfoPage));
         }
 
-        // 名称文本框失去焦点
+        /// <summary>名称文本框失去焦点</summary>
         private void NameTextBox_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
             // 如果已修改，则修改点名称
@@ -77,7 +77,7 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 描述文本框失去焦点
+        /// <summary>描述文本框失去焦点</summary>
         private void DescriptionTextBox_LosingFocus(object sender, RoutedEventArgs e)
         {
             // 如果已修改，则修改点描述
@@ -88,7 +88,7 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 使显示的点名称跟随输入框改变
+        /// <summary>使显示的点名称跟随输入框改变</summary>
         private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             border.Text = NameTextBox.Text;
@@ -105,19 +105,19 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 使点描述提示跟随输入框改变
+        /// <summary>使点描述提示跟随输入框改变</summary>
         private void DescriptionTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             border.ToolTipContent = DescriptionTextBox.Text;
         }
 
-        // 使边框颜色跟随当前值改变
+        /// <summary>使边框颜色跟随当前值改变</summary>
         private void BorderBrushColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
         {
             border.BorderBrush = new SolidColorBrush(BorderBrushColorPicker.Color);
         }
 
-        // 鼠标释放，完成颜色修改
+        /// <summary>鼠标释放，完成颜色修改</summary>
         private void BorderBrushColorPicker_PointerCaptureLost(object sender, PointerRoutedEventArgs e)
         {
             if (node.BorderBrushArgb != null)
@@ -138,7 +138,7 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 自定义字体大小输入完成
+        /// <summary>自定义字体大小输入完成</summary>
         private void FontSizeNumberBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
         {
 
@@ -157,7 +157,7 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 刷新点位置
+        /// <summary>刷新点位置</summary>
         private void RefreshNodePosition()
         {
             border.UpdateLayout();
@@ -165,7 +165,7 @@ namespace MindCanvas.EditPage
             Canvas.SetTop(border, MainPage.mindMapCanvas.Height / 2 + node.Y - border.ActualHeight / 2);
         }
 
-        // 按Shift+Enter键才能换行
+        /// <summary>按Shift+Enter键才能换行</summary>
         private void NameTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)

@@ -82,7 +82,7 @@ namespace MindCanvas
             };
         }
 
-        // 鼠标释放
+        /// <summary>鼠标释放</summary>
         private void NodeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             IsSelected = true;
@@ -95,7 +95,7 @@ namespace MindCanvas
             }
         }
 
-        // 鼠标退出
+        /// <summary>鼠标退出</summary>
         private void NodeControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             if (ShowAnimation)
@@ -116,7 +116,7 @@ namespace MindCanvas
             }
         }
 
-        // 鼠标按下
+        /// <summary>鼠标按下</summary>
         private void NodeControl_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             DescriptionToolTip.IsEnabled = false;
@@ -130,7 +130,7 @@ namespace MindCanvas
             }
         }
 
-        // 鼠标进入
+        /// <summary>鼠标进入</summary>
         private void NodeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             DescriptionToolTip.IsEnabled = true;
@@ -153,7 +153,7 @@ namespace MindCanvas
             ToolTipVerticalOffset = -60 - DescriptionToolTip.DesiredSize.Height;
         }
 
-        // 动画配置
+        /// <summary>动画配置</summary>
         private void CreateOrUpdateSpringAnimation(float finalValue)
         {
             if (_springAnimation == null)
@@ -164,7 +164,7 @@ namespace MindCanvas
             _springAnimation.FinalValue = new Vector3(finalValue);
         }
 
-        // 背景颜色
+        /// <summary>背景颜色</summary>
         public new Brush Background
         {
             get => background;
@@ -178,7 +178,7 @@ namespace MindCanvas
             }
         }
 
-        // 边框颜色
+        /// <summary>边框颜色</summary>
         public new Brush BorderBrush
         {
             get => borderBrush;
@@ -192,7 +192,7 @@ namespace MindCanvas
             }
         }
 
-        // 边框粗细
+        /// <summary>边框粗细</summary>
         public new Thickness BorderThickness
         {
             get => borderThickness;
@@ -206,10 +206,10 @@ namespace MindCanvas
             }
         }
 
-        // 边框与子对象间的距离
+        /// <summary>边框与子对象间的距离</summary>
         public new Thickness Padding => new Thickness(10);
 
-        // 圆角半径
+        /// <summary>圆角半径</summary>
         public new CornerRadius CornerRadius
         {
             get => cornerRadius;
@@ -223,7 +223,7 @@ namespace MindCanvas
             }
         }
 
-        // 文字内容
+        /// <summary>文字内容</summary>
         public string Text
         {
             get => text;
@@ -237,7 +237,7 @@ namespace MindCanvas
             }
         }
 
-        // 描述
+        /// <summary>描述</summary>
         public string ToolTipContent
         {
             get => toolTipContent;
@@ -251,7 +251,7 @@ namespace MindCanvas
             }
         }
 
-        // 描述位置
+        /// <summary>描述位置</summary>
         public double ToolTipVerticalOffset
         {
             get => toolTipVerticalOffset;
@@ -265,7 +265,7 @@ namespace MindCanvas
             }
         }
 
-        // 文字大小
+        /// <summary>文字大小</summary>
         public new double FontSize
         {
             get => fontSize;
@@ -279,7 +279,7 @@ namespace MindCanvas
             }
         }
 
-        // 样式
+        /// <summary>样式</summary>
         public new string Style
         {
             get => style;
@@ -318,10 +318,10 @@ namespace MindCanvas
             }
         }
 
-        // 文字颜色
+        /// <summary>文字颜色</summary>
         public new Brush Foreground => new SolidColorBrush(Colors.Black);
 
-        // 选择
+        /// <summary>选择</summary>
         public bool IsSelected
         {
             get => isSelected;
@@ -383,7 +383,7 @@ namespace MindCanvas
             return visualSize;
         }
 
-        // 锚点（线连着的地方）
+        /// <summary>锚点（线连着的地方）</summary>
         private static Windows.Foundation.Point GetAnchorInCanvas(NodeControl nodeControl, double anotherX, double anotherY)
         {
             Windows.Foundation.Size visualSize = nodeControl.GetVisualSize();
@@ -433,9 +433,11 @@ namespace MindCanvas
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // This method is called by the Set accessor of each property.  
-        // The CallerMemberName attribute that is applied to the optional propertyName  
-        // parameter causes the property name of the caller to be substituted as an argument.
+        /// <summary>
+        /// This method is called by the Set accessor of each property.  
+        /// The CallerMemberName attribute that is applied to the optional propertyName
+        /// parameter causes the property name of the caller to be substituted as an argument.
+        /// </summary>
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

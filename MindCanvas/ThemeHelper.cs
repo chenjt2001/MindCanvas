@@ -6,8 +6,10 @@ using Windows.UI.Xaml;
 
 namespace MindCanvas
 {
-    // 主题切换
-    // 来自Xaml-Controls-Gallery
+    /// <summary>
+    /// 主题切换
+    /// 来自Xaml-Controls-Gallery
+    /// </summary>
     public static class ThemeHelper
     {
         private const string SelectedAppThemeKey = "SelectedAppTheme";

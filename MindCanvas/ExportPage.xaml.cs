@@ -105,7 +105,7 @@ namespace MindCanvas
             }
         }
 
-        // 导出
+        /// <summary>导出</summary>
         private async Task Export(StorageFile file, Guid format)
         {
             LogHelper.Info("Export");
@@ -357,7 +357,7 @@ namespace MindCanvas
             }
         }
 
-        // 缩放
+        /// <summary>缩放</summary>
         private static SoftwareBitmap Resize(SoftwareBitmap softwareBitmap, float newWidth, float newHeight)
         {
             using (var resourceCreator = CanvasDevice.GetSharedDevice())
@@ -374,7 +374,7 @@ namespace MindCanvas
             }
         }
 
-        // 混合颜色
+        /// <summary>混合颜色</summary>
         private static Color BlendColor(Color color1, Color color2, bool backgroundMode = false)
         {
             double a1 = Convert.ToInt32(color1.A) / 255.0;
