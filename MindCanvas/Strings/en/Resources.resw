@@ -434,13 +434,7 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>OK</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.Added the right-click menu.
-2.Added file encryption function.
-3.Added search function.
-4.Support to modify the style of nodes.
-5.Support to modify the color of ties. 
-6.Fixed some bugs.
-7.Optimized some details.</value>
+    <value>Fixed some bugs.</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>New Function</value>

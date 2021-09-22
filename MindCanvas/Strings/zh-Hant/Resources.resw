@@ -434,13 +434,7 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
     <value>好的</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.增加了右鍵菜單。
-2.增加了文件加密功能。
-3.增加了搜索功能。
-4.支持修改點的樣式。
-5.支持修改線的顏色。
-6.修復了一些BUG。
-7.優化了一些細節。</value>
+    <value>修復了一些BUG。</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>新功能</value>
