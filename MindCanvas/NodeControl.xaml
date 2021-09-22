@@ -8,6 +8,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
+    Loaded="NodeControl_Loaded"
     d:DesignWidth="400">
 
 
@@ -29,6 +30,7 @@
             <ToolTipService.ToolTip>
                 <ToolTip 
                 x:Name="DescriptionToolTip" 
+                x:FieldModifier="public"
                 Content="{x:Bind ToolTipContent, Mode=OneWay}" 
                 Opened="DescriptionToolTip_Opened" 
                 VerticalOffset="{x:Bind ToolTipVerticalOffset, Mode=OneWay}"  />

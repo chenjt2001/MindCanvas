@@ -127,85 +127,62 @@ namespace MindCanvas
         /// <summary>获取一条线连接的两个点</summary>
         public List<Node> GetNodes(Tie tie)
         {
-            List<Node> needNodes = new List<Node>();
 
             // 按id查找要连接的两个点
-            foreach (Node node in nodes)
-                if (node.Id == tie.Node1Id)
-                    needNodes.Add(node);
-                else if (node.Id == tie.Node2Id)
-                    needNodes.Add(node);
-
-            return needNodes;
+            return (from Node node in nodes
+                    where node.Id == tie.Node1Id || node.Id == tie.Node2Id
+                    select node).ToList();
         }
 
         /// <summary>获取连接着的点</summary>
         public List<Node> GetNodes(Node node)
         {
-            List<Node> nodes = new List<Node>();
-            foreach (Tie tie in GetTies(node))
-            {
-                if (tie.Node1Id != node.Id)
-                    nodes.Add(GetNode(tie.Node1Id));
-                else
-                    nodes.Add(GetNode(tie.Node2Id));
-            }
+            List<Node> nodes;
+
+            nodes = (from Tie tie in GetTies(node)
+                     select tie.Node1Id == node.Id ? GetNode(tie.Node2Id) : GetNode(tie.Node1Id)).ToList();
+
             return nodes;
         }
 
         /// <summary>获取连着一个点的线有哪些</summary>
         public List<Tie> GetTies(Node node)
         {
-            List<Tie> needTies = new List<Tie>();
-            foreach (Tie tie in ties)
-                if (node.Id == tie.Node1Id || node.Id == tie.Node2Id)
-                    needTies.Add(tie);
-            return needTies;
+            return (from Tie tie in ties
+                    where node.Id == tie.Node1Id || node.Id == tie.Node2Id
+                    select tie).ToList();
         }
 
         /// <summary>按Id获取点</summary>
         public Node GetNode(int id)
         {
-            foreach (Node node in nodes)
-                if (node.Id == id)
-                    return node;
-            return null;
+            return (from Node node in nodes where node.Id == id select node).Single();
         }
 
         /// <summary>按Id获取线</summary>
         public Tie GetTie(int id)
         {
-            foreach (Tie tie in ties)
-                if (tie.Id == id)
-                    return tie;
-            return null;
+            return (from Tie tie in ties where tie.Id == id select tie).Single();
         }
 
         /// <summary>获取两个点间的线</summary>
         public Tie GetTie(Node node1, Node node2)
         {
-            foreach (Tie tie in ties)
-                if ((node1.Id == tie.Node1Id && node2.Id == tie.Node2Id) || (node1.Id == tie.Node2Id && node2.Id == tie.Node1Id))
-                    return tie;
-            return null;
+            return (from Tie tie in ties
+                    where (node1.Id == tie.Node1Id && node2.Id == tie.Node2Id) || (node1.Id == tie.Node2Id && node2.Id == tie.Node1Id)
+                    select tie).SingleOrDefault();
         }
 
         /// <summary>删除点</summary>
-        public List<Tie> RemoveNode(Node node)
+        public void RemoveNode(Node node)
         {
             // 删除这个点本身
             nodes.Remove(node);
 
             // 删除关于这个点的连接
-            List<Tie> needRemove = new List<Tie>();
-            foreach (Tie tie in ties)
+            foreach (Tie tie in ties.ToList())
                 if (tie.Node1Id == node.Id || tie.Node2Id == node.Id)
-                    needRemove.Add(tie);
-
-            foreach (Tie tie in needRemove)
-                RemoveTie(tie);
-
-            return needRemove;
+                    RemoveTie(tie);
         }
 
         /// <summary>删除连接</summary>

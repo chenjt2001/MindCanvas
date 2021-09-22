@@ -157,7 +157,7 @@
                     FontWeight="Normal"
                     x:Uid="HelpPage_Licenses"/>
 
-                <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
+                <RichTextBlock MaxWidth="840" Margin="0,10,0,60" IsTextSelectionEnabled="True">
 
                     <Paragraph>
                         <Hyperlink NavigateUri="https://github.com/Microsoft/dotnet/blob/master/releases/UWP/LICENSE.TXT">

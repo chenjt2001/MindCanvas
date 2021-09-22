@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,17 +10,17 @@ namespace MindCanvas
     /// <summary>思维导图Canvas</summary>
     public class MindMapCanvas : Canvas// InfiniteCanvas
     {
-        private MindMap mindMap;
         private Dictionary<int, NodeControl> nodeIdBorder = new Dictionary<int, NodeControl>();// 标记点id与border
         private Dictionary<int, Windows.UI.Xaml.Shapes.Path> tieIdPath = new Dictionary<int, Windows.UI.Xaml.Shapes.Path>();// 标记线id与path
         private bool showAnimation;// 是否显示动画
         private TransitionCollection transitionCollection = new TransitionCollection();
 
-        public MindMap MindMap { get => mindMap; set => mindMap = value; }
+        public MindMap MindMap { get; set; }
+        public HashSet<NodeControl> SelectedNodeControlList { get; set; } = new HashSet<NodeControl>();// 选中的点
 
         public MindMapCanvas(bool showAnimation = true)
         {
-            mindMap = new MindMap();
+            MindMap = new MindMap();
             VerticalAlignment = VerticalAlignment.Center;
             HorizontalAlignment = HorizontalAlignment.Center;
             //Background = new SolidColorBrush(Colors.White);
@@ -50,7 +51,7 @@ namespace MindCanvas
         /// <summary>画一个点</summary>
         public void Draw(Node node)
         {
-            NodeControl nodeControl = new NodeControl(node, mindMap, showAnimation: showAnimation);
+            NodeControl nodeControl = new NodeControl(node, MindMap, showAnimation: showAnimation);
 
             nodeIdBorder[node.Id] = nodeControl;
             Children.Add(nodeControl);
@@ -60,13 +61,29 @@ namespace MindCanvas
             SetTop(nodeControl, this.Height / 2 + node.Y - visualSize.Height / 2);
             SetLeft(nodeControl, this.Width / 2 + node.X - visualSize.Width / 2);
             nodeControl.UpdateLayout();
+
+            nodeControl.PropertyChanged += NodeControl_PropertyChanged;
+        }
+
+        private void NodeControl_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            NodeControl nodeControl = sender as NodeControl;
+
+            // 自动更新SelectedNodeControlList
+            if (e.PropertyName == "State")
+            {
+                if (nodeControl.State.HasFlag(NodeControlState.Selected))
+                    SelectedNodeControlList.Add(nodeControl);
+                else
+                    SelectedNodeControlList.Remove(nodeControl);
+            }
         }
 
         /// <summary>画一条线</summary>
         public void Draw(Tie tie)
         {
             // 获取这条线的两个点
-            List<Node> nodes = mindMap.GetNodes(tie);
+            List<Node> nodes = MindMap.GetNodes(tie);
             Node node1 = nodes[0];
             Node node2 = nodes[1];
 
@@ -84,26 +101,11 @@ namespace MindCanvas
         }
 
         /// <summary>查询border对应的点</summary>
-        public Node ConvertBorderToNode(NodeControl border)
+        public Node ConvertBorderToNode(NodeControl nodeControl)
         {
-            Node requiredNode = new Node();
-            int id = 0;
+            int id = (from int i in nodeIdBorder.Keys where nodeIdBorder[i] == nodeControl select i).Single();
 
-            foreach (int i in nodeIdBorder.Keys)
-                if (nodeIdBorder[i] == border)
-                {
-                    id = i;
-                    break;
-                }
-
-            foreach (Node node in mindMap.Nodes)
-                if (node.Id == id)
-                {
-                    requiredNode = node;
-                    break;
-                }
-
-            return requiredNode;
+            return MindMap.GetNode(id);
         }
 
         /// <summary>查询点对应的Border</summary>
@@ -112,28 +114,12 @@ namespace MindCanvas
             return nodeIdBorder[node.Id];
         }
 
-
         /// <summary>查询path对应的线</summary>
         public Tie ConvertPathToTie(Windows.UI.Xaml.Shapes.Path path)
         {
-            Tie requiredTie = new Tie();
-            int id = 0;
+            int id = (from int i in tieIdPath.Keys where tieIdPath[i] == path select i).Single();
 
-            foreach (int i in tieIdPath.Keys)
-                if (tieIdPath[i] == path)
-                {
-                    id = i;
-                    break;
-                }
-
-            foreach (Tie tie in mindMap.Ties)
-                if (tie.Id == id)
-                {
-                    requiredTie = tie;
-                    break;
-                }
-
-            return requiredTie;
+            return MindMap.GetTie(id);
         }
 
         /// <summary>查询线对应的Path</summary>
@@ -146,11 +132,11 @@ namespace MindCanvas
         public void DrawAll()
         {
             // 绘制点
-            foreach (Node node in mindMap.Nodes)
+            foreach (Node node in MindMap.Nodes)
                 Draw(node);
             UpdateLayout();//渲染canvas，确保线正确获取点的位置
             // 绘制线
-            foreach (Tie tie in mindMap.Ties)
+            foreach (Tie tie in MindMap.Ties)
                 Draw(tie);
         }
 
@@ -188,7 +174,7 @@ namespace MindCanvas
         /// <summary>重绘线</summary>
         public void ReDrawTies(Node node)
         {
-            foreach (Tie tie in mindMap.GetTies(node))
+            foreach (Tie tie in MindMap.GetTies(node))
                 ReDraw(tie);
         }
 

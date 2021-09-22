@@ -523,7 +523,7 @@ namespace MindCanvas
                 bool flag = true;
                 string itemText = $"Node: {node.Name}";
                 foreach (string word in keywords)
-                    if (!itemText.ToLower().Contains(word.ToLower()) && !node.Description.ToLower().Contains(word.ToLower()))
+                    if (!itemText.Contains(word, StringComparison.CurrentCultureIgnoreCase) && !node.Description.Contains(word, StringComparison.CurrentCultureIgnoreCase))
                         flag = false;
 
                 if (flag)
@@ -537,7 +537,7 @@ namespace MindCanvas
                 List<Node> nodes = App.mindMap.GetNodes(tie);
                 string itemText = $"Tie: {nodes[0].Name} <-> {nodes[1].Name}";
                 foreach (string word in keywords)
-                    if (!tie.Description.ToLower().Contains(word.ToLower()) && !itemText.ToLower().Contains(word.ToLower()))
+                    if (!tie.Description.Contains(word, StringComparison.CurrentCultureIgnoreCase) && !itemText.Contains(word, StringComparison.CurrentCultureIgnoreCase))
                         flag = false;
 
                 if (flag)

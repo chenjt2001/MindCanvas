@@ -14,6 +14,15 @@ using Windows.UI.Xaml.Media;
 
 namespace MindCanvas
 {
+    [Flags]
+    public enum NodeControlState
+    {
+        None = 0b0,
+        Selected = 0b1,// 被选中
+        Highlighted = 0b10,// 鼠标在上面
+        Pressed = 0b100,// 鼠标按下
+    }
+
     public sealed partial class NodeControl : UserControl, INotifyPropertyChanged
     {
         private Node node;
@@ -27,11 +36,12 @@ namespace MindCanvas
         private Thickness borderThickness;
         private CornerRadius cornerRadius;
         private Brush background;
+        private NodeControlState state;
+
 
         // 关于动画
         private Compositor _compositor = Window.Current.Compositor;
         private SpringVector3NaturalMotionAnimation _springAnimation;
-        private bool isSelected;// 是否处于选中状态
 
         public NodeControl(Node node, MindMap mindMap, bool showAnimation = true)
         {
@@ -61,14 +71,6 @@ namespace MindCanvas
                 Style = mindMap.DefaultNodeStyle;
             else
                 Style = node.Style;
-
-            // 事件
-            PointerEntered += NodeControl_PointerEntered;// 鼠标进入
-            PointerPressed += NodeControl_PointerPressed;// 鼠标按下
-            PointerReleased += NodeControl_PointerReleased;// 鼠标释放
-            PointerExited += NodeControl_PointerExited;// 鼠标退出
-            Loaded += NodeControl_Loaded;
-
         }
 
         private void NodeControl_Loaded(object sender, RoutedEventArgs e)
@@ -80,67 +82,6 @@ namespace MindCanvas
                 X = (float)(visualSize.Width / 2),
                 Y = (float)(visualSize.Height / 2),
             };
-        }
-
-        /// <summary>鼠标释放</summary>
-        private void NodeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            IsSelected = true;
-
-            if (ShowAnimation)
-            {
-                NodeDropShadowPanel.ShadowOpacity = 0.5;
-                CreateOrUpdateSpringAnimation(1.1f);
-                StartAnimation();
-            }
-        }
-
-        /// <summary>鼠标退出</summary>
-        private void NodeControl_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            if (ShowAnimation)
-            {
-                if (IsSelected)
-                {
-                    NodeDropShadowPanel.ShadowOpacity = 0.5;
-                    CreateOrUpdateSpringAnimation(1.05f);
-                    StartAnimation();
-                }
-                else
-                {
-                    NodeDropShadowPanel.ShadowOpacity = 0;
-                    // Scale back down to 1.0
-                    CreateOrUpdateSpringAnimation(1.0f);
-                    StartAnimation();
-                }
-            }
-        }
-
-        /// <summary>鼠标按下</summary>
-        private void NodeControl_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            DescriptionToolTip.IsEnabled = false;
-
-            if (ShowAnimation)
-            {
-                NodeDropShadowPanel.ShadowOpacity = 0.5;
-                // 缩放到1.05倍
-                CreateOrUpdateSpringAnimation(1.05f);
-                StartAnimation();
-            }
-        }
-
-        /// <summary>鼠标进入</summary>
-        private void NodeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            DescriptionToolTip.IsEnabled = true;
-
-            if (ShowAnimation)
-            {
-                NodeDropShadowPanel.ShadowOpacity = 0.5;
-                CreateOrUpdateSpringAnimation(1.1f);
-                StartAnimation();
-            }
         }
 
         private void DescriptionToolTip_Opened(object sender, RoutedEventArgs e)
@@ -288,9 +229,9 @@ namespace MindCanvas
                 if (value != this.style)
                 {
                     bool needBeSelected = false;
-                    if (IsSelected)
+                    if (State.HasFlag(NodeControlState.Selected))
                     {
-                        IsSelected = false;
+                        State &= ~NodeControlState.Selected;//IsSelected = false;
                         needBeSelected = true;
                     }
 
@@ -298,7 +239,7 @@ namespace MindCanvas
                     NotifyPropertyChanged();
 
                     if (needBeSelected)
-                        IsSelected = true;
+                        State |= NodeControlState.Selected;//IsSelected = true;
 
                     switch (this.style)
                     {
@@ -321,29 +262,47 @@ namespace MindCanvas
         /// <summary>文字颜色</summary>
         public new Brush Foreground => new SolidColorBrush(Colors.Black);
 
-        /// <summary>选择</summary>
-        public bool IsSelected
+        /// <summary>状态</summary>
+        public NodeControlState State
         {
-            get => isSelected;
+            get => state;
             set
             {
-                isSelected = value;
+                if (state == value)
+                    return;
 
-                if (ShowAnimation)
+                state = value;
+
+                NotifyPropertyChanged();
+
+                if (!ShowAnimation)
+                    return;
+
+                if (state.HasFlag(NodeControlState.Pressed))
                 {
-                    if (isSelected)
-                    {
-                        NodeDropShadowPanel.ShadowOpacity = 0.5;
-                        //this.BorderBrush = new RevealBorderBrush();
-                        CreateOrUpdateSpringAnimation(1.05f);
-                        StartAnimation();
-                    }
-                    else
-                    {
-                        NodeDropShadowPanel.ShadowOpacity = 0;
-                        CreateOrUpdateSpringAnimation(1.0f);
-                        StartAnimation();
-                    }
+                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    // 缩放到1.05倍
+                    CreateOrUpdateSpringAnimation(1.05f);
+                    StartAnimation();
+                }
+                else if (state.HasFlag(NodeControlState.Highlighted))
+                {
+                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    CreateOrUpdateSpringAnimation(1.1f);
+                    StartAnimation();
+                }
+                else if (state.HasFlag(NodeControlState.Selected))
+                {
+                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    //this.BorderBrush = new RevealBorderBrush();
+                    CreateOrUpdateSpringAnimation(1.05f);
+                    StartAnimation();
+                }
+                else
+                {
+                    NodeDropShadowPanel.ShadowOpacity = 0;
+                    CreateOrUpdateSpringAnimation(1.0f);
+                    StartAnimation();
                 }
             }
         }
