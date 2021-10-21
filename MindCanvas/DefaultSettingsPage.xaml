@@ -84,7 +84,7 @@
                     <Button x:Name="InitializeBtn" Margin="0,20,0,0" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_RestoreInitialValue" FontSize="15" Width="150" Click="InitializeBtn_Click"/>
 
                     <Button x:Name="CancelBtn" Margin="0,40,0,0" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_Cancel" FontSize="15" Width="100" Click="CancelBtn_Click"/>
-                    <Button x:Name="SaveBtn" Margin="0,10,0,0" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_Save" FontSize="15" Width="100" Click="SaveBtn_Click"/>
+                    <Button x:Name="SaveBtn" Margin="0,10,0,60" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" x:Uid="DefaultSettingsPage_Save" FontSize="15" Width="100" Click="SaveBtn_Click"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

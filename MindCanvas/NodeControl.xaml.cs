@@ -280,27 +280,27 @@ namespace MindCanvas
 
                 if (state.HasFlag(NodeControlState.Pressed))
                 {
-                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    //NodeDropShadowPanel.ShadowOpacity = 0.5;
                     // 缩放到1.05倍
                     CreateOrUpdateSpringAnimation(1.05f);
                     StartAnimation();
                 }
                 else if (state.HasFlag(NodeControlState.Highlighted))
                 {
-                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    //NodeDropShadowPanel.ShadowOpacity = 0.5;
                     CreateOrUpdateSpringAnimation(1.1f);
                     StartAnimation();
                 }
                 else if (state.HasFlag(NodeControlState.Selected))
                 {
-                    NodeDropShadowPanel.ShadowOpacity = 0.5;
+                    //NodeDropShadowPanel.ShadowOpacity = 0.5;
                     //this.BorderBrush = new RevealBorderBrush();
                     CreateOrUpdateSpringAnimation(1.05f);
                     StartAnimation();
                 }
                 else
                 {
-                    NodeDropShadowPanel.ShadowOpacity = 0;
+                    //NodeDropShadowPanel.ShadowOpacity = 0;
                     CreateOrUpdateSpringAnimation(1.0f);
                     StartAnimation();
                 }

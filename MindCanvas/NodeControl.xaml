@@ -12,7 +12,7 @@
     d:DesignWidth="400">
 
 
-    <controls:DropShadowPanel x:Name="NodeDropShadowPanel" BlurRadius="20" ShadowOpacity="0" OffsetX="0" OffsetY="0" IsMasked="True" Color="Gold">
+    <!--"<controls:DropShadowPanel x:Name="NodeDropShadowPanel" BlurRadius="20" ShadowOpacity="0" OffsetX="0" OffsetY="0" IsMasked="True" Color="Gold">-->
         <Border
         Background="{x:Bind Background, Mode=OneWay}"
         BorderBrush="{x:Bind BorderBrush, Mode=OneWay}"
@@ -36,5 +36,5 @@
                 VerticalOffset="{x:Bind ToolTipVerticalOffset, Mode=OneWay}"  />
             </ToolTipService.ToolTip>
         </Border>
-    </controls:DropShadowPanel>
+    <!--</controls:DropShadowPanel>-->
 </UserControl>
