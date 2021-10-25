@@ -1,5 +1,5 @@
 <p align="center">
-<img height="64" src="https://www.chenjt.com/mindcanvas/assets/images/logo.png"/>
+<img height="64" src="https://s3.bmp.ovh/imgs/2021/10/cfed8d98646a4482.png"/>
 </p>
 
 <div align="center">
@@ -16,7 +16,7 @@
 
 `MindCanvas` 是一款制作思维导图的软件。使用 `MindCanvas`，你可以通过添加点、线和墨迹轻松创造出自己的思维导图，并导出或分享。
 <p align="center">
-<img width="80%" src="https://www.chenjt.com/mindcanvas/assets/images/main.png"/>
+<img width="80%" src="https://s3.bmp.ovh/imgs/2021/10/1213ae9fcf532bfd.png"/>
 </p>
 
 ## 功能
@@ -43,12 +43,3 @@
 
 - master: 主分支
 - Mica: Mica风格的分支（Windows 11风格）
-
-## 打赏
-
-是否打赏均不影响使用软件的任何功能，量力而行，**打赏不意味着开发者承诺对此应用的后续维护和功能更新**
-<p align="center">
-<img width="50%" src="https://www.chenjt.com/mindcanvas/assets/images/pay.png"></img>
-<p align="center"></small>微信扫码</small></p>
-</p>
-如有帮助，欢迎打赏，非常感谢~
