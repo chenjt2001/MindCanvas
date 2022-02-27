@@ -46,7 +46,7 @@ namespace MindCanvas.EditPage
             UseDefaultStrokeToggleSwitch_Toggled(UseDefaultStrokeToggleSwitch, null);
         }
 
-        // 描述文本框失去焦点
+        /// <summary>描述文本框失去焦点</summary>
         private void DescriptionTextBox_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
             // 如果已修改，则修改点描述
@@ -91,13 +91,13 @@ namespace MindCanvas.EditPage
             }
         }
 
-        // 使颜色跟随当前值改变
-        private void StrokeColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        /// <summary>使颜色跟随当前值改变</summary>
+        private void StrokeColorPicker_ColorChanged(Microsoft.UI.Xaml.Controls.ColorPicker sender, Microsoft.UI.Xaml.Controls.ColorChangedEventArgs args)
         {
             path.Stroke = new SolidColorBrush(StrokeColorPicker.Color);
         }
 
-        // 鼠标释放，完成颜色修改
+        /// <summary>鼠标释放，完成颜色修改</summary>
         private void StrokeColorPicker_PointerCaptureLost(object sender, PointerRoutedEventArgs e)
         {
             if (tie.StrokeArgb != null)

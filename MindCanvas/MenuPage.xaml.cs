@@ -16,9 +16,12 @@ namespace MindCanvas
     public sealed partial class MenuPage : Page
     {
         // 声明共享的文件
-        private StorageFile SharedFile;
+        private StorageFile sharedFile;
 
         public static Frame MenuPageFrame;
+
+        // 上一Frame
+        private Microsoft.UI.Xaml.Controls.NavigationViewItem lastItem;
 
         // 资源加载器
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
@@ -33,12 +36,13 @@ namespace MindCanvas
         {
             // 默认选择打开文件界面
             NavView.SelectedItem = OpenItem;
+            lastItem = OpenItem;
 
             MenuPageFrame = this.Frame;
         }
 
-        // 点击导致新项被选中
-        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        /// <summary>点击导致新项被选中</summary>
+        private void NavView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected == true)
             {
@@ -51,7 +55,7 @@ namespace MindCanvas
             }
         }
 
-        // 导航
+        /// <summary>导航</summary>
         private void NavView_Navigate(string navItemTag, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
         {
             Type page = null;
@@ -61,26 +65,31 @@ namespace MindCanvas
             {
                 case "settings":
                     page = typeof(SettingsPage);
+                    lastItem = NavView.SettingsItem as Microsoft.UI.Xaml.Controls.NavigationViewItem;
                     header = resourceLoader.GetString("Code_Settings");// 设置
                     break;
 
                 case "Help":
                     page = typeof(HelpPage);
+                    lastItem = HelpItem;
                     header = resourceLoader.GetString("Code_Help");// 帮助
                     break;
 
                 case "Open":
                     page = typeof(OpenPage);
+                    lastItem = OpenItem;
                     header = resourceLoader.GetString("Code_Open");// 打开
                     break;
 
                 case "Encrypt":
                     page = typeof(EncryptPage);
+                    lastItem = EncryptItem;
                     header = resourceLoader.GetString("Code_Encrypt");// 加密
                     break;
 
                 case "Export":
                     page = typeof(ExportPage);
+                    lastItem = ExportItem;
                     header = resourceLoader.GetString("Code_Export");// 导出
                     break;
 
@@ -113,37 +122,37 @@ namespace MindCanvas
             }
         }
 
-        // 新建文件
+        /// <summary>新建文件</summary>
         private async void NewFile()
         {
             if (await EventsManager.NewFile())
                 On_BackRequested();
             else
-                NavView.SelectedItem = OpenItem;
+                NavView.SelectedItem = lastItem;
         }
 
-        // 保存文件
+        /// <summary>保存文件</summary>
         private async void Save()
         {
             if (await EventsManager.SaveFile())
                 On_BackRequested();// 保存成功则返回
             else
-                NavView.SelectedItem = OpenItem;// 没保存，回到打开文件界面
+                NavView.SelectedItem = lastItem;// 没保存，回到上一界面
         }
 
-        // 分享
+        /// <summary>分享</summary>
         private async void Share()
         {
             // 生成当前状态的文件
             StorageFolder storageFolder = ApplicationData.Current.TemporaryFolder;
-            SharedFile = await storageFolder.CreateFileAsync(
+            sharedFile = await storageFolder.CreateFileAsync(
                 DateTime.Now.ToLongDateString().ToString() + ".mindcanvas",
                 CreationCollisionOption.ReplaceExisting
             );
 
             MindCanvasFile mindCanvasFile = new MindCanvasFile();
             mindCanvasFile.MindMap = App.mindMap;
-            mindCanvasFile.File = SharedFile;
+            mindCanvasFile.File = sharedFile;
             await mindCanvasFile.SaveFile(addToMru: false);
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -151,25 +160,25 @@ namespace MindCanvas
 
             DataTransferManager.ShowShareUI();
 
-            NavView.SelectedItem = OpenItem;
+            NavView.SelectedItem = lastItem;
         }
 
-        // DataRequested 事件处理程序，在用户每次调用共享时调用
+        /// <summary>DataRequested 事件处理程序，在用户每次调用共享时调用</summary>
         private void DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
-            if (SharedFile != null)
+            if (sharedFile != null)
             {
                 List<IStorageItem> storageItems = new List<IStorageItem>();
-                storageItems.Add(SharedFile);
+                storageItems.Add(sharedFile);
 
                 DataRequest request = args.Request;
-                request.Data.Properties.Title = SharedFile.Name;
+                request.Data.Properties.Title = sharedFile.Name;
                 request.Data.Properties.Description = resourceLoader.GetString("Code_SharedFromMindCanvas");// 已从 MindCanvas 共享
                 request.Data.SetStorageItems(storageItems);
             }
         }
 
-        // 另存为
+        /// <summary>另存为</summary>
         private async void SaveAs()
         {
             // 暂时将mindCanvasFile.file设为空，然后发起保存
@@ -181,17 +190,17 @@ namespace MindCanvas
             else
             {
                 App.mindCanvasFile.File = originalFile;
-                NavView.SelectedItem = OpenItem;
+                NavView.SelectedItem = lastItem;
             }
         }
 
-        // 用户点击后退按钮
-        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        /// <summary>用户点击后退按钮</summary>
+        private void NavView_BackRequested(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewBackRequestedEventArgs args)
         {
             On_BackRequested();
         }
 
-        // Handles system-level BackRequested events and page-level back button Click events
+        /// <summary>Handles system-level BackRequested events and page-level back button Click events</summary>
         private bool On_BackRequested()
         {
             try// 防止用户已经返回了

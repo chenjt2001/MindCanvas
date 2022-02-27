@@ -26,7 +26,6 @@ namespace MindCanvas
     public sealed partial class MainPage : Page
     {
         private Node nowNode;// 正在操作的点
-        private List<NodeControl> selectedBorderList = new List<NodeControl>();// 选中的点
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
 
@@ -85,22 +84,29 @@ namespace MindCanvas
             RefreshUnRedoBtn();
         }
 
+        /// <summary>清除被选中的点</summary>
+        private void SelectedNodeControlListClear()
+        {
+            foreach (NodeControl nodeControl in mindMapCanvas.SelectedNodeControlList.ToList())
+                nodeControl.State &= ~NodeControlState.Selected;//border.IsSelected = false;
+        }
+
         /// <summary>刷新主题设置</summary>
         public void RefreshTheme()
         {
             // 应用主题颜色
             if (ThemeHelper.ActualTheme == ElementTheme.Light)
             {
-                MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
-                AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
-                AppNameBorder.Background = new SolidColorBrush(Colors.White);
+                //MenuBtnBorder.Background = new SolidColorBrush(Colors.White);
+                //AppBarButtonsBorder.Background = new SolidColorBrush(Colors.White);
+                //AppNameBorder.Background = new SolidColorBrush(Colors.White);
                 MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.White);
             }
             else if (ThemeHelper.ActualTheme == ElementTheme.Dark)
             {
-                MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
-                AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
-                AppNameBorder.Background = new SolidColorBrush(Colors.Black);
+                //MenuBtnBorder.Background = new SolidColorBrush(Colors.Black);
+                //AppBarButtonsBorder.Background = new SolidColorBrush(Colors.Black);
+                //AppNameBorder.Background = new SolidColorBrush(Colors.Black);
                 MindMapBackgroundBorder.Background = new SolidColorBrush(Colors.DimGray);
             }
         }
@@ -114,10 +120,28 @@ namespace MindCanvas
             foreach (Node node in needConfig)
             {
                 NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(node);
-                nodeControl.PointerPressed += this.Node_Pressed;// 鼠标按下
-                nodeControl.PointerReleased += this.Node_Released;// 鼠标释放
+                nodeControl.PointerEntered += this.NodeControl_PointerEntered;// 鼠标进入
+                nodeControl.PointerPressed += this.NodeControl_Pressed;// 鼠标按下
+                nodeControl.PointerReleased += this.NodeControl_Released;// 鼠标释放
                 nodeControl.RightTapped += this.NodeControl_RightTapped;// 右键
+                nodeControl.PointerExited += this.NodeControl_PointerExited;// 鼠标退出
             }
+        }
+
+        /// <summary>鼠标退出点</summary>
+        private void NodeControl_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            NodeControl nodeControl = sender as NodeControl;
+            nodeControl.State &= ~NodeControlState.Highlighted;
+        }
+
+        /// <summary>鼠标进入点</summary>
+        private void NodeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            NodeControl nodeControl = sender as NodeControl;
+
+            nodeControl.DescriptionToolTip.IsEnabled = true;
+            nodeControl.State |= NodeControlState.Highlighted;
         }
 
         /// <summary>右键单击点</summary>
@@ -143,8 +167,8 @@ namespace MindCanvas
             // BUG修复
             // 如果这个点在selectedBorderList里，则移除
             // 避免在连接点时发生异常
-            if (selectedBorderList.Contains(nodeControl))
-                selectedBorderList.Remove(nodeControl);
+            if (nodeControl.State.HasFlag(NodeControlState.Selected))
+                nodeControl.State &= ~NodeControlState.Selected;
 
             EventsManager.RemoveNode(nowNode);
 
@@ -199,35 +223,37 @@ namespace MindCanvas
         }
 
         /// <summary>鼠标在点内释放，算按了一下点</summary>
-        private void Node_Released(object sender, PointerRoutedEventArgs e)
+        private void NodeControl_Released(object sender, PointerRoutedEventArgs e)
         {
             // 使EditFrame中的内容失去焦点
             EditFrame.IsEnabled = false;
             EditFrame.IsEnabled = true;
 
-            NodeControl nowNodeBorder = sender as NodeControl;
-            nowNode = mindMapCanvas.ConvertBorderToNode(nowNodeBorder);// 记为nowNode
+            NodeControl nowNodeControl = sender as NodeControl;
+            nowNode = mindMapCanvas.ConvertBorderToNode(nowNodeControl);// 记为nowNode
+
+            nowNodeControl.State &= ~NodeControlState.Pressed;
 
             // 正在选择点
             if ((bool)TieBtn.IsChecked)
             {
                 // 检查点是否已被选择
-                if (selectedBorderList.Contains(nowNodeBorder))
+                if (nowNodeControl.State.HasFlag(NodeControlState.Selected))
                 {
                     // 已被选择，现在又点了一次，所以取消选择
-                    selectedBorderList.Remove(nowNodeBorder);
+                    nowNodeControl.State &= ~NodeControlState.Selected;
                     return;
                 }
 
                 // 此点未被选择，现在进行选择
-                selectedBorderList.Add(nowNodeBorder);// 把当前选择的点计入selectedBorderList
+                nowNodeControl.State |= NodeControlState.Selected;// 把当前选择的点计入selectedBorderList
 
                 // 如果已经选好了两个点，就连接
-                if (selectedBorderList.Count() == 2)
+                if (mindMapCanvas.SelectedNodeControlList.Count() == 2)
                 {
                     Node node1, node2;
-                    node1 = mindMapCanvas.ConvertBorderToNode(selectedBorderList[0]);
-                    node2 = mindMapCanvas.ConvertBorderToNode(selectedBorderList[1]);
+                    node1 = mindMapCanvas.ConvertBorderToNode(mindMapCanvas.SelectedNodeControlList.ElementAt(0));
+                    node2 = mindMapCanvas.ConvertBorderToNode(mindMapCanvas.SelectedNodeControlList.ElementAt(1));
 
                     // 如果这两个点已经连了线就删除
                     Tie tie = App.mindMap.GetTie(node1, node2);
@@ -243,9 +269,7 @@ namespace MindCanvas
                     RefreshUnRedoBtn();
 
                     // 不论如何，让这2个被选中的点恢复
-                    foreach (NodeControl border in selectedBorderList)
-                        border.IsSelected = false;
-                    selectedBorderList.Clear();
+                    SelectedNodeControlListClear();
 
                     // 恢复正常
                     TieBtn.IsChecked = false;
@@ -256,11 +280,12 @@ namespace MindCanvas
             // 没在选择点，查看点信息
             else
             {
+                nowNodeControl.State |= NodeControlState.Selected;
+
                 // 只能同时选择一个点
-                foreach (NodeControl border in selectedBorderList)
-                    if (border != nowNodeBorder)
-                        border.IsSelected = false;
-                selectedBorderList = new List<NodeControl> { nowNodeBorder };
+                foreach (NodeControl nodeControl in mindMapCanvas.SelectedNodeControlList.ToList())
+                    if (nodeControl != nowNodeControl)
+                        nodeControl.State &= ~NodeControlState.Selected;//border.IsSelected = false;
 
                 // 显示信息
                 ShowFrame(typeof(EditPage.EditNodePage), nowNode);
@@ -291,16 +316,25 @@ namespace MindCanvas
                 // 移动点完成，允许使用RepeatButton
                 SetRepeatButtonIsHitTestVisible(true);
             }
+            else
+            {
+
+            }
+
             nowPressedNode = null;// 没有点被按下，之所以这句话不写在Node_Released里面
                                   // 是因为当鼠标释放时Node_Released会比MainPage_PointerReleased先运行
                                   // 那MainPage_PointerReleased就不能获取nowPressedNode了
         }
 
         /// <summary>鼠标按下border</summary>
-        private void Node_Pressed(object sender, PointerRoutedEventArgs e)
+        private void NodeControl_Pressed(object sender, PointerRoutedEventArgs e)
         {
-            NodeControl border = sender as NodeControl;
-            nowPressedNode = mindMapCanvas.ConvertBorderToNode(border);
+            NodeControl nodeControl = sender as NodeControl;
+
+            nowPressedNode = mindMapCanvas.ConvertBorderToNode(nodeControl);
+
+            nodeControl.DescriptionToolTip.IsEnabled = false;
+            nodeControl.State |= NodeControlState.Pressed;
         }
 
         /// <summary>鼠标移动事件</summary>
@@ -350,9 +384,7 @@ namespace MindCanvas
             InkToolToggleSwitch.IsOn = false;
 
             // 让所有被选中的点恢复
-            foreach (NodeControl border in selectedBorderList)
-                border.IsSelected = false;
-            selectedBorderList.Clear();
+            SelectedNodeControlListClear();
 
             if (TieBtn.IsChecked.Value)
                 // 从左侧选择两个未连接点以连接它们，或者选择两个已连接的点以取消它们之间的连接。
@@ -372,9 +404,7 @@ namespace MindCanvas
 
             // 退出“连接点”的状态，让所有被选中的点恢复
             TieBtn.IsChecked = false;
-            foreach (NodeControl border in selectedBorderList)
-                border.IsSelected = false;
-            selectedBorderList.Clear();
+            SelectedNodeControlListClear();
 
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
@@ -587,7 +617,8 @@ namespace MindCanvas
 
             double x = (MindMapScrollViewer.HorizontalOffset + MindMapScrollViewer.ActualWidth / 2 - mindMapCanvas.Width * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
             double y = (MindMapScrollViewer.VerticalOffset + MindMapScrollViewer.ActualHeight / 2 - mindMapCanvas.Height * MindMapScrollViewer.ZoomFactor / 2) / MindMapScrollViewer.ZoomFactor;
-            EventsManager.ModifyViewport(x, y, MindMapScrollViewer.ZoomFactor);
+            float zoomFactor = MindMapScrollViewer.ZoomFactor;
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
         /// <summary>禁用鼠标滚轮</summary>
@@ -639,6 +670,8 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor.Value / 2 + y.Value * zoomFactor.Value - MindMapScrollViewer.ActualHeight / 2;
 
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor.Value);
+
+            EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
         /// <summary>移动可视区域</summary>
@@ -663,6 +696,9 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
+            // 之所以在这里写ModifyViewport而不是交给MindMapScrollViewer_ViewChanged处理，是因为
+            // MindMapScrollViewer_ManipulationDelta函数可能被调用多次后才发生一次
+            // MindMapScrollViewer_ViewChanged，从而导致App.mindMap.VisualCenterX等没有实时更新
             EventsManager.ModifyViewport(x, y, zoomFactor);
         }
 
@@ -711,7 +747,7 @@ namespace MindCanvas
         /// <summary>删除所有点</summary>
         private void DeleteAllNodesMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            selectedBorderList.Clear();
+            SelectedNodeControlListClear();
 
             EventsManager.RemoveAllNodes();
 
@@ -798,5 +834,8 @@ namespace MindCanvas
                 HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_HideTheSidebar");// 隐藏侧栏
             }
         }
+
+        /// <summary>两只手指在触摸板捏合时会发生该事件</summary>
+        //private void MindMapScrollViewer_DirectManipulationCompleted(object sender, object e) { }
     }
 }

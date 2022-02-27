@@ -1,4 +1,5 @@
 ﻿using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -15,7 +16,7 @@ namespace MindCanvas
             if (iconGlyph != null)
             {
                 FontIcon fontIcon = new FontIcon();
-                fontIcon.FontFamily = new FontFamily("Segoe MDL2 Assets");
+                fontIcon.FontFamily = Application.Current.Resources["SymbolThemeFontFamily"] as FontFamily;
                 fontIcon.Glyph = iconGlyph;
                 item.Icon = fontIcon;
             }
@@ -29,7 +30,5 @@ namespace MindCanvas
 
             return item;
         }
-
-
     }
 }

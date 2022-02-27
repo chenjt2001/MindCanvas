@@ -5,29 +5,36 @@
     xmlns:local="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
+    Loaded="NodeControl_Loaded"
     d:DesignWidth="400">
 
-    <Border
+
+    <!--"<controls:DropShadowPanel x:Name="NodeDropShadowPanel" BlurRadius="20" ShadowOpacity="0" OffsetX="0" OffsetY="0" IsMasked="True" Color="Gold">-->
+        <Border
         Background="{x:Bind Background, Mode=OneWay}"
         BorderBrush="{x:Bind BorderBrush, Mode=OneWay}"
         BorderThickness="{x:Bind BorderThickness, Mode=OneWay}"
         Padding="{x:Bind Padding, Mode=OneWay}"
         CornerRadius="{x:Bind CornerRadius, Mode=OneWay}">
-        <TextBlock
+
+            <TextBlock
             x:Name="NodeTextBlock"
             Text="{x:Bind Text, Mode=OneWay}"
             FontSize="{x:Bind FontSize, Mode=OneWay}"
             Foreground="{x:Bind Foreground, Mode=OneWay}">
-        </TextBlock>
+            </TextBlock>
 
-        <ToolTipService.ToolTip>
-            <ToolTip 
+            <ToolTipService.ToolTip>
+                <ToolTip 
                 x:Name="DescriptionToolTip" 
+                x:FieldModifier="public"
                 Content="{x:Bind ToolTipContent, Mode=OneWay}" 
                 Opened="DescriptionToolTip_Opened" 
                 VerticalOffset="{x:Bind ToolTipVerticalOffset, Mode=OneWay}"  />
-        </ToolTipService.ToolTip>
-    </Border>
+            </ToolTipService.ToolTip>
+        </Border>
+    <!--</controls:DropShadowPanel>-->
 </UserControl>

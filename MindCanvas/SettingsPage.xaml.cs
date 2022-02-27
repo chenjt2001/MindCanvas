@@ -32,7 +32,7 @@ namespace MindCanvas
             isLanguageComboBoxLoaded = true;
         }
 
-        // 设置主题
+        /// <summary>设置主题</summary>
         private void OnThemeRadioButtonChecked(object sender, RoutedEventArgs e)
         {
             var selectedTheme = ((RadioButton)sender)?.Tag?.ToString();
@@ -40,7 +40,7 @@ namespace MindCanvas
             Settings.Theme = selectedTheme;
         }
 
-        // 设置语言
+        /// <summary>设置语言</summary>
         private async void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!isLanguageComboBoxLoaded)

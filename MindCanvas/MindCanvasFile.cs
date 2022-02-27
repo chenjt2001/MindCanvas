@@ -11,7 +11,7 @@ using Windows.Storage.Streams;
 
 namespace MindCanvas
 {
-    // 思维导图文件
+    /// <summary>思维导图文件</summary>
     public class MindCanvasFile
     {
         public enum LoadFileResult { Success, VerificationFailed, UnknownError, UserInterrupt };
@@ -29,7 +29,7 @@ namespace MindCanvas
         public MindMap MindMap { get => mindMap; set => mindMap = value; }
         public bool IsEncrypted { get => isEncrypted; }
 
-        // 保存文件
+        /// <summary>保存文件</summary>
         public async Task SaveFile(bool addToMru = true)
         {
             MindCanvasFileData data = mindMap.GetData();
@@ -47,7 +47,7 @@ namespace MindCanvas
                 mru.Add(file);
         }
 
-        // 加载文件
+        /// <summary>加载文件</summary>
         public async Task<LoadFileResult> LoadFile(StorageFile storageFile, bool addToMru = true)
         {
             try
@@ -114,7 +114,7 @@ namespace MindCanvas
             }
         }
 
-        // 设置密码
+        /// <summary>设置密码</summary>
         public async Task<bool> SetPassword(string oldPassword, string newPassword)
         {
             LogHelper.Info("SetPassword");

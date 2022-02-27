@@ -434,7 +434,9 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>OK</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>Fixed some bugs.</value>
+    <value>1.Mica material is used.
+2.Fixed some bugs.
+3.Optimized some details.</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>New Function</value>
@@ -600,5 +602,8 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   </data>
   <data name="HelpPage_RewardTheAuthor.Content" xml:space="preserve">
     <value>Reward the author</value>
+  </data>
+  <data name="HelpPage_Paragraph11.Text" xml:space="preserve">
+    <value>Source code:</value>
   </data>
 </root>

@@ -28,6 +28,14 @@ namespace MindCanvas
             }
         }
 
+        private string RewardImagePath
+        {
+            get
+            {
+                return @"/Assets/Image/Reward.png";
+            }
+        }
+
         private async void NewFunctionBtn_Click(object sender, RoutedEventArgs e)
         {
             await Dialog.Show.ShowNewFunction();

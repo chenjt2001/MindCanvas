@@ -22,7 +22,7 @@ namespace MindCanvas
             ToggleEnableEncryptionToggleSwitch(App.mindCanvasFile.IsEncrypted);
         }
 
-        // 修改密码
+        /// <summary>修改密码</summary>
         private async void ChangePasswordButton_Click(object sender, RoutedEventArgs e)
         {
             string[] result = await Dialog.Show.EnterPassword(Dialog.EnterPassword.Mode.ChangePassword);
@@ -85,7 +85,7 @@ namespace MindCanvas
             }
         }
 
-        // 用代码切换EnableEncryptionToggleSwitch时调用，防止执行事件函数
+        /// <summary>用代码切换EnableEncryptionToggleSwitch时调用，防止执行事件函数</summary>
         private void ToggleEnableEncryptionToggleSwitch(bool value)
         {
             EnableEncryptionToggleSwitch.Toggled -= EnableEncryptionToggleSwitch_Toggled;

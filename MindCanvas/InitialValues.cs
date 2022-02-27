@@ -2,7 +2,7 @@
 
 namespace MindCanvas
 {
-    // 定义一些初始值
+    /// <summary>定义一些初始值</summary>
     public static class InitialValues
     {
         public static readonly Color NodeBorderBrushColor = Colors.Blue;

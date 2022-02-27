@@ -25,7 +25,7 @@ namespace MindCanvas
             ConfigFileListView();
         }
 
-        // 配置最近访问的文件列表
+        /// <summary>配置最近访问的文件列表</summary>
         private async void ConfigFileListView()
         {
             StorageFile fileItem;

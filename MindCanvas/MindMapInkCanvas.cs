@@ -19,14 +19,14 @@ namespace MindCanvas
             //core.PointerReleasing += Core_PointerReleasing;
         }
 
-        // 删除一条线
+        /// <summary>删除一条线</summary>
         private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
         {
             EventsManager.ModifyInkCanvas(sender.StrokeContainer);
             MainPage.mainPage.RefreshUnRedoBtn();
         }
 
-        // 新增一条线
+        /// <summary>新增一条线</summary>
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
             EventsManager.ModifyInkCanvas(sender.StrokeContainer);

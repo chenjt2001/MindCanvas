@@ -9,7 +9,7 @@ namespace MindCanvas.Dialog
     {
         private static ContentDialog dialog = null;
 
-        // 显示版本新功能
+        /// <summary>显示版本新功能</summary>
         public static async Task ShowNewFunction()
         {
             if (dialog == null)
@@ -20,7 +20,7 @@ namespace MindCanvas.Dialog
             }
         }
 
-        // 询问是否保存
+        /// <summary>询问是否保存</summary>
         public async static Task<ContentDialogResult> AskForSave()
         {
             if (dialog == null)
@@ -33,7 +33,7 @@ namespace MindCanvas.Dialog
             return ContentDialogResult.None;
         }
 
-        // 询问是否保存设置
+        /// <summary>询问是否保存设置</summary>
         public async static Task<ContentDialogResult> AskForSaveSettings()
         {
             if (dialog == null)
@@ -46,7 +46,7 @@ namespace MindCanvas.Dialog
             return ContentDialogResult.None;
         }
 
-        // 导出失败
+        /// <summary>导出失败</summary>
         public async static Task ExportError()
         {
             if (dialog == null)
@@ -57,7 +57,7 @@ namespace MindCanvas.Dialog
             }
         }
 
-        // 文件打开失败
+        /// <summary>文件打开失败</summary>
         public async static Task OpenFileError()
         {
             if (dialog == null)
@@ -68,7 +68,7 @@ namespace MindCanvas.Dialog
             }
         }
 
-        // 修改了语言设置
+        /// <summary>修改了语言设置</summary>
         public async static Task ChangeLanguageTip()
         {
             if (dialog == null)
@@ -79,7 +79,7 @@ namespace MindCanvas.Dialog
             }
         }
 
-        // 输入密码
+        /// <summary>输入密码</summary>
         public async static Task<string[]> EnterPassword(EnterPassword.Mode mode)
         {
             if (dialog == null)
