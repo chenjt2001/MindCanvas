@@ -6,8 +6,7 @@
     xmlns:MindCanvas="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+    mc:Ignorable="d">
 
     <Grid>
         <ScrollViewer
@@ -22,7 +21,7 @@
                     </TransitionCollection>
                 </StackPanel.ChildrenTransitions>
 
-                <TextBlock x:Uid="SearchResultPage_SearchResults" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock x:Uid="SearchResultPage_SearchResults" Style="{StaticResource SubtitleTextBlockStyle}"/>
 
                 <TextBlock x:Name="NoResultsFoundTextBlock" x:Uid="SearchResultPage_NoResultsFound" Visibility="Collapsed" Margin="0,20,0,0"/>
                 <ListView 
@@ -31,11 +30,11 @@
                     ItemClick="SearchResultListView_ItemClick" 
                     Visibility="Collapsed" 
                     ItemsSource ="{x:Bind Result}"
-                    Margin="0,20,0,0">
+                    Margin="0,20,0,20">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="MindCanvas:Item">
                             <StackPanel Orientation="Horizontal">
-                                <Button Tag="{x:Bind}" x:Name="ItemEditButton" Margin="0,0,2,0" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70F;" Click="ItemEditButton_Click"/>
+                                <Button Tag="{x:Bind}" x:Name="ItemEditButton" Margin="0,0,2,0" FontFamily="{x:Bind MindCanvas:App.SymbolThemeFontFamily}" Content="&#xE70F;" Click="ItemEditButton_Click"/>
                                 <TextBlock Text="{x:Bind Text}" />
                             </StackPanel>
                         </DataTemplate>

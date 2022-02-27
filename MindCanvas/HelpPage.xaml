@@ -15,9 +15,8 @@
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,4,0,0"
-                    FontWeight="Normal"
                     x:Uid="HelpPage_Introduction"/>
 
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
@@ -28,16 +27,14 @@
                 </RichTextBlock>
                 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
                     x:Uid="HelpPage_NewContent"/>
                 <Button x:Name="NewFunctionBtn" x:Uid="HelpPage_VersionNewFeatures" Margin="0,10,0,0" Click="NewFunctionBtn_Click"/>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
                     x:Uid="HelpPage_QuestionAndAnswer"/>
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
                     <Paragraph>
@@ -46,9 +43,9 @@
                 </RichTextBlock>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
+
                     x:Uid="HelpPage_Feedback"/>
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
                     
@@ -65,9 +62,9 @@
                 </RichTextBlock>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
+
                     x:Uid="HelpPage_About"/>
 
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,0" IsTextSelectionEnabled="True">
@@ -80,6 +77,14 @@
                         <!--版本：-->
                         <Run x:Uid="HelpPage_Paragraph4"></Run>
                         <Run Text="{x:Bind Version}"/>
+                    </Paragraph>
+
+                    <Paragraph Margin="0,10,0,0">
+                        <!--源码：-->
+                        <Run x:Uid="HelpPage_Paragraph11"></Run>
+                        <Hyperlink NavigateUri="https://github.com/chenjt2001/MindCanvas">
+                            GitHub
+                        </Hyperlink>
                     </Paragraph>
 
                     <Paragraph Margin="0,10,0,0">
@@ -152,9 +157,8 @@
                 </Button>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
                     x:Uid="HelpPage_Licenses"/>
 
                 <RichTextBlock MaxWidth="840" Margin="0,10,0,60" IsTextSelectionEnabled="True">

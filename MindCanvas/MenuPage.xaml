@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -25,6 +25,11 @@
             IsBackEnabled="True"
             Loaded="NavView_Loaded"
             SelectionChanged="NavView_SelectionChanged">
+            <muxc:NavigationView.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
+                </DataTemplate>
+            </muxc:NavigationView.HeaderTemplate>
 
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Icon="Add" Tag="New" x:Uid="MenuPage_New"/><!--icon: Page-->
@@ -33,7 +38,7 @@
 
                 <muxc:NavigationViewItem Tag="SaveAs" x:Uid="MenuPage_SaveAs" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE792;"/>
+                        <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE792;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
@@ -41,7 +46,7 @@
 
                 <muxc:NavigationViewItem x:Name="EncryptItem" Tag="Encrypt" x:Uid="MenuPage_Encrypt" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE72E;"/>
+                        <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE72E;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
@@ -49,13 +54,13 @@
 
                 <muxc:NavigationViewItem x:Name="ExportItem" Tag="Export" x:Uid="MenuPage_Export" >
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xEDE1;"/>
+                        <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xEDE1;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
                 <!--<NavigationViewItem Tag="Print" Content="打印">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE749;"/>
+                        <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE749;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>-->
 

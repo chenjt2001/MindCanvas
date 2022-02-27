@@ -8,6 +8,90 @@
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="RepeatButtonBackgroundPointerOver" Color="Black" Opacity="0.1"/>
+            <SolidColorBrush x:Key="RepeatButtonBorderBrushPointerOver" Color="Transparent" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonForegroundPointerOver" Color="Black" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonBackgroundPressed" Color="#66000000" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonBorderBrushPressed" Color="Transparent" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonForegroundPressed" Color="Black" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonBackgroundDisabled" Color="#33000000" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonBorderBrushDisabled" Color="Transparent" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonForegroundDisabled" Color="#66000000" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonBackground" Color="Transparent" Opacity="1"/>
+            <SolidColorBrush x:Key="RepeatButtonForeground" Color="#E4000000" Opacity="1"/>
+            <Style x:Key="RepeatButtonStyle" TargetType="RepeatButton">
+                <Setter Property="Background" Value="{StaticResource RepeatButtonBackground}"/>
+                <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
+                <Setter Property="Foreground" Value="{StaticResource RepeatButtonForeground}"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="Padding" Value="11,5,11,6"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+                <Setter Property="UseSystemFocusVisuals" Value="True"/>
+                <Setter Property="FocusVisualMargin" Value="-3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RepeatButton">
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BackgroundSizing="OuterBorderEdge" Background="{TemplateBinding Background}" BorderThickness="1,1,1,1" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" CornerRadius="{TemplateBinding CornerRadius}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBackgroundPointerOver}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBorderBrushPointerOver}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonForegroundPointerOver}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBackgroundPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBorderBrushPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonForegroundPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBackgroundDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonBorderBrushDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RepeatButtonForegroundDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </ContentPresenter>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+        
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -114,7 +198,9 @@
                     VerticalAlignment="Center" 
                     HorizontalAlignment="Center"
                     TextAlignment="Center"
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    FontSize="24"
+                    OpticalMarginAlignment="TrimSideBearings"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Text="MindCanvas"/>
             </Border>
 
@@ -147,7 +233,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" CornerRadius="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="8*"/>
@@ -160,18 +246,10 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.MergedDictionaries>
-                                <XamlControlsResources ControlsResourcesVersion="Version1" xmlns="using:Microsoft.UI.Xaml.Controls"/>
-                            </ResourceDictionary.MergedDictionaries>
-                        </ResourceDictionary>
-                    </Grid.Resources>
-
-                    <RepeatButton Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
-                    <RepeatButton Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" Background="Transparent" FontFamily="{StaticResource SymbolThemeFontFamily}" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Style="{StaticResource RepeatButtonStyle}" Tag="Up" x:Name="UpRepeatButton" Click="Chevron_Click" Delay="0" FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Content="&#xE70E;" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Style="{StaticResource RepeatButtonStyle}" Tag="Down" x:Name="DownRepeatButton" Click="Chevron_Click" Delay="0" FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Content="&#xE70D;" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Style="{StaticResource RepeatButtonStyle}" Tag="Left" x:Name="LeftRepeatButton" Click="Chevron_Click" Delay="0" FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Content="&#xE76B;" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
+                    <RepeatButton Style="{StaticResource RepeatButtonStyle}" Tag="Right" x:Name="RightRepeatButton" Click="Chevron_Click" Delay="0" FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Content="&#xE76C;" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></RepeatButton>
 
                     <ScrollViewer 
                         Canvas.ZIndex="-1"
@@ -188,16 +266,6 @@
                         ViewChanged="MindMapScrollViewer_ViewChanged"
                         ManipulationMode="All">
 
-                        <!--应该是Winui2.6的bug，由于我上面临时搞了一下ControlsResourcesVersion="Version1"，
-                        现在如果不设置Version2的话后面的NavigationView效果就会有问题-->
-                        <ScrollViewer.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <XamlControlsResources ControlsResourcesVersion="Version2" xmlns="using:Microsoft.UI.Xaml.Controls"/>
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </ScrollViewer.Resources>
-                        
                         <Grid 
                             Canvas.ZIndex="-1" 
                             x:Name="MindMapGrid" 
@@ -237,7 +305,7 @@
                 </Grid>
             </Grid>
 
-            <Grid x:Name="RightBottomGrid" CornerRadius="10,0,0,0" Grid.Row="1" Grid.Column="2" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid x:Name="RightBottomGrid" Grid.Row="1" Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>
@@ -248,7 +316,6 @@
                         x:Name="SearchAutoSuggestBox"
                         x:Uid="MainPage_SearchMindMap"
                         Margin="20,0,20,0" 
-                        Background="{ThemeResource SystemControlAcrylicWindowBrush}" 
                         QueryIcon="Find" 
                         VerticalAlignment="Center"
                         TextChanged="SearchAutoSuggestBox_TextChanged"

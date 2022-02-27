@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -26,6 +27,9 @@ namespace MindCanvas
         // 声明思维导图和文件
         public static MindMap mindMap;
         public static MindCanvasFile mindCanvasFile;
+
+        // 符号字体
+        public static Windows.UI.Xaml.Media.FontFamily symbolThemeFontFamily;
 
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
@@ -235,6 +239,26 @@ namespace MindCanvas
                 throw new InvalidOperationException("Generic parameter 'TEnum' must be an enum.");
             }
             return (TEnum)Enum.Parse(typeof(TEnum), text);
+        }
+
+        public static Windows.UI.Xaml.Media.FontFamily SymbolThemeFontFamily
+        {
+            get
+            {
+                if (App.symbolThemeFontFamily != null)
+                    return App.symbolThemeFontFamily;
+
+                App.symbolThemeFontFamily = IsFontInstalled("Segoe Fluent Icons")
+                    ? new Windows.UI.Xaml.Media.FontFamily("Segoe Fluent Icons")
+                    : new Windows.UI.Xaml.Media.FontFamily("Segoe MDL2 Assets");
+                return App.symbolThemeFontFamily;
+            }
+        }
+
+        private static bool IsFontInstalled(string fontName)
+        {
+            var fontFalmilies = Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies();
+            return fontFalmilies.Any(x => x.Equals(fontName, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

@@ -15,7 +15,7 @@
 
             <StackPanel HorizontalAlignment="Left">
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,4,0,0"
                     x:Uid="SettingsPage_ThemeMode"/>
 
@@ -26,7 +26,7 @@
                 </StackPanel>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
                     x:Uid="SettingsPage_Language"/>
 

@@ -15,17 +15,15 @@
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,4,0,0"
-                    FontWeight="Normal"
                     x:Uid="OpenPage_OpenFile"/>
 
                 <Button Margin="0,10,0,0" x:Uid="OpenPage_BrowseFiles" Click="Button_Click"/>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
                     x:Uid="OpenPage_RecentlyOpenedFiles"/>
 
                 <ListView x:Name="FileListView" IsItemClickEnabled="True" ItemClick="FileListView_ItemClick" Margin="0,10,0,0"></ListView>

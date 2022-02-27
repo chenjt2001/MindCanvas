@@ -434,13 +434,9 @@ A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写�
     <value>好的</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.增加了右键菜单。
-2.增加了文件加密功能。
-3.增加了搜索功能。
-4.支持修改点的样式。
-5.支持修改线的颜色。
-6.修复了一些BUG。
-7.优化了一些细节。</value>
+    <value>1.使用了 Mica 材料。
+2.修复了一些BUG。
+3.优化了一些细节。</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>新功能</value>
@@ -606,5 +602,8 @@ A: 若要使用触控或鼠标进行墨迹书写，请确保启用“触摸写�
   </data>
   <data name="HelpPage_RewardTheAuthor.Content" xml:space="preserve">
     <value>打赏作者</value>
+  </data>
+  <data name="HelpPage_Paragraph11.Text" xml:space="preserve">
+    <value>源码：</value>
   </data>
 </root>

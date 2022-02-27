@@ -16,9 +16,8 @@
             <StackPanel HorizontalAlignment="Left">
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,4,0,0"
-                    FontWeight="Normal"
                     x:Uid="ExportPage_Format" />
 
                 <ComboBox x:Name="FormatComboBox" Margin="0,10,0,0" x:Uid="ExportPage_PleaseSelectAFormat" Width="200">
@@ -40,9 +39,8 @@
                 <Button Margin="0,10,0,0" x:Name="ExportBtn" x:Uid="ExportPage_Export" Click="ExportBtn_Click"/>
 
                 <TextBlock
-                    Style="{StaticResource TitleTextBlockStyle}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"
-                    FontWeight="Normal"
                     x:Uid="ExportPage_Preview"/>
 
                 <Viewbox x:Name="MindMapViewbox" MaxWidth="840" Canvas.ZIndex="-1">

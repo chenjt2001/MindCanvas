@@ -286,7 +286,7 @@ namespace MindCanvas
                 foreach (NodeControl nodeControl in mindMapCanvas.SelectedNodeControlList.ToList())
                     if (nodeControl != nowNodeControl)
                         nodeControl.State &= ~NodeControlState.Selected;//border.IsSelected = false;
-                
+
                 // 显示信息
                 ShowFrame(typeof(EditPage.EditNodePage), nowNode);
             }
@@ -317,8 +317,8 @@ namespace MindCanvas
                 SetRepeatButtonIsHitTestVisible(true);
             }
             else
-            { 
-                
+            {
+
             }
 
             nowPressedNode = null;// 没有点被按下，之所以这句话不写在Node_Released里面

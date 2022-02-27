@@ -10,17 +10,17 @@
                 <XamlControlsResources ControlsResourcesVersion="Version2" xmlns="using:Microsoft.UI.Xaml.Controls"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <!--应该是winui2.6的bug，必须加这个才能保证全部的TitleTextBlockStyle保持在Version1-->
-            <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
-                <Setter Property="FontWeight" Value="SemiLight" />
-                <Setter Property="FontSize" Value="24" />
-                <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings" />
+            <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+                <Setter Property="FontWeight" Value="Normal"/>
+            </Style>
+            <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
+                <Setter Property="FontWeight" Value="Normal"/>
             </Style>
 
             <!--Win10-->
             <!--<FontFamily x:Key="SymbolThemeFontFamily">Segoe MDL2 Assets</FontFamily>-->
             <!--Win11-->
-            <FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons</FontFamily>
+            <!--<FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons</FontFamily>-->
 
         </ResourceDictionary>
     </Application.Resources>
