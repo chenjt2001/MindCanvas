@@ -38,8 +38,3 @@
 `Microsoft.Toolkit.Uwp.UI`  
 `Microsoft.Toolkit.Uwp.UI.Controls`  
 `Microsoft.UI.Xaml`
-
-## 分支说明
-
-- master: 主分支
-- Mica: Mica风格的分支（Windows 11风格）
