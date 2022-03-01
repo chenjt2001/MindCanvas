@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Serialization.Formatters.Binary;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
+using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
@@ -14,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -26,8 +30,11 @@ namespace MindCanvas
     public sealed partial class MainPage : Page
     {
         private Node nowNode;// 正在操作的点
+        private Tie nowTie;// 正在操作的线
         private Node nowPressedNode; // 正在按着的点
         private bool isMovingNode = false;// 是否有点正在被移动
+        private object clipboardContentCache;// 剪贴板内容缓存
+        private Windows.Foundation.Point RightTappedPosition;// 右键的位置（MindMapCanvas标准坐标）
 
         public static MindMapCanvas mindMapCanvas;
         public static MindMapInkCanvas mindMapInkCanvas;
@@ -58,6 +65,7 @@ namespace MindCanvas
             SharedShadow.Receivers.Add(MindMapScrollViewer);
             EditBorder.Translation += new Vector3(0, 0, 32);
             InkToolbarBorder.Translation += new Vector3(0, 0, 32);
+            SearchBorder.Translation += new Vector3(0, 0, 32);
 
             // 应用设置
             Settings.Apply();
@@ -150,11 +158,24 @@ namespace MindCanvas
             // 创建右键菜单
             ContextMenuFlyout contextMenuFlyout = new ContextMenuFlyout();
 
-            MenuFlyoutItem item2 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Delete"),// 删除
+            MenuFlyoutItem item1 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Copy"),// 复制
+                                                             VirtualKey.C,
+                                                             VirtualKeyModifiers.None,
+                                                             "\xE8C8");
+
+            MenuFlyoutItem item2 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Cut"),// 剪切
+                                                             VirtualKey.X,
+                                                             VirtualKeyModifiers.None,
+                                                             "\xE8C6");
+
+            MenuFlyoutItem item3 = contextMenuFlyout.AddItem(resourceLoader.GetString("Code_Delete"),// 删除
                                                             VirtualKey.D,
                                                             VirtualKeyModifiers.None,
                                                             "\xE74D");
-            item2.Click += DeleteNodeMenuFlyoutItem_Click;
+
+            item1.Click += CopyNodeMenuFlyoutItem_Click;
+            item2.Click += CutNodeMenuFlyoutItem_Click;
+            item3.Click += DeleteNodeMenuFlyoutItem_Click;
 
             contextMenuFlyout.ShowAt(this, e.GetPosition(this));
         }
@@ -164,13 +185,32 @@ namespace MindCanvas
         {
             NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(nowNode);
 
-            // BUG修复
-            // 如果这个点在selectedBorderList里，则移除
-            // 避免在连接点时发生异常
+            // 如果这个点在selectedBorderList里，则移除，避免在连接点时发生异常
             if (nodeControl.State.HasFlag(NodeControlState.Selected))
                 nodeControl.State &= ~NodeControlState.Selected;
 
             EventsManager.RemoveNode(nowNode);
+
+            RefreshUnRedoBtn();
+            ShowFrame(typeof(EditPage.InfoPage));
+        }
+
+        /// <summary>点击了右键的复制点按钮</summary>
+        private void CopyNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            EventsManager.CopyNode(nowNode);
+        }
+
+        /// <summary>点击了右键的剪切点按钮</summary>
+        private void CutNodeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            NodeControl nodeControl = mindMapCanvas.ConvertNodeToBorder(nowNode);
+
+            // 如果这个点在selectedBorderList里，则移除，避免在连接点时发生异常
+            if (nodeControl.State.HasFlag(NodeControlState.Selected))
+                nodeControl.State &= ~NodeControlState.Selected;
+
+            EventsManager.CutNode(nowNode);
 
             RefreshUnRedoBtn();
             ShowFrame(typeof(EditPage.InfoPage));
@@ -207,7 +247,7 @@ namespace MindCanvas
         /// <summary>点击了右键的删除线按钮</summary>
         private void DeleteTieMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            EventsManager.RemoveTie(mindMapCanvas.ConvertPathToTie(sender as Windows.UI.Xaml.Shapes.Path));
+            EventsManager.RemoveTie(nowTie);
             RefreshUnRedoBtn();
             ShowFrame(typeof(EditPage.InfoPage));
         }
@@ -216,10 +256,10 @@ namespace MindCanvas
         private void Path_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             Windows.UI.Xaml.Shapes.Path path = sender as Windows.UI.Xaml.Shapes.Path;
-            Tie tie = mindMapCanvas.ConvertPathToTie(path);
+            nowTie = mindMapCanvas.ConvertPathToTie(path);
 
             // 显示信息
-            ShowFrame(typeof(EditPage.EditTiePage), tie);
+            ShowFrame(typeof(EditPage.EditTiePage), nowTie);
         }
 
         /// <summary>鼠标在点内释放，算按了一下点</summary>
@@ -739,8 +779,35 @@ namespace MindCanvas
         }
 
         /// <summary>右键或触摸设备长按</summary>
-        private void MindMapBackgroundBorder_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        private async void MindMapBackgroundBorder_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
+            // 检查是否可粘贴
+            DataPackageView dataPackageView = Clipboard.GetContent();
+            if (dataPackageView.Contains("MindCanvas Node"))
+            {
+                // 从流中读取序列化后的内容并恢复
+                var streamRef = await dataPackageView.GetDataAsync("MindCanvas Node") as RandomAccessStreamReference;
+                using (IRandomAccessStreamWithContentType stream = await streamRef.OpenReadAsync())
+                {
+                    var buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
+                    await stream.ReadAsync(buffer, (uint)stream.Size, InputStreamOptions.None);
+
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    object data = formatter.Deserialize(buffer.AsStream());
+                    clipboardContentCache = data;
+                }
+                PasteMenuFlyoutItem.IsEnabled = true;
+            }
+            else
+            {
+                PasteMenuFlyoutItem.IsEnabled = false;
+            }
+
+            RightTappedPosition = e.GetPosition(mindMapCanvas);
+            RightTappedPosition.X -= mindMapCanvas.Width / 2;
+            RightTappedPosition.Y -= mindMapCanvas.Height / 2;
+
+            // 显示右键菜单
             ContextMenuFlyout.ShowAt(this, e.GetPosition(this));
         }
 
@@ -823,6 +890,7 @@ namespace MindCanvas
             {
                 // 处于显示状态，现在要隐藏
                 RightBottomGrid.Visibility = Visibility.Collapsed;
+                ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0);
                 Grid.SetColumnSpan(LeftBottomGrid, 3);
                 HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_ShowTheSidebar");// 显示侧栏
             }
@@ -830,8 +898,20 @@ namespace MindCanvas
             {
                 // 处于隐藏状态，现在要显示
                 RightBottomGrid.Visibility = Visibility.Visible;
+                ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0, 10, 0, 0);
                 Grid.SetColumnSpan(LeftBottomGrid, 2);
                 HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_HideTheSidebar");// 隐藏侧栏
+            }
+        }
+
+        /// <summary>粘贴</summary>
+        private void PasteMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (clipboardContentCache is Node clipboardNode)
+            {
+                EventsManager.PasteNode(clipboardNode, RightTappedPosition);
+                ConfigNodesBorder(new List<Node> { clipboardNode });
+                RefreshUnRedoBtn();
             }
         }
 

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
     <Page.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="RepeatButtonBackgroundPointerOver" Color="Black" Opacity="0.1"/>
@@ -90,7 +90,6 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-        
     </Page.Resources>
 
     <Grid>
@@ -233,7 +232,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <Grid Grid.Row="1" CornerRadius="0,10,0,0">
+                <Grid x:Name="ScrollViewerWarpperGrid" Grid.Row="1" CornerRadius="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="8*"/>
@@ -293,9 +292,28 @@
 
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout x:Name="ContextMenuFlyout">
-                                        <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" x:Uid="MainPage_DeleteAllNodes" Click="DeleteAllNodesMenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" x:Uid="MainPage_DeleteAllTies" Click="DeleteAllTiesMenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem x:Name="HideOrShowTheSidebarMenuFlyoutItem" x:Uid="MainPage_HideTheSidebar" Click="HideOrShowTheSidebarMenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem x:Name="PasteMenuFlyoutItem" x:Uid="MainPage_Paste" Click="PasteMenuFlyoutItem_Click">
+                                            <MenuFlyoutItem.KeyboardAccelerators>
+                                                <KeyboardAccelerator  Key="P" Modifiers="None"/>
+                                            </MenuFlyoutItem.KeyboardAccelerators>
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE77F;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutSeparator/>
+                                        <MenuFlyoutItem x:Name="DeleteAllNodesMenuFlyoutItem" x:Uid="MainPage_DeleteAllNodes" Click="DeleteAllNodesMenuFlyoutItem_Click">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE74D;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem x:Name="DeleteAllTiesMenuFlyoutItem" x:Uid="MainPage_DeleteAllTies" Click="DeleteAllTiesMenuFlyoutItem_Click">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE74D;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutSeparator/>
+                                        <MenuFlyoutItem x:Name="HideOrShowTheSidebarMenuFlyoutItem" x:Uid="MainPage_HideTheSidebar" Click="HideOrShowTheSidebarMenuFlyoutItem_Click">
+                                        </MenuFlyoutItem>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
 
@@ -311,7 +329,7 @@
                     <RowDefinition Height="9*"/>
                 </Grid.RowDefinitions>
 
-                <Border x:Name="SearchBorder" Grid.Row="0" >
+                <Border x:Name="SearchBorder" Grid.Row="0" Shadow="{StaticResource SharedShadow}">
                     <AutoSuggestBox 
                         x:Name="SearchAutoSuggestBox"
                         x:Uid="MainPage_SearchMindMap"

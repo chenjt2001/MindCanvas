@@ -102,6 +102,13 @@ namespace MindCanvas
             return newNode;
         }
 
+        ///<summary>添加点（仅分配id）</summary>
+        public void AddNode(Node newNode)
+        {
+            newNode.Id = nodes.Count() == 0 ? 0 : nodes.Last().Id + 1;
+            nodes.Add(newNode);
+        }
+
         /// <summary>添加连接</summary>
         public Tie AddTie(int node1id, int node2id, string description)
         {

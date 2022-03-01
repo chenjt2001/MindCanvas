@@ -606,4 +606,13 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
   <data name="HelpPage_Paragraph11.Text" xml:space="preserve">
     <value>Source code:</value>
   </data>
+  <data name="Code_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Code_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="MainPage_Paste.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
 </root>

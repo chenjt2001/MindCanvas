@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
@@ -25,6 +27,7 @@ namespace MindCanvas
         private static List<MindCanvasFileData> records = new List<MindCanvasFileData>();// 记录每次操作后的数据
         private static bool modified = false;
         private static int nowIndex;
+        private static object clipboardContent; // 存储剪贴板的内容
 
         // 资源加载器，用于翻译
         private static readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
@@ -305,7 +308,6 @@ namespace MindCanvas
                 MainPage.mainPage.ConfigTiesPath(new List<Tie> { tie });
             }
 
-
             Record();
         }
 
@@ -366,6 +368,88 @@ namespace MindCanvas
 
             App.mindMap.RemoveNode(node);
             MainPage.mindMapCanvas.Clear(node);
+            Record();
+        }
+
+        /// <summary>复制点</summary>
+        public static void CopyNode(Node node)
+        {
+            clipboardContent = node;
+
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetDataProvider(StandardDataFormats.Text, OnDeferredTextRequestedHandler);
+            dataPackage.SetDataProvider("MindCanvas Node", OnDeferredNodeRequestedHandler);
+
+            Clipboard.SetContent(dataPackage);// 将 DataPackage 添加到剪贴板
+        }
+
+        /// <summary>剪切点</summary>
+        public static void CutNode(Node node)
+        {
+            clipboardContent = node;
+
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetDataProvider(StandardDataFormats.Text, OnDeferredTextRequestedHandler);
+            dataPackage.SetDataProvider("MindCanvas Node", OnDeferredNodeRequestedHandler);
+
+            foreach (Tie tie in App.mindMap.GetTies(node))
+                MainPage.mindMapCanvas.Clear(tie);
+
+            Clipboard.SetContent(dataPackage);// 将 DataPackage 添加到剪贴板
+
+            App.mindMap.RemoveNode(node);
+            MainPage.mindMapCanvas.Clear(node);
+
+            Record();
+        }
+
+        /// <summary>
+        /// 请求获取剪贴板的文本
+        /// </summary>
+        public static void OnDeferredTextRequestedHandler(DataProviderRequest request)
+        {
+            if (clipboardContent != null)
+            {
+                DataProviderDeferral deferral = request.GetDeferral();
+
+                if (clipboardContent is Node clipboardNode)
+                {
+                    request.SetData(clipboardNode.Name);
+                    deferral.Complete();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 请求获取剪贴板的Node
+        /// </summary>
+        public static void OnDeferredNodeRequestedHandler(DataProviderRequest request)
+        {
+            if (clipboardContent != null)
+            {
+                DataProviderDeferral deferral = request.GetDeferral();
+
+                if (clipboardContent is Node clipboardNode)
+                {
+                    // 序列化后存入流
+                    InMemoryRandomAccessStream inMemoryStream = new InMemoryRandomAccessStream();
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(inMemoryStream.AsStream(), clipboardNode);
+                    request.SetData(RandomAccessStreamReference.CreateFromStream(inMemoryStream));
+                    deferral.Complete();
+                }
+            }
+        }
+
+        /// <summary>粘贴点</summary>
+        public static void PasteNode(Node node, Windows.Foundation.Point position)
+        {
+            node.X = position.X;
+            node.Y = position.Y;
+            App.mindMap.AddNode(node);// 更新点id
+            MainPage.mindMapCanvas.Draw(node);
             Record();
         }
 

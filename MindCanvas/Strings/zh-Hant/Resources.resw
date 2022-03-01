@@ -606,4 +606,13 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   <data name="HelpPage_Paragraph11.Text" xml:space="preserve">
     <value>源碼：</value>
   </data>
+  <data name="Code_Copy" xml:space="preserve">
+    <value>復製</value>
+  </data>
+  <data name="Code_Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="MainPage_Paste.Text" xml:space="preserve">
+    <value>粘貼</value>
+  </data>
 </root>
