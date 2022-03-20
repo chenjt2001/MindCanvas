@@ -200,7 +200,7 @@
                     </Paragraph>
 
                     <Paragraph Margin="0,10,0,0">
-                        <Hyperlink NavigateUri="https://www.nuget.org/packages/Microsoft.UI.Xaml/2.6.2/License">
+                        <Hyperlink NavigateUri="https://www.nuget.org/packages/Microsoft.UI.Xaml/2.7.1/license">
                             Microsoft.UI.Xaml
                         </Hyperlink>
                     </Paragraph>

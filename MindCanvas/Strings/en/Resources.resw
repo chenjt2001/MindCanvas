@@ -277,7 +277,7 @@
     <value>Version:</value>
   </data>
   <data name="HelpPage_Paragraph5.Text" xml:space="preserve">
-    <value>Copyright © 2021 JanTang. All rights reserved.</value>
+    <value>Copyright © 2022 JanTang. All rights reserved.</value>
   </data>
   <data name="HelpPage_Paragraph6_1.Text" xml:space="preserve">
     <value>For more information, please visit the</value>
@@ -434,9 +434,10 @@ A: If you want to use touch or mouse for inking writing, make sure to enable the
     <value>OK</value>
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
-    <value>1.Mica material is used.
-2.Fixed some bugs.
-3.Optimized some details.</value>
+    <value>1.Used Mica material.
+2.Added copy, paste and cut functions.
+3.Fixed some bugs.
+4.Optimized some details.</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>New Function</value>

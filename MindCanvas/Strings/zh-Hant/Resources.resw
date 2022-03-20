@@ -277,7 +277,7 @@
     <value>版本：</value>
   </data>
   <data name="HelpPage_Paragraph5.Text" xml:space="preserve">
-    <value>Copyright © 2021 珒陶. All rights reserved.</value>
+    <value>Copyright © 2022 珒陶. All rights reserved.</value>
   </data>
   <data name="HelpPage_Paragraph6_1.Text" xml:space="preserve">
     <value>更多資訊可訪問</value>
@@ -435,8 +435,9 @@ A: 若要使用觸控或鼠標進行墨迹書寫，請確保啓用“觸摸寫�
   </data>
   <data name="ShowNewFunction.Content" xml:space="preserve">
     <value>1.使用了 Mica 材料。
-2.修復了一些BUG。
-3.優化了一些細節。</value>
+2.增加了復製、粘貼、剪切功能。
+3.修復了一些BUG。
+4.優化了一些細節。</value>
   </data>
   <data name="ShowNewFunction.Title" xml:space="preserve">
     <value>新功能</value>

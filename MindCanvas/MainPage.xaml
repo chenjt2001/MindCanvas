@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -294,7 +293,7 @@
                                     <MenuFlyout x:Name="ContextMenuFlyout">
                                         <MenuFlyoutItem x:Name="PasteMenuFlyoutItem" x:Uid="MainPage_Paste" Click="PasteMenuFlyoutItem_Click">
                                             <MenuFlyoutItem.KeyboardAccelerators>
-                                                <KeyboardAccelerator  Key="P" Modifiers="None"/>
+                                                <KeyboardAccelerator  Key="V" Modifiers="None"/>
                                             </MenuFlyoutItem.KeyboardAccelerators>
                                             <MenuFlyoutItem.Icon>
                                                 <FontIcon FontFamily="{x:Bind local:App.SymbolThemeFontFamily}" Glyph="&#xE77F;"/>
