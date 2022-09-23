@@ -5,6 +5,7 @@
     xmlns:local="using:MindCanvas"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     mc:Ignorable="d"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}">
     <Page.Resources>
@@ -88,6 +89,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
         </ResourceDictionary>
     </Page.Resources>
 
@@ -100,11 +102,10 @@
 
         <Grid Grid.Row="1">
             <Grid.Resources>
-                <ThemeShadow x:Name="SharedShadow"/>
+                <ui:AttachedDropShadow x:Name="CommonShadow" x:Key="CommonShadow" Color="#7F000000" BlurRadius="32" CastTo="{x:Bind MindMapScrollViewer}"/>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
@@ -113,102 +114,14 @@
                 <RowDefinition Height="9*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
-                <AppBarButton 
-                    x:Name="MenuBtn" 
-                    x:Uid="MainPage_Menu"
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center"
-                    Click="MenuBtn_Click">
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph="&#xEDE3;"/>
-                    </AppBarButton.Icon>
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="M" Modifiers="Control"/>
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-            </Border>
-
-            <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
-                <CommandBar Background="Transparent" DefaultLabelPosition="Right" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <AppBarButton x:Uid="MainPage_AddNode" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE7C8;"/>
-                        </AppBarButton.Icon>
-
-                        <!-- AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
-                    所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
-                    详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
-                        <FlyoutBase.AttachedFlyout>
-                            <Flyout Placement="Bottom">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="AddNodeTextBox" KeyDown="AddNodeTextBox_KeyDown" x:Uid="MainPage_NodeName" Margin="0,0,12,0" Width="150"/>
-                                    <Button x:Name="ConfirmAddingNodeBtn" x:Uid="MainPage_Confirm" Click="ConfirmAddingNodeBtn_Click"/>
-                                </StackPanel>
-                            </Flyout>
-                        </FlyoutBase.AttachedFlyout>
-                    </AppBarButton>
-
-                    <AppBarToggleButton x:Uid="MainPage_TieNodes"
-                                    x:Name="TieBtn"
-                                    Click="TieBtn_Click">
-                        <AppBarToggleButton.Icon>
-                            <!--<FontIcon Glyph="&#xF7B7;"/> -->
-                            <FontIcon Glyph="&#xE71B;"/>
-                        </AppBarToggleButton.Icon>
-                    </AppBarToggleButton>
-                    <AppBarSeparator/>
-
-                    <AppBarButton Icon="Undo" Tag="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UnRedoBtn_Click">
-                        <AppBarButton.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Z" Modifiers="Control"/>
-                        </AppBarButton.KeyboardAccelerators>
-                    </AppBarButton>
-
-                    <AppBarButton Icon="Redo" Tag="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="UnRedoBtn_Click">
-                        <AppBarButton.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Y" Modifiers="Control"/>
-                        </AppBarButton.KeyboardAccelerators>
-                    </AppBarButton>
-
-                    <AppBarSeparator/>
-
-                    <AppBarButton Icon="ZoomIn" x:Uid="MainPage_ZoomIn" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
-                    <AppBarButton Icon="ZoomOut" x:Uid="MainPage_ZoomOut" x:Name="ZoomOutBtn" Tag="ZoomOut" Click="Zoom_Click"/>
-
-                    <AppBarButton x:Uid="MainPage_FitPage" x:Name="FitPageBtn" Tag="Fit" Click="Zoom_Click">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE9A6;"/>
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarSeparator/>
-
-                    <CommandBar.SecondaryCommands>
-                        <AppBarButton Icon="Setting" x:Uid="MainPage_SetDefaultValues" x:Name="DefaultSettingsBtn" Click="DefaultSettingsBtn_Click">
-                        </AppBarButton>
-                    </CommandBar.SecondaryCommands>
-                </CommandBar>
-            </Border>
-
-            <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
-                <TextBlock 
-                    x:Name="AppNameTextBlock" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center"
-                    TextAlignment="Center"
-                    FontSize="24"
-                    OpticalMarginAlignment="TrimSideBearings"
-                    Style="{StaticResource SubtitleTextBlockStyle}"
-                    Text="MindCanvas"/>
-            </Border>
-
-            <Grid x:Name="LeftBottomGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            
+            <Grid x:Name="LeftBottomGrid" Grid.Row="1" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" x:Name="InkToolbarBorder" Shadow="{StaticResource SharedShadow}">
+                <Border Grid.Row="0" Canvas.ZIndex="100" Background="{ThemeResource SystemControlAcrylicWindowBrush}" x:Name="InkToolbarBorder" ui:Effects.Shadow="{StaticResource CommonShadow}">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <InkToolbar 
@@ -311,8 +224,8 @@
                                             </MenuFlyoutItem.Icon>
                                         </MenuFlyoutItem>
                                         <MenuFlyoutSeparator/>
-                                        <MenuFlyoutItem x:Name="HideOrShowTheSidebarMenuFlyoutItem" x:Uid="MainPage_HideTheSidebar" Click="HideOrShowTheSidebarMenuFlyoutItem_Click">
-                                        </MenuFlyoutItem>
+                                        <ToggleMenuFlyoutItem  x:Name="ShowTheSidebarMenuFlyoutItem" IsChecked="True" x:Uid="MainPage_ShowTheSidebar" Click="ShowTheSidebarMenuFlyoutItem_Click">
+                                        </ToggleMenuFlyoutItem>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
 
@@ -322,13 +235,111 @@
                 </Grid>
             </Grid>
 
-            <Grid x:Name="RightBottomGrid" Grid.Row="1" Grid.Column="2">
+            <Grid x:Name="RightTopGrid" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
+                    <TextBlock 
+                    x:Name="AppNameTextBlock" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    TextAlignment="Center"
+                    FontSize="24"
+                    OpticalMarginAlignment="TrimSideBearings"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="MindCanvas"/>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="LeftTopGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Border Grid.Row="0" Grid.Column="0" x:Name="MenuBtnBorder">
+                    <AppBarButton 
+                    x:Name="MenuBtn" 
+                    x:Uid="MainPage_Menu"
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    Click="MenuBtn_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xEDE3;"/>
+                        </AppBarButton.Icon>
+                        <AppBarButton.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="M" Modifiers="Control"/>
+                        </AppBarButton.KeyboardAccelerators>
+                    </AppBarButton>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" x:Name="AppBarButtonsBorder">
+                    <CommandBar Background="Transparent" DefaultLabelPosition="Right" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <AppBarButton x:Uid="MainPage_AddNode" AllowFocusOnInteraction="True" Tapped="AddNodeBtn_Tapped">
+                            <AppBarButton.Icon>
+                                <FontIcon Glyph="&#xE7C8;"/>
+                            </AppBarButton.Icon>
+
+                            <!-- AppBarButton.Flyout有一个BUG，但要Windows UI 3.0 才能修复
+                    所以用FlyoutBase.AttachedFlyout加一个AddNodeBtn_Tapped方法
+                    详见 https://github.com/microsoft/microsoft-ui-xaml/issues/679-->
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout Placement="Bottom">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="AddNodeTextBox" KeyDown="AddNodeTextBox_KeyDown" x:Uid="MainPage_NodeName" Margin="0,0,12,0" Width="150"/>
+                                        <Button x:Name="ConfirmAddingNodeBtn" x:Uid="MainPage_Confirm" Click="ConfirmAddingNodeBtn_Click"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </AppBarButton>
+
+                        <AppBarToggleButton x:Uid="MainPage_TieNodes"
+                                    x:Name="TieBtn"
+                                    Click="TieBtn_Click">
+                            <AppBarToggleButton.Icon>
+                                <!--<FontIcon Glyph="&#xF7B7;"/> -->
+                                <FontIcon Glyph="&#xE71B;"/>
+                            </AppBarToggleButton.Icon>
+                        </AppBarToggleButton>
+                        <AppBarSeparator/>
+
+                        <AppBarButton Icon="Undo" Tag="Undo" x:Uid="MainPage_Undo" IsEnabled="False" x:Name="UndoBtn" Click="UnRedoBtn_Click">
+                            <AppBarButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Z" Modifiers="Control"/>
+                            </AppBarButton.KeyboardAccelerators>
+                        </AppBarButton>
+
+                        <AppBarButton Icon="Redo" Tag="Redo" x:Uid="MainPage_Redo" IsEnabled="False" x:Name="RedoBtn" Click="UnRedoBtn_Click">
+                            <AppBarButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Y" Modifiers="Control"/>
+                            </AppBarButton.KeyboardAccelerators>
+                        </AppBarButton>
+
+                        <AppBarSeparator/>
+
+                        <AppBarButton Icon="ZoomIn" x:Uid="MainPage_ZoomIn" x:Name="ZoomInBtn" Tag="ZoomIn" Click="Zoom_Click"/>
+                        <AppBarButton Icon="ZoomOut" x:Uid="MainPage_ZoomOut" x:Name="ZoomOutBtn" Tag="ZoomOut" Click="Zoom_Click"/>
+
+                        <AppBarButton x:Uid="MainPage_FitPage" x:Name="FitPageBtn" Tag="Fit" Click="Zoom_Click">
+                            <AppBarButton.Icon>
+                                <FontIcon Glyph="&#xE9A6;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarSeparator/>
+
+                        <CommandBar.SecondaryCommands>
+                            <AppBarButton Icon="Setting" x:Uid="MainPage_SetDefaultValues" x:Name="DefaultSettingsBtn" Click="DefaultSettingsBtn_Click">
+                            </AppBarButton>
+                        </CommandBar.SecondaryCommands>
+                    </CommandBar>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="RightBottomGrid" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>
                 </Grid.RowDefinitions>
 
-                <Border x:Name="SearchBorder" Grid.Row="0" Shadow="{StaticResource SharedShadow}">
+                <Border x:Name="SearchBorder" Grid.Row="0" ui:Effects.Shadow="{StaticResource CommonShadow}">
                     <AutoSuggestBox 
                         x:Name="SearchAutoSuggestBox"
                         x:Uid="MainPage_SearchMindMap"
@@ -340,7 +351,7 @@
                         QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"/>
                 </Border>
 
-                <Border x:Name="EditBorder" Grid.Row="1" Shadow="{StaticResource SharedShadow}">
+                <Border x:Name="EditBorder" Grid.Row="1" ui:Effects.Shadow="{StaticResource CommonShadow}">
                     <Frame x:Name="EditFrame" Loaded="EditFrame_Loaded">
                         <Frame.ContentTransitions>
                             <TransitionCollection>

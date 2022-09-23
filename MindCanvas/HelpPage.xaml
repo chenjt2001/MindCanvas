@@ -114,48 +114,6 @@
                     </Paragraph>
                 </RichTextBlock>
 
-                <Button Margin="0,10,0,0" x:Uid="HelpPage_RewardTheAuthor">
-                    <Button.Resources>
-                        <Style x:Key="FlyoutPresenterStyle" TargetType="FlyoutPresenter">
-                            <Setter Property="RequestedTheme" Value="Light"/>
-                        </Style>
-                    </Button.Resources>
-                    <Button.Flyout>
-                        <Flyout FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle}">
-                            <StackPanel MaxWidth="400">
-                                <StackPanel.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.ThemeDictionaries>
-                                            <ResourceDictionary x:Key="Dark">
-                                                <SolidColorBrush x:Key="ControlDefaultForegroud" Color="Black"/>
-                                                <SolidColorBrush x:Key="ControlDefaultBackgroud" Color="Transparent"/>
-                                                <SolidColorBrush x:Key="ControlDefaultBorder" Color="Transparent"/>
-                                            </ResourceDictionary>
-                                        </ResourceDictionary.ThemeDictionaries>
-                                    </ResourceDictionary>
-                                </StackPanel.Resources>
-                                <RichTextBlock IsTextSelectionEnabled="True">
-                                    <Paragraph Margin="0,10,0,0">
-                                        <!--是否打赏均不影响使用软件的任何功能，量力而行-->
-                                        <Run x:Uid="HelpPage_Paragraph8"></Run>
-                                    </Paragraph>
-                                    <Paragraph Margin="0,10,0,0" FontWeight="Bold">
-                                        <!--打赏不意味着开发者承诺对此应用的后续维护和功能更新-->
-                                        <Run x:Uid="HelpPage_Paragraph9"></Run>
-                                    </Paragraph>
-                                </RichTextBlock>
-                                <Image Margin="0,40,0,0" Source="{x:Bind RewardImagePath}" Width="200"/>
-                                <RichTextBlock IsTextSelectionEnabled="True">
-                                    <Paragraph Margin="0,40,0,0">
-                                        <!--如有帮助，欢迎打赏，非常感谢~-->
-                                        <Run x:Uid="HelpPage_Paragraph10"></Run>
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-
                 <TextBlock
                     Style="{StaticResource SubtitleTextBlockStyle}"
                     Margin="0,40,0,0"

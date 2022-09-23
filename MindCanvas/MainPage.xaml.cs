@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.UI;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -61,14 +63,11 @@ namespace MindCanvas
             // 设置缓存
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            // 设置阴影
-            SharedShadow.Receivers.Add(MindMapScrollViewer);
-            EditBorder.Translation += new Vector3(0, 0, 32);
-            InkToolbarBorder.Translation += new Vector3(0, 0, 32);
-            SearchBorder.Translation += new Vector3(0, 0, 32);
-
             // 应用设置
             Settings.Apply();
+
+            // 默认显示侧栏
+            ShowTheSidebarMenu = true;
 
             // 请求评分
             if (Settings.TotalLaunchCount == 5)
@@ -736,6 +735,9 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
+            Debug.WriteLine(zoomFactor);
+            Debug.WriteLine(MindMapScrollViewer.HorizontalOffset.ToString() + " " + MindMapScrollViewer.VerticalOffset.ToString());
+
             // 之所以在这里写ModifyViewport而不是交给MindMapScrollViewer_ViewChanged处理，是因为
             // MindMapScrollViewer_ManipulationDelta函数可能被调用多次后才发生一次
             // MindMapScrollViewer_ViewChanged，从而导致App.mindMap.VisualCenterX等没有实时更新
@@ -884,23 +886,46 @@ namespace MindCanvas
         }
 
         /// <summary>右键隐藏或显示侧栏</summary>
-        private void HideOrShowTheSidebarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private void ShowTheSidebarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (RightBottomGrid.Visibility == Visibility.Visible)
+            ShowTheSidebarMenu = !ShowTheSidebarMenu;
+        }
+
+        private bool showTheSidebarMenu;
+        private bool ShowTheSidebarMenu
+        {
+            get => showTheSidebarMenu;
+            set
             {
-                // 处于显示状态，现在要隐藏
-                RightBottomGrid.Visibility = Visibility.Collapsed;
-                ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0);
-                Grid.SetColumnSpan(LeftBottomGrid, 3);
-                HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_ShowTheSidebar");// 显示侧栏
-            }
-            else
-            {
-                // 处于隐藏状态，现在要显示
-                RightBottomGrid.Visibility = Visibility.Visible;
-                ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0, 10, 0, 0);
-                Grid.SetColumnSpan(LeftBottomGrid, 2);
-                HideOrShowTheSidebarMenuFlyoutItem.Text = resourceLoader.GetString("Code_HideTheSidebar");// 隐藏侧栏
+                showTheSidebarMenu = value;
+
+                if (value)
+                {
+                    // 显示
+                    RightBottomGrid.Visibility = Visibility.Visible;
+                    ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0, 10, 0, 0);
+                    Grid.SetColumnSpan(LeftBottomGrid, 1);
+                    Effects.SetShadow(InkToolbarBorder, CommonShadow);
+                    Effects.SetShadow(SearchBorder, CommonShadow);
+                    Effects.SetShadow(EditBorder, CommonShadow);
+
+                    // 不加这个的话阴影不能即时出来
+                    foreach (AttachedShadowElementContext context in CommonShadow.EnumerateElementContexts())
+                    {
+                        context.ClearAndDisposeResources();
+                        context.CreateResources();
+                    }
+                }
+                else
+                {
+                    // 隐藏
+                    RightBottomGrid.Visibility = Visibility.Collapsed;
+                    ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0);
+                    Grid.SetColumnSpan(LeftBottomGrid, 2);
+
+                    Effects.SetShadow(SearchBorder, null);
+                    Effects.SetShadow(EditBorder, null);
+                }
             }
         }
 
