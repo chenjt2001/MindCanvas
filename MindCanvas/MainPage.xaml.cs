@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -735,8 +734,8 @@ namespace MindCanvas
             verticalOffset = mindMapCanvas.Height * zoomFactor / 2 + y * zoomFactor - MindMapScrollViewer.ActualHeight / 2;
             MindMapScrollViewer.ChangeView(horizontalOffset, verticalOffset, zoomFactor);
 
-            Debug.WriteLine(zoomFactor);
-            Debug.WriteLine(MindMapScrollViewer.HorizontalOffset.ToString() + " " + MindMapScrollViewer.VerticalOffset.ToString());
+            //Debug.WriteLine(zoomFactor);
+            //Debug.WriteLine(MindMapScrollViewer.HorizontalOffset.ToString() + " " + MindMapScrollViewer.VerticalOffset.ToString());
 
             // 之所以在这里写ModifyViewport而不是交给MindMapScrollViewer_ViewChanged处理，是因为
             // MindMapScrollViewer_ManipulationDelta函数可能被调用多次后才发生一次

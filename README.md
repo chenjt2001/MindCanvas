@@ -16,8 +16,10 @@
 
 `MindCanvas` 是一款制作思维导图的软件。使用 `MindCanvas`，你可以通过添加点、线和墨迹轻松创造出自己的思维导图，并导出或分享。
 <p align="center">
-<img width="80%" src="https://s3.bmp.ovh/imgs/2021/10/1213ae9fcf532bfd.png"/>
+<img width="80%" src="https://s3.uuu.ovh/imgs/2022/11/25/8deb2f9b9d08f175.jpg"/>
 </p>
+
+**PS: 本软件一开始是我在学习C#的过程中为了练手而开发的，代码混乱且缺乏良好的项目管理，准备弃坑了**
 
 ## 功能
 
