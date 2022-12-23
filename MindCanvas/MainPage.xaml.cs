@@ -919,13 +919,15 @@ namespace MindCanvas
                 {
                     // 隐藏
                     RightBottomGrid.Visibility = Visibility.Collapsed;
-                    ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(0);
+
+                    // 原本应该是new CornerRadius(0)，但是0和double.Epsilon都会导致阴影显示有问题
+                    // 所以使用float.Epsilon
+                    ScrollViewerWarpperGrid.CornerRadius = new CornerRadius(float.Epsilon);
+
                     Grid.SetColumnSpan(LeftBottomGrid, 2);
 
                     Effects.SetShadow(SearchBorder, null);
                     Effects.SetShadow(EditBorder, null);
-                    //Canvas.SetZIndex(InkToolbarBorder, 99999);
-                    //Effects.SetShadow(InkToolbarBorder, null);
                 }
             }
         }
