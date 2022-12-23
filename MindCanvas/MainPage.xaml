@@ -121,7 +121,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Canvas.ZIndex="100" Background="{ThemeResource SystemControlAcrylicWindowBrush}" x:Name="InkToolbarBorder" ui:Effects.Shadow="{StaticResource CommonShadow}">
+                <Border Grid.Row="0" Canvas.ZIndex="100" Background="Transparent" x:Name="InkToolbarBorder" ui:Effects.Shadow="{StaticResource CommonShadow}">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <InkToolbar 
@@ -235,7 +235,7 @@
                 </Grid>
             </Grid>
 
-            <Grid x:Name="RightTopGrid" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid x:Name="RightTopGrid" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Background="Transparent">
                 <Border Grid.Row="0" Grid.Column="2" x:Name="AppNameBorder">
                     <TextBlock 
                     x:Name="AppNameTextBlock" 
@@ -249,7 +249,7 @@
                 </Border>
             </Grid>
 
-            <Grid x:Name="LeftTopGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid x:Name="LeftTopGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="6*"/>
@@ -333,7 +333,7 @@
                 </Border>
             </Grid>
 
-            <Grid x:Name="RightBottomGrid" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Grid.Row="1" Grid.Column="1">
+            <Grid x:Name="RightBottomGrid" Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="9*"/>

@@ -924,6 +924,8 @@ namespace MindCanvas
 
                     Effects.SetShadow(SearchBorder, null);
                     Effects.SetShadow(EditBorder, null);
+                    //Canvas.SetZIndex(InkToolbarBorder, 99999);
+                    //Effects.SetShadow(InkToolbarBorder, null);
                 }
             }
         }
